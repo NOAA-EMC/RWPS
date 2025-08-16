@@ -1,0 +1,73 @@
+#!/bin/bash
+
+date
+
+set -xa
+
+export PS4='$SECONDS + '
+ 
+# PATH for working directory
+export DATA=${DATA:-${DATAROOT:?}/$jobid}
+mkdir -p $DATA
+cd $DATA
+
+# Set cycle parameters
+export cycle=${cycle:-t${cyc}z}
+setpdy.sh
+. PDY
+
+# NCO alerts and outputs 
+export SENDECF=${SENDECF:-YES}
+export SENDDBN=${SENDDBN:-YES}
+export SENDCOM=${SENDCOM:-YES}
+export KEEPDATA=${KEEPDATA:-NO}
+
+# Set runID (Until modID becomes glwn and glw is dumped) 
+export runID=rwps
+export modID=rwps
+
+export NET=rwps
+export RUN=rwps
+export model_ver=${rwps_ver}
+
+export HOMErwps=${HOMErwps:-${PACKAGEHOME}/${NET}.${model_ver}}
+export EXECrwps=${EXECrwps:-${HOMErwps}/exec}
+export FIXrwps=${FIXrwps:-${HOMErwps}/fix}
+export PARMrwps=${PARMrwps:-${HOMErwps}/parm}
+export USHrwps=${USHrwps:-${HOMErwps}/ush}
+
+export COMIN=${COMIN:-$(compath.py -v ${NET}/${model_ver}/${RUN}.${PDY})}
+export COMINwave=${COMINwave:-$(compath.py -v ${NET}/${model_ver})}
+#added for restart files
+export COMINrst=${COMINrst:-$(compath.py -v ${NET}/${model_ver})}
+export COMOUT=${COMOUT:-$(compath.py -v -o ${NET}/${model_ver}/${RUN}.${PDY})}
+export COMOUTwave=${COMOUTwave:-$(compath.py -v -o ${NET}/${model_ver})}
+#added for restart files
+export COMOUTrst=${COMOUTrst:-$(compath.py -v ${NET}/${model_ver})}
+export COMINOUT=${COMINOUT:-$(compath.py -v -o ${NET}/${model_ver}/${RUN}.${PDY})}
+
+
+if [ "$SENDCOM" = YES ]; then
+  mkdir -p $COMOUT
+fi
+
+export wavelog=${COMOUTwave}/wave.log
+
+env
+
+${HOMErwps}/scripts/exrwps_forecast.sh
+
+export err=$?; err_chk
+
+msg="JOB $job HAS COMPLETED NORMALLY."
+postmsg "$msg"
+
+if [ -e "$pgmout" ]; then
+  cat $pgmout
+fi
+ 
+if [ "$KEEPDATA" != YES ]; then
+  rm -rf $DATA
+fi
+
+date
