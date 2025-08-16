@@ -88,7 +88,6 @@ then
   com_wind=/lfs/h2/emc/couple/noscrub/saeideh.banihashemi/Retro
   export DCOMIN=/lfs/h2/emc/couple/noscrub/saeideh.banihashemi/Retro
 else
-  # DCOMROOT=/lfs/h2/emc/couple/noscrub/saeideh.banihashemi/GLWU/dcom  # Canned data for WCOSS2 testing
   DCOMROOT=/lfs/h1/ops/prod/dcom
   com_wind=${DCOMROOT}/                         # operational wind com
 fi
@@ -272,7 +271,7 @@ fi
   then
     out=$NWROOT/com/output                            # output directory
   else
-    out=$NWROOT/GLWU/com/output                       # output directory
+    out=$NWROOT/RWPS/com/output                       # output directory
   fi
 
 # 2.c Set file to check and check presence

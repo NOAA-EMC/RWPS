@@ -77,7 +77,7 @@ export NET=rwps
   esac 
 
   export modID=rwps
-  export MODID=GLWU
+  export MODID=RWPS
   export start_dir=${LSFDIR}  # start/work dir.
 
 # USHwave changed to USHwavepa to avoid mixup with USHwave in j-jobs
@@ -87,14 +87,14 @@ export NET=rwps
   else
     dirext="_${envir}"
   fi
-  export GLWUdir=GLWU
-  export UTILdir=${GLWUdir}/util/ush
+  export RWPSdir=RWPS
+  export UTILdir=${RWPSdir}/util/ush
 
   export USHwavepa=/lfs/h2/emc/couple/noscrub/${runuser}/${UTILdir}
-  export com=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/com/${modID}/${rwps_ver}
+  export com=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/com/${modID}/${rwps_ver}
 
   #export wavelog=${com}/${modID}.log                     # log for wave com
-  export wavelog=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/com/output/${modID}.log      # log for wave com
+  export wavelog=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/com/output/${modID}.log      # log for wave com
 
   if [ -f $wavelog ]
   then
@@ -107,9 +107,9 @@ export NET=rwps
   fi
 
   touch $wavelog
-  export web=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/WEB${dirext}
+  export web=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/WEB${dirext}
   export weblog=${web}/${modID}.log                      # log for web page
-  export out=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/com/output
+  export out=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/com/output
 
   export iceID=icean_5m                              # ice ID
   export wndID=rwps                              # wind ID (for the WW3 grid used for wind data)

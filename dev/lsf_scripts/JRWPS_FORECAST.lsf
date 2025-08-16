@@ -1,11 +1,11 @@
 ############################################
-### JGLWU_FORECAST: Great Lakes Wave Sys ###
+### JRWPS_FORECAST: Great Lakes Wave Sys ###
 ###      LSF card for development        ###
 ############################################
 #
 # LSF options
 #
-#PBS -N JGLWU_FORECAST
+#PBS -N JRWPS_FORECAST
 #PBS -j oe
 #PBS -S /bin/bash
 #PBS -q dev
@@ -16,8 +16,8 @@
 #PBS -l place=excl
 #PBS -l debug=true
 #PBS -V
-#PBS -o JGLWU_FORECAST.out
-#PBS -e JGLWU_FORECAST.out
+#PBS -o JRWPS_FORECAST.out
+#PBS -e JRWPS_FORECAST.out
 
 cd $PBS_O_WORKDIR
 
@@ -57,7 +57,7 @@ export IOBUF_PARAMS='*:count=4:size=32M:prefetch=1:preflush=1'
 
 # Set global variables
 export modID=rwps
-export MODID=GLWU
+export MODID=RWPS
 
 runuser=$USER
 NWROOT=/lfs/h2/emc/couple/noscrub/${runuser}      # root of file system
@@ -72,7 +72,7 @@ export WCOSS_SYSTEM=$( echo $COMROOTp1 | cut -c7 )d1
 export WCOSS_SYSTEM_COM=$( echo $COMROOTp1 | cut -c7-9)
 
 
-export job=JGLWU_FORECAST
+export job=JRWPS_FORECAST
 export SMSBIN=/gpfs/${pref}p1/emc/globaldump/sms_fake
 
 # #Set Version numbers
@@ -120,20 +120,20 @@ export SENDDBN=NO
 export SENDCOM=YES 
 
 # Set COM paths
-export COMINwave=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/com/${NET}/${model_ver}
-export COMIN=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/com/${NET}/${model_ver}/${RUN}.${PDY}
+export COMINwave=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/com/${NET}/${model_ver}
+export COMIN=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/com/${NET}/${model_ver}/${RUN}.${PDY}
 #added for restart files
-export COMINrst=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/com/${NET}/${model_ver}
+export COMINrst=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/com/${NET}/${model_ver}
 
-export COMOUTwave=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/com/${NET}/${model_ver}
-export COMOUT=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/com/${NET}/${model_ver}/${RUN}.${PDY}
+export COMOUTwave=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/com/${NET}/${model_ver}
+export COMOUT=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/com/${NET}/${model_ver}/${RUN}.${PDY}
 export COMINOUT=$COMOUT
 #added for restart files
-export COMOUTrst=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/com/${NET}/${model_ver}
+export COMOUTrst=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/com/${NET}/${model_ver}
 
 
-export COMROOT=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/com/${NET}/${model_ver}
-#export DCOMROOT=/gpfs/${pref}p1/nco/GLWU_Danger_Seas/dcom
+export COMROOT=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/com/${NET}/${model_ver}
+#export DCOMROOT=/gpfs/${pref}p1/nco/RWPS_Danger_Seas/dcom
 
 # Choose to keep temporary directory
 export KEEPDATA='YES'

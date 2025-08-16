@@ -1,12 +1,12 @@
 
 ############################################
-###  JGLWU_PREP: Great Lakes Wave Sys    ###
+###  JRWPS_PREP: Great Lakes Wave Sys    ###
 ###      LSF card for development        ###
 ############################################
 #
 # LSF options
 #
-#PBS -N JGLWU_PREP
+#PBS -N JRWPS_PREP
 #PBS -j oe
 #PBS -S /bin/bash
 #PBS -q dev
@@ -16,8 +16,8 @@
 #PBS -l place=excl
 #PBS -l debug=true
 #PBS -V
-#PBS -o JGLWU_PREP.out
-#PBS -e JGLWU_PREP.out
+#PBS -o JRWPS_PREP.out
+#PBS -e JRWPS_PREP.out
 
 cd $PBS_O_WORKDIR
 
@@ -61,7 +61,7 @@ export IOBUF_PARAMS='*.dat:count=4:size=32M:prefetch=1:preflush=1'
 
 # Set global variables
 export modID=rwps
-export MODID=GLWU
+export MODID=RWPS
 
 runuser=$USER
 NWROOT=/lfs/h2/emc/couple/noscrub/${runuser}      # root of file system
@@ -83,10 +83,10 @@ export WCOSS_SYSTEM_COM=$( echo $COMROOTp1 | cut -c7-9)
 
 
 # Lines below for retrospective testing using data in noscrub
-# export DCOM=/gpfs/hps3/emc/marine/noscrub/${runuser}/GLWU_Q1FY15/DCOM
-# export INCOM=/gpfs/hps3/emc/marine/noscrub/${runuser}/GLWU_Q1FY15
+# export DCOM=/gpfs/hps3/emc/marine/noscrub/${runuser}/RWPS_Q1FY15/DCOM
+# export INCOM=/gpfs/hps3/emc/marine/noscrub/${runuser}/RWPS_Q1FY15
 
-export job=JGLWU_PREP
+export job=JRWPS_PREP
 export SMSBIN=/gpfs/${pref}p1/emc/globaldump/sms_fake
 
 # #Set Version numbers
@@ -139,14 +139,14 @@ else
 fi
 
 # Set COM paths
-export COMINwave=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/com/${NET}/${model_ver}
-export COMIN=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/com/${NET}/${model_ver}/${RUN}.${PDY}
+export COMINwave=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/com/${NET}/${model_ver}
+export COMIN=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/com/${NET}/${model_ver}/${RUN}.${PDY}
 
-export COMOUTwave=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/com/${NET}/${model_ver}
-export COMOUT=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/com/${NET}/${model_ver}/${RUN}.${PDY}
+export COMOUTwave=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/com/${NET}/${model_ver}
+export COMOUT=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/com/${NET}/${model_ver}/${RUN}.${PDY}
 export COMINOUT=$COMOUT
 
-export COMROOT=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/com/${NET}/${model_ver}
+export COMROOT=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/com/${NET}/${model_ver}
 
 #There was a change for the wind name in the ndfd files this happenned at 20181030_15
 #So the variable name must be change in ~fix/multiwaveprnc.ndfd

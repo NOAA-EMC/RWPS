@@ -1,13 +1,13 @@
 
 
 ############################################
-###   JGLWU_PGEN: Great Lakes Wave Sys   ###
+###   JRWPS_PGEN: Great Lakes Wave Sys   ###
 ###      LSF card for development        ###
 ############################################
 #
 # LSF options
 #
-#PBS -N JGLWU_PGEN
+#PBS -N JRWPS_PGEN
 #PBS -j oe
 #PBS -S /bin/bash
 #PBS -q dev
@@ -17,8 +17,8 @@
 #PBS -l place=excl
 #PBS -l debug=true
 #PBS -V
-#PBS -o JGLWU_PGEN.out
-#PBS -e JGLWU_PGEN.out
+#PBS -o JRWPS_PGEN.out
+#PBS -e JRWPS_PGEN.out
 
 cd $PBS_O_WORKDIR
 
@@ -49,7 +49,7 @@ export IOBUF_PARAMS='*:count=4:size=32M:prefetch=1:preflush=1'
 
 # Set global variables
 export modID=rwps
-export MODID=GLWU
+export MODID=RWPS
 
 runuser=$USER
 NWROOT=/lfs/h2/emc/couple/noscrub/${runuser}      # root of file system
@@ -68,10 +68,10 @@ else
 fi
 
 # Lines below for retrospective testing using data in noscrub
-# export DCOM=/gpfs/hps3/emc/marine/noscrub/${runuser}/GLWU_Q1FY15/DCOM
-# export INCOM=/gpfs/hps3/emc/marine/noscrub/${runuser}/GLWU_Q1FY15
+# export DCOM=/gpfs/hps3/emc/marine/noscrub/${runuser}/RWPS_Q1FY15/DCOM
+# export INCOM=/gpfs/hps3/emc/marine/noscrub/${runuser}/RWPS_Q1FY15
 
-export job=JGLWU_PGEN
+export job=JRWPS_PGEN
 export SMSBIN=/gpfs/${pref}p1/emc/marine/save/wavepa/sms_fake
 
 # #Set Version numbers
@@ -119,14 +119,14 @@ export SENDDBN=NO
 export SENDCOM=YES 
 
 # Set COM paths
-export COMROOT=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/com/${NET}/${model_ver}
-export COMINwave=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/com/${NET}/${model_ver}
-export COMIN=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/com/${NET}/${model_ver}/${RUN}.${PDY}
+export COMROOT=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/com/${NET}/${model_ver}
+export COMINwave=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/com/${NET}/${model_ver}
+export COMIN=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/com/${NET}/${model_ver}/${RUN}.${PDY}
 
-export COMOUTwave=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/com/${NET}/${model_ver}
-export COMOUT=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/com/${NET}/${model_ver}/${RUN}.${PDY}
+export COMOUTwave=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/com/${NET}/${model_ver}
+export COMOUT=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/com/${NET}/${model_ver}/${RUN}.${PDY}
 export COMINOUT=$COMOUT
-export COMOUTwmo=/lfs/h2/emc/couple/noscrub/${runuser}/${GLWUdir}/com/${NET}/${model_ver}/${RUN}.${PDY}/wmo
+export COMOUTwmo=/lfs/h2/emc/couple/noscrub/${runuser}/${RWPSdir}/com/${NET}/${model_ver}/${RUN}.${PDY}/wmo
 
 export DBNROOT=/dev/null
 
