@@ -291,12 +291,12 @@
     
 # 2.g Create model input file from template       
     
-  if [ -f $FIXrwps/multiwavefcst.$runID.tmpl ]    
+  if [ -f $FIXrwps/wavefcst.$runID.tmpl ]    
   then        
-    cp $FIXrwps/multiwavefcst.$runID.tmpl multiwavefcst.inp.tmpl   
+    cp $FIXrwps/wavefcst.$runID.tmpl wavefcst.inp.tmpl   
   fi
     
-  if [ ! -f multiwavefcst.inp.tmpl ]  
+  if [ ! -f wavefcst.inp.tmpl ]  
   then        
     msg="ABNORMAL EXIT: NO TEMPLATE FOR INPUT FILE" 
     postmsg   "$msg"        
@@ -323,10 +323,10 @@
       -e "s/BUOY_FILE/DUMMY/g" \
       -e "s/RST_TMES/$time_rsts/g" \
       -e "s/RST_TMEE/$time_rste/g" \
-                                     multiwavefcst.inp.tmpl | \
+                                     wavefcst.inp.tmpl | \
   sed -n "/DUMMY/!p"               > ww3_multi.inp
  
-#  rm -f multiwavefcst.inp.tmpl        
+#  rm -f wavefcst.inp.tmpl        
    
 pwd
 
@@ -347,18 +347,18 @@ pwd
   ln -fs mod_def.${grids} mod_def.ww3
   ln -fs wind.${grids} wind.ww3
   ln -fs ice.${grids} ice.ww3
-  ${mpicmd} $EXECrwps/multiwavefcst         
+  ${mpicmd} $EXECrwps/wavefcst         
   err=$?      
     
   if [ "$err" != '0' ]    
   then        
     pgm=wave_fcst         
-    msg="ABNORMAL EXIT: ERROR IN multiwavefcst"   
+    msg="ABNORMAL EXIT: ERROR IN wavefcst"   
     postmsg   "$msg"        
     set $setoff 
     echo ' '    
     echo '******************************************** '      
-    echo '*** FATAL ERROR : ERROR IN multiwavefcst *** '      
+    echo '*** FATAL ERROR : ERROR IN wavefcst *** '      
     echo '******************************************** '      
     echo ' '    
     echo "$runID fcst $date $cycle : model crashed." >> $wavelog   
@@ -443,7 +443,7 @@ pwd
 # 4.b Clean up unwanted files         
     
 #  rm -f mod_def.* wind.* ice.* restart* 
-#  rm -f multiwavefcst.inp   
+#  rm -f wavefcst.inp   
     
 # --------------------------------------------------------------------------- #
 # 5.  Ending output      

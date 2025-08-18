@@ -7,13 +7,13 @@
 # files to the work directory. After this the actual preprocessing is         #
 # performed by the following child scripts :                                  #
 #                                                                             #
-#   multiwavemod_def.sh   :  generate mod_def.ww3 files when needed           #
-#   waveice_glw.sh        :  preprocess ice fields                            #
+#   wavemod_def.sh   :  generate mod_def.ww3 files when needed           #
+#   waveice_rwps.sh        :  preprocess ice fields                            #
 #   wavendfd_rwps.sh      :  find and copy ndfd wind files (GLWU)             #
 #                                                                             #
 # Also used is the utililty script                                            #
 #                                                                             #
-#  multiwavestart.sh   : get time of most recent restart file.                #
+#  wavestart.sh   : get time of most recent restart file.                #
 #                                                                             #
 # Remarks :                                                                   #
 #                                                                             #
@@ -62,7 +62,7 @@
 # 0.b Date and time stuff
 #     The ending time of the run always is the $lsth hour forecast. The starting
 #     time depends on availablility of restart files, and is obtained with
-#     multiwavestart.sh
+#     wavestart.sh
 #
 #     Make sure nback is set identically in the forecast script !!!
 #     nback is the number of cycles (12-hour cycles) to look back.
@@ -392,16 +392,16 @@
 
 # 1.b Wind preprocessor template file
 
-  if [ -f $FIXrwps/multiwaveprnc.${wndTAG}.tmpl ]
+  if [ -f $FIXrwps/waveprnc.${wndTAG}.tmpl ]
   then
-    cp $FIXrwps/multiwaveprnc.${wndTAG}.tmpl .
+    cp $FIXrwps/waveprnc.${wndTAG}.tmpl .
   fi
 
-  if [ -f multiwaveprnc.${wndTAG}.tmpl ]
+  if [ -f waveprnc.${wndTAG}.tmpl ]
   then
-    echo "   multiwaveprnc."${wndTAG}".tmpl copied ($FIXrwps/multiwaveprnc."${wndTAG}".tmpl)."
+    echo "   waveprnc."${wndTAG}".tmpl copied ($FIXrwps/waveprnc."${wndTAG}".tmpl)."
   else
-    msg="ABNORMAL EXIT: NO FILE multiwaveprnc."${wndTAG}".tmpl"
+    msg="ABNORMAL EXIT: NO FILE waveprnc."${wndTAG}".tmpl"
     postmsg   "$msg"
     set +x
     echo ' '
@@ -420,16 +420,16 @@
 # and rwps runs.
 
 # 1.c Ice preprocessor template file
-  if [ -f $FIXrwps/multiwaveprep.ice_glw.tmpl ]
+  if [ -f $FIXrwps/waveprep.ice.tmpl ]
   then
-    cp $FIXrwps/multiwaveprep.ice_glw.tmpl ./multiwaveprep.ice.tmpl
+    cp $FIXrwps/waveprep.ice.tmpl ./waveprep.ice.tmpl
   fi
 
-  if [ -f multiwaveprep.ice.tmpl ]
+  if [ -f waveprep.ice.tmpl ]
   then
-    echo "   multiwaveprep.ice.tmpl copied ($FIXrwps/multiwaveprep.ice_glw.tmpl)."
+    echo "   waveprep.ice.tmpl copied ($FIXrwps/waveprep.ice.tmpl)."
   else
-    msg="ABNORMAL EXIT: NO FILE multiwaveprep.ice.tmpl"
+    msg="ABNORMAL EXIT: NO FILE waveprep.ice.tmpl"
     postmsg   "$msg"
     set +x
     echo ' '
@@ -503,7 +503,7 @@
 
   while [ "$ymdh" -le "$ymdh_end_ice" ]
   do
-  echo "$USHrwps/waveice_glw.sh $ymdh > ice_$ymdh.err 2>&1"     >> cmdfile
+  echo "$USHrwps/waveice_rwps.sh $ymdh > ice_$ymdh.err 2>&1"     >> cmdfile
     tinc_ice=1
     if [ $ymdh -ge $ymdh_newtres_ice -o $ymdh -lt $YMDH_ICE ]
     then
@@ -593,9 +593,9 @@
   do
     if [ -d eice_${ymdh} ]
     then
-      postmsg   "    File for $ymdh : error in waveice_glw.sh"
+      postmsg   "    File for $ymdh : error in waveice_rwps.sh"
       set +x
-      echo "         File for $ymdh : error in waveice_glw.sh"
+      echo "         File for $ymdh : error in waveice_rwps.sh"
       [[ "$LOUD" = YES ]] && set -x       
       nr_err=`expr $nr_err + 1`
       rm -f eice.$ymdh
@@ -636,7 +636,7 @@
     set +x
     echo ' '
     echo '****************************************'
-    echo '*** ERROR OUTPUT waveice_glw.sh ***'
+    echo '*** ERROR OUTPUT waveice_rwps.sh ***'
     echo '****************************************'
     echo '            Possibly in multiple calls'
     echo "$runID prep $date $cycle : error in ice   files." >> $wavelog
@@ -649,7 +649,7 @@
       sed "s/^/$file : /g" $file
     done
      # rm -f ice_*.out
-    postmsg   "NON-FATAL ERROR in waveice_glw.sh, possibly in multiple calls."
+    postmsg   "NON-FATAL ERROR in waveice_rwps.sh, possibly in multiple calls."
   fi
   if [ "$nr_err" -gt "$err_max" ]
   then
@@ -674,29 +674,29 @@
   echo ' '
   echo '   Running ice field through preprocessor.'
   [[ "$LOUD" = YES ]] && set -x
-  sed "s/GRIDLAYOUT/$GRID/g" multiwaveprep.ice.tmpl > ww3_prep.inp
-  rm -f multiwaveprep.ice.tmpl
+  sed "s/GRIDLAYOUT/$GRID/g" waveprep.ice.tmpl > ww3_prep.inp
+  rm -f waveprep.ice.tmpl
 
 # Here using igrids (the regular grid for ice grlr)
   for grdID in $grids
   do
 
     cp mod_def.$grdID mod_def.ww3
-    $EXECrwps/multiwaveprep > multiwaveprep.out
+    $EXECrwps/waveprep > waveprep.out
     err=$?
 
     if [ "$err" != '0' ]
     then
-      msg="ABNORMAL EXIT: ERROR IN multiwaveprep"
+      msg="ABNORMAL EXIT: ERROR IN waveprep"
       postmsg   "$msg"
       set +x
       echo ' '
       echo '******************************************** '
-      echo '*** FATAL ERROR : ERROR IN multiwaveprep *** '
+      echo '*** FATAL ERROR : ERROR IN waveprep *** '
       echo '******************************************** '
       echo ' '
       [[ "$LOUD" = YES ]] && set -x
-      echo "$runID $grdID prep $date $cycle : error in multiwaveprep." >> $wavelog
+      echo "$runID $grdID prep $date $cycle : error in waveprep." >> $wavelog
       err=12;export err;err_chk
     fi
 
@@ -706,7 +706,7 @@
       postmsg   "$msg"
       set +x
       echo ' '
-      cat multiwaveprep.out
+      cat waveprep.out
       echo ' '
       echo '****************************************'
       echo '*** FATAL ERROR : ice.ww3 NOT FOUND ***'

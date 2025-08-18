@@ -94,7 +94,7 @@
 #     the WW3 netcdf preprocessor only works with regular grids)
 
 # Convert NDFD file scan order to make sense to wgrib2 #
-  $WGRIB2 ${ndfd_file} -match "(WIND|WDIR)" -rpn alt_x_scan -set table_3.4 64 -grib_out glwnd.grb2
+  $WGRIB2 ${ndfd_file} -match "(WIND|WDIR)" -match ":vt=${ymdh}" -rpn alt_x_scan -set table_3.4 64 -grib_out glwnd.grb2
 
 # Convert to UGRD/VGRD
   $WGRIB2 glwnd.grb2 -match "(WIND|WDIR)" \
@@ -116,7 +116,7 @@
 # Unify UGRD/VGRD files
   cat ugrd.grib2 vgrd.grib2 > gluv.grb2
 
-# Interpolate to regular grid and higher reslution to avoid resolution cramp
+# Interpolate to regular grid (NDFD grid at 2.5km, using about half that to avoid resolution cramp)
   $WGRIB2 gluv.grb2 -new_grid_winds earth -new_grid_vectors UGRD:VGRD -new_grid latlon 267.28:1376:0.0125 41.1675:910:.009 gluv.grib2 > grib_interp.out 2>&1
 
 # Final store on NetCDF file
