@@ -137,7 +137,7 @@
 
 # 2.a Prepare the input file
 
-    sed -e "s/HDR/$hdr/g" ../multiwaveprnc.ndfd_rwps.tmpl > ww3_prnc.inp
+    sed -e "s/HDR/$hdr/g" ../waveprnc.ndfd_rwps.tmpl > ww3_prnc.inp
 
 # 2.b Execute code
 
@@ -145,7 +145,7 @@
     do 
 
       cp ../mod_def.$grdID mod_def.ww3
-      $EXECrwps/multiwaveprnc > multiwaveprnc.out.$ymdh 
+      $EXECrwps/waveprnc > waveprnc.out.$ymdh 
       err=$?
 
       if [ "$err" != '0' ]

@@ -113,56 +113,56 @@ if [[ $rc -ne 0 ]] ; then
 fi
 
 # Copy to top-level exe directory
-cp $path_build/install/bin/ww3_grid $finalexecdir/multiwavegrid
+cp $path_build/install/bin/ww3_grid $finalexecdir/wavegrid
 rc=$?
 if [[ $rc -ne 0 ]] ; then
   echo "FATAL: Unable to copy $path_build/ww3_grid to $finalexecdir (Error code $rc)"
   exit $rc
 fi
 
-cp $path_build/install/bin/ww3_prep $finalexecdir/multiwaveprep
+cp $path_build/install/bin/ww3_prep $finalexecdir/waveprep
 rc=$?
 if [[ $rc -ne 0 ]] ; then
   echo "FATAL: Unable to copy $path_build/ww3_prep to $finalexecdir (Error code $rc)"
   exit $rc
 fi
 
-cp $path_build/install/bin/ww3_prnc $finalexecdir/multiwaveprnc
+cp $path_build/install/bin/ww3_prnc $finalexecdir/waveprnc
 rc=$?
 if [[ $rc -ne 0 ]] ; then
   echo "FATAL: Unable to copy $path_build/ww3_prnc to $finalexecdir (Error code $rc)"
   exit $rc
 fi
 
-cp $path_build/install/bin/ww3_outp $finalexecdir/multiwavespec
+cp $path_build/install/bin/ww3_outp $finalexecdir/wavespec
 rc=$?
 if [[ $rc -ne 0 ]] ; then
   echo "FATAL: Unable to copy $path_build/ww3_outp to $finalexecdir (Error code $rc)"
   exit $rc
 fi
 
-cp $path_build/install/bin/ww3_gint $finalexecdir/multiwavegrid_interp
+cp $path_build/install/bin/ww3_gint $finalexecdir/wavegrid_interp
 rc=$?
 if [[ $rc -ne 0 ]] ; then
   echo "FATAL: Unable to copy $path_build/ww3_gint to $finalexecdir (Error code $rc)"
   exit $rc
 fi
 
-cp $path_build/install/bin/ww3_ounf $finalexecdir/multiwavefldn
+cp $path_build/install/bin/ww3_ounf $finalexecdir/wavefldn
 rc=$?
 if [[ $rc -ne 0 ]] ; then
   echo "FATAL: Unable to copy $path_build/ww3_ounf to $finalexecdir (Error code $rc)"
   exit $rc
 fi
 
-cp $path_build/install/bin/ww3_ounp $finalexecdir/multiwavespnc
+cp $path_build/install/bin/ww3_ounp $finalexecdir/wavespnc
 rc=$?
 if [[ $rc -ne 0 ]] ; then
   echo "FATAL: Unable to copy $path_build/ww3_ounp to $finalexecdir (Error code $rc)"
   exit $rc
 fi
 
-cp $path_build/install/bin/ww3_grib $finalexecdir/multiwavegrib2
+cp $path_build/install/bin/ww3_grib $finalexecdir/wavegrib2
 rc=$?
 if [[ $rc -ne 0 ]] ; then
   echo "FATAL: Unable to copy $path_build/ww3_grib to $finalexecdir (Error code $rc)"
@@ -205,7 +205,7 @@ if [[ $rc -ne 0 ]] ; then
 fi
 
 # Copy to top-level exe directory
-cp $path_build/install/bin/ww3_multi $finalexecdir/multiwavefcst
+cp $path_build/install/bin/ww3_multi $finalexecdir/wavefcst
 rc=$?
 if [[ $rc -ne 0 ]] ; then
   echo "FATAL: Unable to copy $path_build/ww3_multi to $finalexecdir (Error code $rc)"

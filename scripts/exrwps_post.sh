@@ -6,13 +6,13 @@
 # some generally used files to the work directory. After this the actual      #
 # postprocessing is performed by the following child scripts :                #
 #                                                                             #
-#  multiwavegrib2.sh        : generates GRIB2 files.                          #
-#  multiwavespec.sh         : generates spectral data files for output        #
+#  wavegrib2.sh        : generates GRIB2 files.                          #
+#  wavespec.sh         : generates spectral data files for output        #
 #                             locations.                                      #
-#  multiwavespec_ts.sh      : generates mean parameter tables for output      #
+#  wavespec_ts.sh      : generates mean parameter tables for output      #
 #                             locations.                                      #
-#  multiwavebull.sh         : generates bulletins for output locations.       #
-#  multiwavetar.sh          : tars the spectral and bulletin multiple files   #
+#  wavebull.sh         : generates bulletins for output locations.       #
+#  wavetar.sh          : tars the spectral and bulletin multiple files   #
 #                                                                             #
 # Remarks :                                                                   #
 # - The above scripts are (mostly) run under poe in parallel.                 #
@@ -429,17 +429,17 @@ export grint_OK='yes'
 
   if [ "$grib_OK" = 'yes' ]
   then
-    if [ -f $FIXrwps/multiwavegrib2.inp.tmpl ]
+    if [ -f $FIXrwps/wavegrib2.inp.tmpl ]
     then
-      cp $FIXrwps/multiwavegrib2.inp.tmpl multiwavegrib2.inp.tmpl
+      cp $FIXrwps/wavegrib2.inp.tmpl wavegrib2.inp.tmpl
     fi
 
-    if [ -f multiwavegrib2.inp.tmpl ]
+    if [ -f wavegrib2.inp.tmpl ]
     then
       set +x
-      echo "   multiwavegrib2.inp.tmpl copied. Syncing to all nodes ..."
+      echo "   wavegrib2.inp.tmpl copied. Syncing to all nodes ..."
       [[ "$LOUD" = YES ]] && set -x
-      $FSYNC multiwavegrib2.inp.tmpl
+      $FSYNC wavegrib2.inp.tmpl
     else
       set +x
       echo ' '
@@ -457,17 +457,17 @@ export grint_OK='yes'
 
   if [ "$ncdf_OK" = 'yes' ]
   then
-    if [ -f $FIXrwps/multiwavefldn.inp.tmpl ]
+    if [ -f $FIXrwps/wavefldn.inp.tmpl ]
     then
-      cp $FIXrwps/multiwavefldn.inp.tmpl multiwavefldn.inp.tmpl
+      cp $FIXrwps/wavefldn.inp.tmpl wavefldn.inp.tmpl
     fi
 
-    if [ -f multiwavefldn.inp.tmpl ]
+    if [ -f wavefldn.inp.tmpl ]
     then
       set +x
-      echo "   multiwavefldn.inp.tmpl copied. Syncing to all nodes ..."
+      echo "   wavefldn.inp.tmpl copied. Syncing to all nodes ..."
       [[ "$LOUD" = YES ]] && set -x
-      $FSYNC multiwavefldn.inp.tmpl
+      $FSYNC wavefldn.inp.tmpl
     else
       set +x
       echo ' '
@@ -483,17 +483,17 @@ export grint_OK='yes'
     fi
   fi
 
-  if [ -f $FIXrwps/multiwavespec.inp.tmpl ]
+  if [ -f $FIXrwps/wavespec.inp.tmpl ]
   then
-    cp $FIXrwps/multiwavespec.inp.tmpl multiwavespec.inp.tmpl
+    cp $FIXrwps/wavespec.inp.tmpl wavespec.inp.tmpl
   fi
 
-  if [ -f multiwavespec.inp.tmpl ]
+  if [ -f wavespec.inp.tmpl ]
   then
     set +x
-    echo "   multiwavespec.inp.tmpl copied. Syncing to all grids ..."
+    echo "   wavespec.inp.tmpl copied. Syncing to all grids ..."
     [[ "$LOUD" = YES ]] && set -x
-    $FSYNC multiwavespec.inp.tmpl
+    $FSYNC wavespec.inp.tmpl
   else
     set +x
     echo ' '
@@ -511,17 +511,17 @@ export grint_OK='yes'
     Obull_OK='no'
   fi
 
-  if [ -f $FIXrwps/multiwavespec_ts.inp.tmpl ]
+  if [ -f $FIXrwps/wavespec_ts.inp.tmpl ]
   then
-    cp $FIXrwps/multiwavespec_ts.inp.tmpl multiwavespec_ts.inp.tmpl
+    cp $FIXrwps/wavespec_ts.inp.tmpl wavespec_ts.inp.tmpl
   fi
 
- if [ -f multiwavespec_ts.inp.tmpl ]
+ if [ -f wavespec_ts.inp.tmpl ]
   then
     set +x
-    echo "   multiwavespec_ts.inp.tmpl copied. Syncing to all grids ..."
+    echo "   wavespec_ts.inp.tmpl copied. Syncing to all grids ..."
     [[ "$LOUD" = YES ]] && set -x
-    $FSYNC multiwavespec_ts.inp.tmpl
+    $FSYNC wavespec_ts.inp.tmpl
   else
     set +x
     echo ' '
@@ -537,17 +537,17 @@ export grint_OK='yes'
     ripin_OK='no'
   fi
 
-  if [ -f $FIXrwps/multiwavespec_bull.inp.tmpl ]
+  if [ -f $FIXrwps/wavespec_bull.inp.tmpl ]
   then
-    cp $FIXrwps/multiwavespec_bull.inp.tmpl multiwavespec_bull.inp.tmpl
+    cp $FIXrwps/wavespec_bull.inp.tmpl wavespec_bull.inp.tmpl
   fi
 
-  if [ -f multiwavespec_bull.inp.tmpl ]
+  if [ -f wavespec_bull.inp.tmpl ]
   then
     set +x
-    echo "   multiwavespec_bull.inp.tmpl copied. Syncing to all nodes ..."
+    echo "   wavespec_bull.inp.tmpl copied. Syncing to all nodes ..."
     [[ "$LOUD" = YES ]] && set -x
-    $FSYNC multiwavespec_bull.inp.tmpl
+    $FSYNC wavespec_bull.inp.tmpl
   else
     set +x
     echo ' '
@@ -575,21 +575,21 @@ export grint_OK='yes'
         -e "s/POINT/1/g" \
         -e "s/ITYPE/0/g" \
         -e "s/FORMAT/F/g" \
-                               multiwavespec.inp.tmpl > ww3_outp.inp
+                               wavespec.inp.tmpl > ww3_outp.inp
    
     ln -s mod_def.$pntgrd mod_def.ww3
-    $EXECrwps/multiwavespec > buoy_tmp.loc 
+    $EXECrwps/wavespec > buoy_tmp.loc 
     err=$?
 
     if [ "$err" != '0' ]
     then
       pgm=wave_post
-      msg="ABNORMAL EXIT: ERROR IN multiwavespec"
+      msg="ABNORMAL EXIT: ERROR IN wavespec"
       postmsg   "$msg"
       set +x
       echo ' '
       echo '******************************************** '
-      echo '*** FATAL ERROR : ERROR IN multiwavespec *** '
+      echo '*** FATAL ERROR : ERROR IN wavespec *** '
       echo '******************************************** '
       echo ' '
       echo "$runID post $date $cycle : buoy log file failed to be created." >> $wavelog
@@ -646,7 +646,7 @@ export grint_OK='yes'
       ymdh_int=`$NDATE -9 $YMDH`
       dt_int=3600.
       n_int=9999
-      $USHrwps/multiwavegrid_interp.sh $igrdID $ymdh_int $dt_int $n_int > grint_$igrdID.out
+      $USHrwps/wavegrid_interp.sh $igrdID $ymdh_int $dt_int $n_int > grint_$igrdID.out
     done
 
     for igrdID in $itgrids
@@ -654,7 +654,7 @@ export grint_OK='yes'
       ymdh_int=`$NDATE -9 $YMDH`
       dt_int=3600.
       n_int=9999
-      echo "$USHrwps/multiwavegrid_interp.sh $igrdID $ymdh_int $dt_int $n_int > grint_$igrdID.out 2>&1" >> cmdfile
+      echo "$USHrwps/wavegrid_interp.sh $igrdID $ymdh_int $dt_int $n_int > grint_$igrdID.out 2>&1" >> cmdfile
     done
 
   fi
@@ -789,7 +789,7 @@ export grint_OK='yes'
       fi
       if [ "$grib2_GO" = "yes" ]
       then 
-        echo "$USHrwps/multiwavegrib2.sh $grdID $dtgrib $ngrib $GRIDNR $MODNR $GTMPLN > grib_$grdID.out 2>&1"               >> cmdfile
+        echo "$USHrwps/wavegrib2.sh $grdID $dtgrib $ngrib $GRIDNR $MODNR $GTMPLN > grib_$grdID.out 2>&1"               >> cmdfile
       fi
     done
   fi
@@ -815,7 +815,7 @@ export grint_OK='yes'
 
     for buoy in $buoys
     do
-      echo "$USHrwps/multiwavespec2.sh $buoy $ymdh > spec_$buoy.out 2>&1" >> cmdfile
+      echo "$USHrwps/wavespec2.sh $buoy $ymdh > spec_$buoy.out 2>&1" >> cmdfile
     done
   fi
 
@@ -826,7 +826,7 @@ export grint_OK='yes'
 
     for buoy in $buoys
     do
-      echo "$USHrwps/multiwavespec_ts.sh $buoy $ymdh > ts_$buoy.out 2>&1" >> cmdfile
+      echo "$USHrwps/wavespec_ts.sh $buoy $ymdh > ts_$buoy.out 2>&1" >> cmdfile
     done
   fi
 
@@ -837,13 +837,13 @@ export grint_OK='yes'
  do	 
   #if [ "$RetroRun" = "YES" ] 
   #then
-    if [ -f $FIXrwps/multiwavespnc.inp.tmpl ]
+    if [ -f $FIXrwps/wavespnc.inp.tmpl ]
     then     
-       cp $FIXrwps/multiwavespnc.inp.tmpl multiwavespnc.inp.tmpl
+       cp $FIXrwps/wavespnc.inp.tmpl wavespnc.inp.tmpl
     fi
     export dtspec=3600.   # time step for spectra
     ymdh=$YMDH # start time for spectra output
-    echo "$USHrwps/multiwavespnc.sh $grdID $ymdh > spnc.out 2>&1" >> cmdfile
+    echo "$USHrwps/wavespnc.sh $grdID $ymdh > spnc.out 2>&1" >> cmdfile
   #fi
  done
 
@@ -860,7 +860,7 @@ export grint_OK='yes'
    
     for buoy in $buoys
     do
-      echo "$USHrwps/multiwavespec_bull.sh $buoy $ymdh > bull_$buoy.out 2>&1" >> cmdfile
+      echo "$USHrwps/wavespec_bull.sh $buoy $ymdh > bull_$buoy.out 2>&1" >> cmdfile
     done
   fi
 #  set +v; [[ "$LOUD" = YES ]] && set -x
@@ -1027,12 +1027,12 @@ export grint_OK='yes'
         set +x
         echo ' '
         echo '**************************************'
-        echo '*** ERROR OUTPUT multiwavegrib2.sh ***'
+        echo '*** ERROR OUTPUT wavegrib2.sh ***'
         echo '**************************************'
         echo ' '
         [[ "$LOUD" = YES ]] && set -x
         echo "$runID post $date $cycle : error in GRIB." >> $wavelog
-        postmsg   "NON-FATAL ERROR in multiwavegrib2.sh"
+        postmsg   "NON-FATAL ERROR in wavegrib2.sh"
         exit_code=22
         sed "s/^/grib_$grdID.err : /g"  grib_$grdID.err
       fi
@@ -1044,12 +1044,12 @@ export grint_OK='yes'
       set +x
       echo ' '
       echo '*************************************'
-      echo '*** ERROR OUTPUT multiwavespec.sh ***'
+      echo '*** ERROR OUTPUT wavespec.sh ***'
       echo '*************************************'
       echo '            Possibly in multiple calls'
       [[ "$LOUD" = YES ]] && set -x
       echo "$runID post $date $cycle : error in spectra." >> $wavelog
-      postmsg   "NON-FATAL ERROR in multiwavespec.sh, possibly in multiple calls."
+      postmsg   "NON-FATAL ERROR in wavespec.sh, possibly in multiple calls."
       exit_code=24
       for file in spec_*.err
       do
@@ -1064,12 +1064,12 @@ export grint_OK='yes'
       set +x
       echo ' '
       echo '*************************************'
-      echo '*** ERROR OUTPUT multiwavespec_ts.sh ***'
+      echo '*** ERROR OUTPUT wavespec_ts.sh ***'
       echo '*************************************'
       echo '            Possibly in multiple calls'
       [[ "$LOUD" = YES ]] && set -x
       echo "$runID post $date $cycle : error in time series." >> $wavelog
-      postmsg   "NON-FATAL ERROR in multiwavespec_ts.sh, possibly in multiple calls."
+      postmsg   "NON-FATAL ERROR in wavespec_ts.sh, possibly in multiple calls."
       exit_code=24
       for file in ts_*.err
       do
@@ -1085,13 +1085,13 @@ export grint_OK='yes'
       set +x
       echo ' '
       echo '******************************************'
-      echo '*** ERROR OUTPUT multiwavespec_bull.sh ***'
+      echo '*** ERROR OUTPUT wavespec_bull.sh ***'
       echo '******************************************'
       echo '            Possibly in multiple calls'
       echo ' '
       [[ "$LOUD" = YES ]] && set -x
       echo "$runID post $date $cycle : error in bulletins." >> $wavelog
-      postmsg   "NON-FATAL ERROR in multiwavebull.sh, possibly in multiple calls."
+      postmsg   "NON-FATAL ERROR in wavebull.sh, possibly in multiple calls."
       exit_code=25
       for file in bull_*.err
       do
@@ -1131,12 +1131,12 @@ export grint_OK='yes'
 
   if [ "$spec_OK" = 'yes' ]
   then
-    echo "$USHrwps/multiwavetar.sh $runID spec $Nb > ${runID}_spec_tar.out 2>&1 "   >> cmdfile
+    echo "$USHrwps/wavetar.sh $runID spec $Nb > ${runID}_spec_tar.out 2>&1 "   >> cmdfile
   fi
 
   if [ "$ts_OK" = 'yes' ]
   then
-    echo "$USHrwps/multiwavetar.sh $runID ts $Nb > ${runID}_ts_tar.out 2>&1 "   >> cmdfile
+    echo "$USHrwps/wavetar.sh $runID ts $Nb > ${runID}_ts_tar.out 2>&1 "   >> cmdfile
   fi
 
   if [ "$ripin_OK" = 'yes' ]
@@ -1153,28 +1153,28 @@ export grint_OK='yes'
       Nrip=`expr $Nrip + 1`
     done
     cd $DATA
-    echo "$USHrwps/multiwavetar.sh $runID ripin $Nrip > ${runID}_ripin_tar.out 2>&1 "   >> cmdfile
+    echo "$USHrwps/wavetar.sh $runID ripin $Nrip > ${runID}_ripin_tar.out 2>&1 "   >> cmdfile
   fi
 
 # 7.b Bulletins
 
   if [ "$bull_OK" = 'yes' ]
   then
-    echo "$USHrwps/multiwavetar.sh $runID bull $Nb > ${runID}_bull_tar.out 2>&1 "   >> cmdfile
+    echo "$USHrwps/wavetar.sh $runID bull $Nb > ${runID}_bull_tar.out 2>&1 "   >> cmdfile
   fi
 
 # 7.c Compressed bulletins
 
   if [ "$bull_OK" = 'yes' ]
   then
-     echo "$USHrwps/multiwavetar.sh $runID cbull $Nb > ${runID}_cbull_tar.out 2>&1 " >> cmdfile
+     echo "$USHrwps/wavetar.sh $runID cbull $Nb > ${runID}_cbull_tar.out 2>&1 " >> cmdfile
   fi
 
 # 7.d CSV bulletins
 
   if [ "$bull_OK" = 'yes' ]
   then
-    echo "$USHrwps/multiwavetar.sh $runID csbull $Nb > ${runID}_csbull_tar.out 2>&1 " >> cmdfile
+    echo "$USHrwps/wavetar.sh $runID csbull $Nb > ${runID}_csbull_tar.out 2>&1 " >> cmdfile
   fi
 
 # --------------------------------------------------------------------------- #
@@ -1364,7 +1364,7 @@ export grint_OK='yes'
 # Save 2.5km lambert sr grid files
       grdID=grlc_2p5km_sr
 
-# grib2 files are DBN-alerted within multiwavegrib2.sh
+# grib2 files are DBN-alerted within wavegrib2.sh
     fi 
     
     echo ' '
@@ -1427,7 +1427,7 @@ export grint_OK='yes'
       echo "RUNID: $runID "
       echo THIS IS IT '$grdID $dtgrib $ngrib $GRIDNR $MODNR $GTMPLN'
       echo $grdID $dtgrib $ngrib $GRIDNR $MODNR $GTMPLN
-      $USHrwps/multiwavegrib2.sh $grdID $dtgrib $ngrib $GRIDNR $MODNR $GTMPLN > grib_$grdID.out 2>&1
+      $USHrwps/wavegrib2.sh $grdID $dtgrib $ngrib $GRIDNR $MODNR $GTMPLN > grib_$grdID.out 2>&1
     done
   fi
 # --------------------------------------------------------------------------- #

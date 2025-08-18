@@ -86,7 +86,7 @@
   set +x
   echo ' '
   echo '   Creating mod_def file ...'
-  echo "   Executing $EXECrwps/multiwavegrid"
+  echo "   Executing $EXECrwps/wavegrid"
   echo ' '
   [[ "$LOUD" = YES ]] && set -x
  
@@ -97,7 +97,7 @@
     ln -fs ../mesh.$grdID .
   fi
 
-  $EXECrwps/multiwavegrid
+  $EXECrwps/wavegrid
   err=$?
 
   if [ "$err" != '0' ]
@@ -105,11 +105,11 @@
     set +x
     echo ' '
     echo '******************************************** '
-    echo '*** FATAL ERROR : ERROR IN multiwavegrid *** '
+    echo '*** FATAL ERROR : ERROR IN wavegrid *** '
     echo '******************************************** '
     echo ' '
     [[ "$LOUD" = YES ]] && set -x
-    postmsg   "FATAL ERROR : ERROR IN multiwavegrid"
+    postmsg   "FATAL ERROR : ERROR IN wavegrid"
     exit 3
   fi
  
@@ -137,7 +137,7 @@
 
   set +x
   echo ' '
-  echo 'End of multiwavemod_def.sh at'
+  echo 'End of wavemod_def.sh at'
   date
 
-# End of multiwavemod_def.sh ------------------------------------------------- #
+# End of wavemod_def.sh ------------------------------------------------- #

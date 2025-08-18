@@ -114,11 +114,8 @@ export NET=rwps
   export iceID=icean_5m                              # ice ID
   export wndID=rwps                              # wind ID (for the WW3 grid used for wind data)
   export COMDATE=/lfs/h2/emc/couple/noscrub/${runuser}/rwps/${sysver}/dev/lsf_scripts      # directory where PDY date                                                      # stored
-#JS="WEB PUBWEB ARC WEB"
-#JS="PREP FORECAST POST WEB PUBWEB"
-#JS="PREP FORECAST POST WEB"
-JS="PREP FORECAST POST PGEN"
-#JS="PREP"
+#JS="PREP FORECAST POST PGEN"
+JS="PREP FORECAST"
 
   for j in ${JS}
   do
