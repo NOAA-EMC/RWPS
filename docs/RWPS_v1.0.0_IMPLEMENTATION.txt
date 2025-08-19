@@ -1,6 +1,7 @@
 IMPLEMENTATION INSTRUCTIONS ON WCOSS2
-Go to your emc/couple/noscrub/$USER directory
- cd <topdir>
+Go to your /lfs/h2/emc/couple/noscrub/$USER directory
+ mkdir rwps
+ cd rwps
  git clone  https://github.com/NOAA-EMC/rwps.git rwps.v1.0.0
  cd rwps.v1.0.0
  git submodule update --init --recursive
