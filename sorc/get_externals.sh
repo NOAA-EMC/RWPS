@@ -7,7 +7,7 @@
 # --------------------------------------------------------------------------- #
 
 echo 'Fetching externals...'
-cp -p /lfs/h2/emc/couple/noscrub/saeideh.banihashemi/git/fv3gfs/fix/fix_glwu/mesh.glwu ../fix/mesh.rwps
+cp -p /lfs/h2/emc/couple/noscrub/keston.smith/meshes/RWPS.v0.msh ../fix/mesh.rwps
 cp -p /lfs/h2/emc/couple/noscrub/saeideh.banihashemi/git/fv3gfs/fix/fix_glwu/grint_weights.grlc_2p5km ../fix/
 cp -p /lfs/h2/emc/couple/noscrub/saeideh.banihashemi/git/fv3gfs/fix/fix_glwu/grint_weights.grlr ../fix/
 cp -p /lfs/h2/emc/couple/noscrub/saeideh.banihashemi/git/fv3gfs/fix/fix_glwu/grint_weights.grlr_500m ../fix/
