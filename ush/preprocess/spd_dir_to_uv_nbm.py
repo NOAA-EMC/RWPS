@@ -4,7 +4,7 @@ import numpy as np
 import netCDF4 as nc
 import sys
 import math
-
+import interp_utilities as iutil
 # Converts NBM direction and magnitude wind variables to U,V 
 # Command line inputs:
 #     argumnent 1 is the netcdf input file name with variables: WIND_10maboveground and WDIR_10maboveground

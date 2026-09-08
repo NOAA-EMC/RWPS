@@ -37,7 +37,7 @@ rwps_ak="$outdir/$meshname.$PDY.$cyc.wind10m.rrfs.ak.nc"
 rwps_conus="$outdir/$meshname.$PDY.$cyc.wind10m.rrfs.conus.nc"
 
 
-mkdir $outdir
+mkdir -p $outdir
 
 ##LocalFS  = [ rwps_pr, rwps_hi, rwps_ak, rwps_conus, rwps_na] # file names
 ##VarFS    = [ 4.     , 4.    , 9.      , 16.       , 25.    ] # (m m /s /s)

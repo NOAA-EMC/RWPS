@@ -9,7 +9,7 @@ ICE_FILE="$COMINnbm/blend.t$2z.icec.ak.grib2"
 OUTPUT_DIR="$COMINlocal/ice.$1.$2"
 OUTPUT_FILE="$OUTPUT_DIR/nbm.$1.$2.ice.ak.nc"
 
-mkdir "$OUTPUT_DIR"
+mkdir -p "$OUTPUT_DIR"
 # Remove existing output file to avoid mixing old data
 rm -f "$OUTPUT_FILE"
 
