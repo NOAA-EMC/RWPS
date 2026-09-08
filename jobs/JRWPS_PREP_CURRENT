@@ -1,0 +1,6 @@
+#!/bin/sh
+
+cd $HOMErwps/ush/preprocess
+sh get_current.sh
+sh process_current.sh
+

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+cd $HOMErwps/ush/preprocess
+sh get_ice.sh
+sh process_ice.sh
+
+

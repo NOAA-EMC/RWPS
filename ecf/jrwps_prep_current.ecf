@@ -1,0 +1,36 @@
+#!/bin/sh
+#PBS -q dev
+#PBS -l walltime=00:59:00
+#PBS -A GLWU-DEV
+#PBS -N RWPS.PreProc.current
+#PBS -j oe
+#PBS -l select=1:ncpus=32:mem=64GB
+#PBS -o RWPS.PreProc.out
+
+cd $HOMErwps/ush/preprocess
+
+module use ${HOMErwps}/modulefiles
+
+############################################################
+# Load modules
+############################################################
+source $HOMErwps/versions/preproc.${MACHINE_ID}.ver
+
+#modules for esmf
+module reset
+module load PrgEnv-intel/${PrgEnv_intel_ver}
+module load craype/${craype_ver}
+module load intel/${intel_ver}
+module load cray-mpich/${cray_mpich_ver}
+module load hdf5-C/${hdf5_C_ver}
+module load netcdf-C/${netcdf_C_ver}
+module load esmf-C/${esmf_C_ver}
+module load ve/hafs/${ve_hafs_ver}
+
+#modules for wgrib2
+module load intel-oneapi/${intel_oneapi_ver}
+module load wgrib2/${wgrib2_ver}
+
+module list
+
+${HOMErwps}/jobs/JRWPS_PREP_CURRENT

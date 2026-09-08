@@ -1,0 +1,7 @@
+#!/bin/sh
+
+cd $HOMErwps/ush/preprocess
+sh get_wind.sh
+sh process_wind.sh
+
+
