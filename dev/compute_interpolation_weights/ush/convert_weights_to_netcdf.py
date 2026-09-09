@@ -1,7 +1,7 @@
 import numpy as np
 import netCDF4 as nc
 import sys
-import interp_utilities as  iutil
+import compute_interpolation_weights_utilities as  iutil
 import scipy.sparse as sp
 
 nargin = len(sys.argv) - 1

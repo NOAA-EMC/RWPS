@@ -21,6 +21,6 @@ module load ve/hafs/2.1
 
 pip list -v
 
-$RWPSroot/dev/compute_interpolation_weights/jobs/COMPUTE_INTERPOLATION_WEIGHTS
+$HOMErwps/dev/compute_interpolation_weights/jobs/COMPUTE_INTERPOLATION_WEIGHTS
 
 

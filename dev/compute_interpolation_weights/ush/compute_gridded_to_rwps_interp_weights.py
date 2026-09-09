@@ -8,19 +8,15 @@
 
 import numpy as np
 import os
-
-import datetime
 import netCDF4 as nc
 import sys
-import re
-
 import xarray as xr
 import esmpy
 import scipy.sparse as sp
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../ush/preprocess')))
 
-import interp_utilities as iutil
+import compute_interpolation_weights_utilities as iutil
 
 # Main program
 AddExtrapolationSupport=True

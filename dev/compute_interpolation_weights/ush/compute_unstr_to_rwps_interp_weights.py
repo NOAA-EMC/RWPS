@@ -1,11 +1,10 @@
 import numpy as np
 import netCDF4 as nc
 import sys
-from scipy.interpolate import RegularGridInterpolator
 import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../ush/preprocess')))
-import interp_utilities as  iutil
+import compute_interpolation_weights_utilities as  iutil
 
 nargin = len(sys.argv) - 1
 

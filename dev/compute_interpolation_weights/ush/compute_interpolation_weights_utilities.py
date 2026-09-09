@@ -1,88 +1,5 @@
-from scipy.interpolate import RegularGridInterpolator
-from scipy.sparse import csr_matrix
-from scipy.sparse.csgraph import connected_components
-
-from datetime import datetime
 import numpy as np
 import netCDF4 as nc
-import sys
-import re
-
-#Convert Time to "seconds since 1970-01-01 00:00:00.0"
-#eg   'seconds since 2024-04-04 12:00:00        ! NCDASE - BASE_DAT'
-def ConvertTimeToUnixTime(flin,TimeVarName = None):
-    if TimeVarName == None:
-        TimeVarName="time"
-    data = nc.Dataset(flin,"r")
-    #print("TimeVarName = "+TimeVarName)
-    timevar=data[TimeVarName]
-    time=np.asarray(data[TimeVarName][:])
-    epoch_1970 = datetime(1970, 1, 1, 0, 0, 0)
-    TimeUnitsString=timevar.units
-    TimeUnitsStrings=TimeUnitsString.split(" ")
-    tunits=TimeUnitsStrings[0]
-    dstr=TimeUnitsStrings[2]
-    dstr=dstr.split("-")
-    tstr=TimeUnitsStrings[3]
-    tstr=tstr.split(":")
-    print(dstr)
-    print(tstr)
-    secstr=tstr[2].rsplit(".", 1)[0]
-    base_date = datetime(int(dstr[0]),int(dstr[1]),int(dstr[2]),int(tstr[0]),int(tstr[1]),int(secstr))
-    base_offset = int((base_date - epoch_1970).total_seconds())
-    if tunits=="seconds":
-        unix_time = time + base_offset
-    if tunits=="days":
-        unix_time = time*24*60*60 + base_offset
-    if tunits=="hours":
-        unix_time = time*60*60 + base_offset
-    return unix_time
-
-def FileNameToUnixTime(flin,FcastPDY,FcastCYC):
-    year0=int(FcastPDY[0:4])
-    month0=int(FcastPDY[4:6])
-    day0=int(FcastPDY[6:8])
-    hr0=int(FcastCYC)
-    #remove path and file  
-    suffixp = flin.rfind(".")
-    dirp = flin.rfind("/")
-    flin=flin[dirp+1:suffixp]
-    
-    IsForecast=True
-    ntimep=flin.find(".f")
-    ntimeu=flin.find("_f")
-    ntime=max(ntimep,ntimeu)
-    print("ntime: "+str(ntime))
-    if ntime<1:
-        IsForecast=False
-        ntimep=flin.find(".n")
-        ntimeu=flin.find("_n")
-        ntime=max(ntimep,ntimeu)
-    
-    print("ntime: "+str(ntime))
-    ctime=flin[ntime+2:ntime+5]
-    print(ctime)
-    ctime=ctime.replace(".", "") #remove trailing "." in some file names
-    
-    print("FileNameToUnixTime A:")
-    print(flin)
-    print(ctime)
-    hrf=int(ctime)
-    epoch_1970 = datetime(1970, 1, 1, 0, 0, 0)
-    FileTime =   datetime(year0,month0,day0, hr0, 0, 0)
-    base_offset = int((FileTime - epoch_1970).total_seconds())
-    if IsForecast:
-        unix_time = base_offset + abs(hrf)*3600
-    else:
-        unix_time = base_offset - abs(hrf)*3600
-        
-    print("FileNameToUnixTime:")
-    print(str(year0)+" "+str(month0)+ " " +str(day0)   + " " +str(hr0))
-    print(flin)
-    print(ctime)
-    print(base_offset)
-    print(hrf)
-    return unix_time
 
 def loadWW3Mesh(fl):
     print("mesh file="+fl)
@@ -124,9 +41,7 @@ def loadWW3Mesh(fl):
     k=0
     for i in range(ne):
         A = f.readline()
-        #print(A)
         values = A.split(" ")
-        #print(values)
         if len(values) == 6:
             if int(values[2])==2:
                 bnd.append(int(values[5]))
@@ -146,149 +61,15 @@ def loadWW3Mesh(fl):
     print("number of elements read: "+str(k))
     return xi, yi, ei, zi
 
-
-import numpy as np
-from scipy.interpolate import griddata
-#import matplotlib.pyplot as plt
-
-def interpolate_curvilinear_to_points(lon_in, lat_in, data_in, lon_out, lat_out):
-    """
-    Performs bilinear-equivalent interpolation from a curvilinear grid to new points.
-
-    Args:
-        lon_in (np.ndarray): 2D array of input longitudes.
-        lat_in (np.ndarray): 2D array of input latitudes.
-        data_in (np.ndarray): 2D array of data values corresponding to (lon_in, lat_in).
-        lon_out (np.ndarray or list): Longitudes of the target points.
-        lat_out (np.ndarray or list): Latitudes of the target points.
-
-    Returns:
-        np.ndarray: Interpolated data values at the target points.
-    """
-    # Flatten the input coordinates and data into 1D arrays
-    # griddata expects points as a list of (x, y) tuples or a 2D array
-    points_in = np.vstack((lon_in.flatten(), lat_in.flatten())).T
-    values_in = data_in.flatten()
-
-    # Define the target points
-    points_out = np.vstack((lon_out, lat_out)).T
-
-    # Perform the interpolation using scipy.interpolate.griddata with 'linear' method
-    # The 'linear' method in griddata is the appropriate choice for curvilinear data
-    # as it uses triangulation.
-    interpolated_data = griddata(points_in, values_in, points_out, method='linear')
-
-    return interpolated_data
-
-
-def interpolate_curvilinear_to_pointsMD(lon_in, lat_in, data_in, lon_out, lat_out):
-    """
-    Performs bilinear-equivalent interpolation from a curvilinear grid to new points.
-
-    Args:
-        lon_in (np.ndarray): 2D array of input longitudes.
-        lat_in (np.ndarray): 2D array of input latitudes.
-        data_in (np.ndarray): 3D array of data values corresponding to (lon_in, lat_in, ntimes).
-        lon_out (np.ndarray or list): Longitudes of the target points.
-        lat_out (np.ndarray or list): Latitudes of the target points.
-
-    Returns:
-        np.ndarray: Interpolated data values at the target points (length(lon_out/lat_out x ntimes)).
-    """
-    # Flatten the input coordinates and data into 1D arrays
-    # griddata expects points as a list of (x, y) tuples or a 2D array
-    points_in = np.vstack((lon_in.flatten(), lat_in.flatten())).T
-
-    shp=data_in.shape
-    print(shp)
-    nx=shp[0]
-    ny=shp[1]
-    nt=shp[2]
-
-    ns=nx*ny
-    S=np.zeros((ns,nt))
-    s0=np.zeros((nx,ny))
-    for k in range(nt):
-        s0[:,:]=np.transpose(data_in[:,:,k])
-        S[:,k] = s0.flatten()
-
-    # Define the target points
-    points_out = np.vstack((lon_out, lat_out)).T
-
-    # Perform the interpolation using scipy.interpolate.griddata with 'linear' method
-    # The 'linear' method in griddata is the appropriate choice for curvilinear data
-    # as it uses triangulation.
-    interpolated_data = griddata(points_in, S, points_out, method='linear')
-
-    return interpolated_data
-
-
-def interpolate_curvilinear_to_pointsRRFS(lon_in, lat_in, data_in, lon_out, lat_out):
-    """
-    Performs bilinear-equivalent interpolation from a curvilinear grid to new points.
-
-    Args:
-        lon_in (np.ndarray): 2D array of input longitudes.
-        lat_in (np.ndarray): 2D array of input latitudes.
-        data_in (np.ndarray): 3D array of data values corresponding to (lon_in, lat_in, ntimes).
-        lon_out (np.ndarray or list): Longitudes of the target points.
-        lat_out (np.ndarray or list): Latitudes of the target points.
-
-    Returns:
-        np.ndarray: Interpolated data values at the target points (length(lon_out/lat_out x ntimes)).
-    """
-    # Flatten the input coordinates and data into 1D arrays
-    # griddata expects points as a list of (x, y) tuples or a 2D array
-   
-    points_in = np.vstack((lon_in.flatten(), lat_in.flatten())).T
-   # points_in = np.hstack((lon_in.flatten(), lat_in.flatten()))
-
-    shp=data_in.shape
-    print(shp)
-    nx=shp[0]
-    ny=shp[1]
-    nt=shp[2]
-
-    ns=nx*ny
-    S=np.zeros((ns,nt))
-    s0=np.zeros((ny,nx))
-    for k in range(nt):
-        s0[:,:]=np.transpose(data_in[:,:,k])
-        S[:,k] = s0.flatten()
-
-    # Define the target points
-    points_out = np.vstack((lon_out, lat_out)).T
-
-    # Perform the interpolation using scipy.interpolate.griddata with 'linear' method
-    # The 'linear' method in griddata is the appropriate choice for curvilinear data
-    # as it uses triangulation.
-    print(S.shape)
-    print(points_in)
-    print(points_out)
-    
-    interpolated_data = griddata(points_in, S, points_out, method='linear')
-
-    return interpolated_data
-
-def CopyAttributes(VarOld, VarNew):
-    #Copy attributes from old NetCDF file variable to new NetCDF file variable
-    att_names = VarOld.ncattrs()
-    for jatt in range(len(att_names)):
-        att_name=att_names[jatt]
-        if (not (att_name=="_FillValue")):
-            att_value = VarOld.getncattr(att_name)
-            VarNew.setncattr(att_name, att_value)
-    return
-
-
 ############################################################################################
 # BEGIN WIND TO RWPS INTERP ROUTINES 
 import esmpy
-import scipy.sparse as sp
 
 def CurvilinearGridCreateInterpWeights(xi,yi,x1,y1, weights_file):
 # Compute interpolation weights to interpolate from curvilinear grid (x1,y1) to points (xi,yi)
 # and store in netcdf file using ESMPY
+    debuging_output=False
+    
     nx,ny=x1.shape
     nn=len(xi)
     n1=nx*ny
@@ -329,10 +110,12 @@ def CurvilinearGridCreateInterpWeights(xi,yi,x1,y1, weights_file):
     src_field = esmpy.Field(src_grid, name="src_field")
     dst_field = esmpy.Field(dst_grid, name="dst_field")
     src_field.data[...]=np.sqrt(np.abs(x1/180))/(90+y1) # arbitrary function of x,y
-
-    np.savetxt('F.txt', src_field.data[...])
-    np.savetxt('X.txt', x1)
-    np.savetxt('Y.txt', y1)
+    
+    if debuging_output: 
+        np.savetxt('F.txt', src_field.data[...])
+        np.savetxt('X.txt', x1)
+        np.savetxt('Y.txt', y1)
+    
     print(f"Creating weights: {weights_file}")
     regrid = esmpy.Regrid(
       src_field,
@@ -347,35 +130,13 @@ def CurvilinearGridCreateInterpWeights(xi,yi,x1,y1, weights_file):
         ds.Nrows = nn
         ds.Ncols = n1
     
-    np.savetxt('Fi.txt', dst_field.data[...])
-    np.savetxt('xi.txt', xi)
-    np.savetxt('yi.txt', yi)
+    if debuging_output: 
+        np.savetxt('Fi.txt', dst_field.data[...])
+        np.savetxt('xi.txt', xi)
+        np.savetxt('yi.txt', yi)
     
     return
 
-def CalculateDistanceToBoundary(xi,yi,x1,y1):
-# Distance to boundary calculation for use when interpolation envelope corresponds with 
-# interior of curvilinear grid boundary.
-#
-# Inputs:
-#   xi (nn): longitude of unstructured mesh nodes 
-#   yi (nn): latitude of unstructured mesh nodes 
-#   x1 (nx x ny): longitude for interpoltated field
-#   y1 (nx x ny): latitude for interpoltated field
-#
-# Outputs:
-#   dist2bnd (nn) : distance to edge of interpolation envelope.  
-    nx=x1.shape[0]
-    ny=x1.shape[1]
-    xb=np.hstack((x1[1,:],x1[:,ny-1].T,x1[nx-1,:],x1[:,1].T))
-    yb=np.hstack((y1[1,:],y1[:,ny-1].T,y1[nx-1,:],y1[:,1].T))
-    np.savetxt('xbyb.txt', np.vstack((xb,yb)))
-    dist2bnd=np.zeros(nn)
-    for k in range(nn):
-        dist2bnd[k]=QuickDistance(yi[k],xi[k],yb,xb)
-        if k%10000==0:
-            print("calculating distance to boundary, "+str(k)+":"+ str(nn)+":"+str(k/nn) )
-    return dist2bnd
 
 def CalculateDistanceToInterpEnvelope(xi,yi,fi,SearchWidth):
 # Alternative distance to boundary calculation for use when interpolation envelope is 
@@ -422,34 +183,6 @@ def QuickDistance(lat1, lon1, lats2, lons2):
     d= np.min(  np.sqrt( (  (lat1-lats2)*deg2kmY)**2 + ((lon1-lons2)*deg2kmX)**2 )  )
     return d
 
-def VarianceLinearDistanceToBndy(DistanceToBoundary, InteriorVariance, VarianceOnBoundary, LengthScale):
-    InteriorNodeList=np.where(DistanceToBoundary**2 >= 0 )
-    Variance=np.zeros(len(DistanceToBoundary))+np.inf
-    SpatialFunction=DistanceToBoundary/LengthScale
-    j=np.where(SpatialFunction>1.)
-    SpatialFunction[j]=1.
-    Variance[InteriorNodeList] = VarianceOnBoundary + ( InteriorVariance - VarianceOnBoundary ) * SpatialFunction[InteriorNodeList]
-    return Variance
-
-def VarianceInverseDistanceToBndy( DistanceToBoundary, InteriorVariance, LengthScale):
-    InteriorNodeList=np.where(DistanceToBoundary**2 >= 0 )
-    Variance=np.zeros(len(DistanceToBoundary))+np.inf
-    SpatialFunction=LengthScale / DistanceToBoundary
-    j=np.where(SpatialFunction>1.)
-    SpatialFunction[j]=1.
-    Variance[InteriorNodeList] = InteriorVariance  * SpatialFunction[InteriorNodeList]
-    return Variance
-
-def VarianceLinearDepth(zi,VarianceShallow,VarianceDeep,Zshallow,Zdeep):        
-    Variance = VarianceShallow + (VarianceDeep-VarianceShallow)*(zi-Zshallow)/(Zdeep-Zshallow)
-    js=np.where(zi<Zshallow)
-    jd=np.where(zi>Zdeep)
-    Variance[js]=VarianceShallow
-    Variance[jd]=VarianceDeep
-    return Variance
-
-import numpy as np
-import netCDF4 as nc
 def WriteInterpolationWeightsToNetCDF(weights_file,row,col,weights,Nrows,Ncols):
     #create a esmpy style sparse matrix netcdf file
     print(Nrows)
@@ -567,15 +300,13 @@ def compute_mesh_to_mesh_interp_weights(x, y, e, xi, yi):
     deg2kmY=111.
     UseNearestEle = False #if True just use closest element center
     N = 12 # search N nearest elements (nearest by element center to target node distance)
-            
-    print(xi)
+
     x = np.asarray(x)
     y = np.asarray(y)
     e = np.asarray(e)
     xi = np.asarray(xi)
     yi = np.asarray(yi)
-    print("e.shape")
-    print(e.shape)
+
     # convert node indexs to 0 .. nn-1
     e0=e-1
     
@@ -647,20 +378,6 @@ def compute_mesh_to_mesh_interp_weights(x, y, e, xi, yi):
     return weights, nodes, elenum, Dist2EleCenter
 
 
-def InterpolateField2Nodes(nodes,weights, f):
-    fi=np.zeros(weights.shape[0])
-    for k in range(weights.shape[0]):
-        fl=f[nodes[k,:]]
-        wl=weights[k,:]
-        fi[k]=np.dot(wl,fl)
-        if (not np.abs(fi[k]) > 0.):
-           fi[k]=0.
-        if ( fi[k]>np.max(fl)  ):
-           fi[k]=np.max(fl)
-        if ( fi[k]<np.min(fl)  ):
-           fi[k]=np.min(fl)
-    return fi
-
 
 # Move to the directory where the job was submitted
 #-->cd $PBS_O_WORKDIR
@@ -685,7 +402,6 @@ def WriteInterpJobscriptPBS(fl,flin,mshfl,Njobs, ComputeNodes):
         f.write("#PBS -l walltime=01:00:00\n")
         f.write("#PBS -J 1-"+str(Njobs)+"\n")
         f.write("#PBS -l select=2:ncpus=32:mem=128gb\n")
-#        f.write("#PBS -l select=1:ncpus=1:mem=8G\n")
         f.write("#PBS -l place=excl\n")
         f.write("#PBS -l debug=true\n")
         f.write("#PBS -r y\n")
@@ -735,30 +451,8 @@ def WriteInterpJobscriptSLURM(fl,flin,mshfl,Njobs, ComputeNodes):
         f.write("module load py-scipy/1.14.1 \n")
         f.write("module load py-netcdf4/1.7.1.post2 \n")
         f.write("pip list \n")
-        f.write("# calculate interpolation weights in parallel geographically \n")
-        f.write("srun python GeoSubsetInterpolateSTOFS.py "+flin+" "+mshfl+" $SLURM_ARRAY_TASK_ID " + str(Njobs)+" > InterpJob.$SLURM_ARRAY_TASK_ID.out \n")
-        f.write("wait\n")
-        f.write("# concatonate different parts of the mesh to common text file \n")
-        f.write("cat "+TmpOutDir+"/Part.IntrpWghts.*.txt > "+WghtFl+" \n")
-        f.write("# convert output weights to netcdf file \n")
-        f.write("python convert_weights_to_netcdf.py "+flin+" "+mshfl+" \n")
+        current_dir = os.getcwd()
+        f.write("cd "+current_dir+"\n")
 
-            
-    flintrp="STOFS.to."+mshfl[meshslash:len(mshfl)-4]+".sh"
-    flout=flin[0:-2]+mshfl[meshslash:len(mshfl)-4]+".nc"
-    flinuv=flin[0:-3]+".vel.nc"
-    floutuv=flinuv[0:-2]+mshfl[meshslash:len(mshfl)-4]+".nc"
-    with open(flintrp, 'w') as f:
-        f.write("#!/bin/bash \n")
-        f.write("#SBATCH --job-name=STOFS_interp_masterscript \n")
-        f.write(" \n")
-        f.write("module purge \n")
-        f.write("module use /scratch4/NCEPDEV/marine/Ali.Salimi/Hera_Data/HR4-OPT/FromJessica/Keston/ICunstructuredRuns15km-implicit-450s/global-workflow/sorc/ufs_model.fd/modulefiles \n")
-        f.write("module load ufs_ursa.intel \n")
-        f.write("module load py-scipy/1.14.1 \n")
-        f.write("module load py-netcdf4/1.7.1.post2 \n")
-        f.write("pip list \n")
         f.write("# calculate interpolation weights in parallel geographically \n")
-        f.write("python InterpolateSTOFS.py "+flin+" "+mshfl+" "+flout+" zeta 2\n")
-        f.write("python InterpolateSTOFS.py "+flinuv+" "+mshfl+" "+floutuv+" u-vel:v-vel 2\n")
-
+        f.write("python compute_unstr_to_rwps_interp_weights.py "+flin+" "+mshfl+" $SLURM_ARRAY_TASK_ID " + str(Njobs)+" > InterpJob.$SLURM_ARRAY_TASK_ID.out \n")

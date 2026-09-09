@@ -1,11 +1,11 @@
 Scripts to create interpolation weights and distance to boundary files for interpolating forcing to RWPS mesh.
 To run:
 
-$ cd RWPS/dev/compute_interpolation_weights/sorc
+$ cd RWPS/dev/compute_interpolation_weights/ush
 $ sh compute_interpolation_weights.sh oc_1500m_30km
 
 to generate interpolation files for mesh rwps.oc_1500m_30km.msh.  Files will be writen to directory:
-RWPS/fix/
+RWPS/interpolation_weights
 
 Interpolation weights are created for:
 
