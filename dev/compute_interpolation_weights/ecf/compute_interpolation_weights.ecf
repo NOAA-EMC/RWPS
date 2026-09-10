@@ -1,11 +1,11 @@
 #!/bin/bash
-#PBS -N ESMPy
+#PBS -N compute_interpolation_weights
 #PBS -j oe
 #PBS -S /bin/bash
 #PBS -q dev
 #PBS -A NWPS-DEV
 #PBS -l walltime=04:00:00
-#PBS -l select=1:ncpus=16:mem=500GB
+#PBS -l select=1:ncpus=32:mem=500GB
 #PBS -l place=excl
 #PBS -l debug=true
 

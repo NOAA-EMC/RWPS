@@ -111,7 +111,7 @@ xwin=[lonW,lonE]
 ywin=[latS,latN]
 print("calculating interpolation weights for [W"+str(lonW)+": E "+str(lonE)+": S "+str(latS)+": N "+str(latN)+"]")
 #Find target mesh nodes in window
-jxUi=np.where( xi <= np.max(xwin))[0].tolist()
+jxUi=np.where( xi < np.max(xwin))[0].tolist()
 jxDi=np.where( xi >= np.min(xwin))[0].tolist()
 jyUi=np.where( yi <= np.max(ywin))[0].tolist()
 jyDi=np.where( yi >= np.min(ywin))[0].tolist()
