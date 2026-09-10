@@ -11,11 +11,7 @@ import os
 import netCDF4 as nc
 import sys
 import xarray as xr
-import esmpy
 import scipy.sparse as sp
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../ush/preprocess')))
-
 import compute_interpolation_weights_utilities as iutil
 
 # Main program
@@ -137,8 +133,10 @@ if Extrapolate:
     interpolator = NearestNDInterpolator(srcp, srcv)
     distances, j0src = interpolator.tree.query(dstp)
     weightsExtrp=weights.tolist().append([1.0] * len(j0) )
-    rowExtrp=np.concatenate( (row, np.array(j0)) )
-    colExtrp=np.concatenate( (col, np.array(j0src+1)) )
+    j0=np.array(j0)
+    j0src=np.array(j0src)
+    rowExtrp=np.concatenate( (row, j0+1    ) )
+    colExtrp=np.concatenate( (col, j0src+1 ) )
     weightsExtrp=np.concatenate( (weights, np.array([1.0] * len(j0))) )
     os.replace(weights_file, weights_file[0:-3]+".NoExtrap.nc")
     iutil.WriteInterpolationWeightsToNetCDF(weights_file,rowExtrp,colExtrp,weightsExtrp,len(xi),len(x1v))
