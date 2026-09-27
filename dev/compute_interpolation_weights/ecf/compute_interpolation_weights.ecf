@@ -4,7 +4,7 @@
 #PBS -S /bin/bash
 #PBS -q dev
 #PBS -A NWPS-DEV
-#PBS -l walltime=04:00:00
+#PBS -l walltime=08:00:00
 #PBS -l select=1:ncpus=32:mem=500GB
 #PBS -l place=excl
 #PBS -l debug=true
@@ -21,6 +21,7 @@ module load ve/hafs/2.1
 
 pip list -v
 cd ${DATA}
+
 ${HOMErwps}/dev/compute_interpolation_weights/jobs/COMPUTE_INTERPOLATION_WEIGHTS
 
 

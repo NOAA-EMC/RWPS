@@ -1,5 +1,6 @@
 import numpy as np
 import netCDF4 as nc
+import esmpy
 import os
 HOMErwps = os.environ['HOMErwps']
 CIWrwps=HOMErwps+'/dev/compute_interpolation_weights/ush'
@@ -7,10 +8,10 @@ CIWrwps=HOMErwps+'/dev/compute_interpolation_weights/ush'
 def loadWW3Mesh(fl):
     print("mesh file="+fl)
     f=open(fl, 'r')
-    header = f.readline() 
-    header = f.readline() 
-    header = f.readline() 
-    header = f.readline() 
+    header = f.readline()
+    header = f.readline()
+    header = f.readline()
+    header = f.readline()
     header = f.readline() # number of nodes
     nn=int(header)
     print("nn = "+str(nn))
@@ -32,8 +33,8 @@ def loadWW3Mesh(fl):
             zi[k]=values[3]
         k=k+1
     print("number of nodes read: "+str(k))
-    header = f.readline() 
-    header = f.readline() 
+    header = f.readline()
+    header = f.readline()
     header = f.readline() # number of elements
     ne=int(header)#includes boundary nodes and actual elements
     print("ne="+str(ne)+" -includes boundary nodes")
@@ -63,15 +64,11 @@ def loadWW3Mesh(fl):
     print("number of elements read: "+str(k))
     return xi, yi, ei, zi
 
-############################################################################################
-# BEGIN WIND TO RWPS INTERP ROUTINES 
-import esmpy
 
 def CurvilinearGridCreateInterpWeights(xi,yi,x1,y1, weights_file):
 # Compute interpolation weights to interpolate from curvilinear grid (x1,y1) to points (xi,yi)
 # and store in netcdf file using ESMPY
     debuging_output=False
-    
     nx,ny=x1.shape
     nn=len(xi)
     n1=nx*ny
@@ -112,12 +109,12 @@ def CurvilinearGridCreateInterpWeights(xi,yi,x1,y1, weights_file):
     src_field = esmpy.Field(src_grid, name="src_field")
     dst_field = esmpy.Field(dst_grid, name="dst_field")
     src_field.data[...]=np.sqrt(np.abs(x1/180))/(90+y1) # arbitrary function of x,y
-    
-    if debuging_output: 
+
+    if debuging_output:
         np.savetxt('F.txt', src_field.data[...])
         np.savetxt('X.txt', x1)
         np.savetxt('Y.txt', y1)
-    
+
     print(f"Creating weights: {weights_file}")
     regrid = esmpy.Regrid(
       src_field,
@@ -131,12 +128,12 @@ def CurvilinearGridCreateInterpWeights(xi,yi,x1,y1, weights_file):
     with nc.Dataset(weights_file, mode="a") as ds:
         ds.Nrows = nn
         ds.Ncols = n1
-    
-    if debuging_output: 
+
+    if debuging_output:
         np.savetxt('Fi.txt', dst_field.data[...])
         np.savetxt('xi.txt', xi)
         np.savetxt('yi.txt', yi)
-    
+
     return
 
 
@@ -154,10 +151,9 @@ def CalculateDistanceToInterpEnvelope(xi,yi,fi,SearchWidth):
 #   dist2bnd (nn) : distance to edge of interpolation envelope.  dist2bnd[k]=0 if (xi[k],yi[k]) is outside
 #                   of the interpolation envelope
     nn=len(xi)
-    #dist2bnd=np.zeros(nn)
     dist2bnd=np.full(nn,np.nan)
-    jin = np.where(~np.isnan(fi))[0].tolist()#points inside interpolation envelope
-    jout = np.where(np.isnan(fi))[0].tolist() #points outside interpolation envelope
+    jin = np.where(~np.isnan(fi))[0].tolist() # nodes inside interpolation envelope
+    jout = np.where(np.isnan(fi))[0].tolist() # nodes outside interpolation envelope
     xin=xi[jin]
     yin=yi[jin]
     xout=xi[jout]
@@ -172,6 +168,7 @@ def CalculateDistanceToInterpEnvelope(xi,yi,fi,SearchWidth):
     din=np.zeros(len(jin))
     print(len(xin))
     print(len(xout))
+
     for k in range(len(xin)):
         din[k]=QuickDistance(yin[k],xin[k],yout,xout) # distance from node to closest point not interpolated to
         if k%10000==0:
@@ -179,10 +176,12 @@ def CalculateDistanceToInterpEnvelope(xi,yi,fi,SearchWidth):
     dist2bnd[jin]=din
     return dist2bnd
 
+deg2rad= np.pi / 180.
+deg2kmY=111.
 def QuickDistance(lat1, lon1, lats2, lons2):
-    deg2kmY=111.
-    deg2kmX=np.cos( np.pi * lat1 / 180.)*deg2kmY
-    d= np.min(  np.sqrt( (  (lat1-lats2)*deg2kmY)**2 + ((lon1-lons2)*deg2kmX)**2 )  )
+    deg2kmX=np.cos( deg2rad * lat1 )*deg2kmY
+    d = np.min( ((lat1-lats2)*deg2kmY)**2 + ((lon1-lons2)*deg2kmX)**2  )
+    d = np.sqrt(d)
     return d
 
 def WriteInterpolationWeightsToNetCDF(weights_file,row,col,weights,Nrows,Ncols):
