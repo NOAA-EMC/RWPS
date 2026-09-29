@@ -118,7 +118,12 @@ with nc.Dataset(flout, 'w', format='NETCDF4') as ncout:
 
     #Copy attributes from old file to new
     for jv in range(nvar):
-        f_var=ncout.createVariable(varname[jv], 'f4', ('time','node'))
+        try:
+            fill_value0=data0[varname[jv]]._FillValue
+        except:
+            fill_value0=-99999
+        print("fill value="+str(fill_value0))
+        f_var=ncout.createVariable(varname[jv], 'f4', ('time','node'),fill_value = fill_value0)
         iutil.CopyAttributes(data0[varname[jv]], f_var)
         f_var[:,:]=field[jv,:,:]
 
