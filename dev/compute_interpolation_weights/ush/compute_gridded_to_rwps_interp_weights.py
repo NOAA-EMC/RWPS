@@ -6,6 +6,15 @@
 # incorporating all forecasts. The understanding is that the more local forecast 
 # products are of higher accuracy than the coarser broader scale forecasts
 
+# Script should be called as:
+# $python compute_unstr_to_rwps_interp_weights.py InputDataFileToBeInterpolated.nc InputWW3MeshFile.msh OutputInterpolationWeightsFile.nc OutputDistanceToBoundaryFile.nc ExtrapolationFlag
+# where:
+#   InputDataFileToBeInterpolated.nc is forcast file with curvilinear(or regular) gridded spatial data
+#   InputWW3MeshFile.msh is the ascii WW3 unstructured mesh geometry file
+#   OutputInterpolationWeightsFile.nc contains the weights for interpolating from InputDataFileToBeInterpolated.n to the nodes of the mesh defined in InputWW3MeshFile.msh
+#   OutputDistanceToBoundaryFile.nc contains the distance to the forecast boundary and bathymetric depth for each node in the mesh which can be usefull for combining forecasts with different spatial coverage
+#   ExtrapolationFlag=True if nearest neighbor extrapolation should be used to extrapolate to nodes outside of the coverage of InputDataFileToBeInterpolated.nc
+#
 import numpy as np
 import netCDF4 as nc
 import xarray as xr
