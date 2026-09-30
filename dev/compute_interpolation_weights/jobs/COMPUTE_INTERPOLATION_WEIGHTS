@@ -28,6 +28,12 @@
 
 cd ${DATA}
 
+# The sample input directory (${SID}) should have example input from all 
+# of the forecasts that may be used as forcing for RWPS.  If no sample
+# is available use whatever source is going to be used for forcing, i.e.
+# forecasts for a recent forecast cycle. Edit the script to reflect the
+# location, date and cycle.
+
 # Sample input directory on dogwood
 #SID="/lfs/h2/emc/couple/noscrub/keston.smith/SampleInput"
 #PDY="20260730"
