@@ -388,19 +388,19 @@ def WriteInterpJobscriptPBS(fl,flin,mshfl,Njobs, ComputeNodes):
     WghtFl="STOFS.wght."+mshfl[meshslash:len(mshfl)-4]+".txt"
     WghtFl="InterpWeights."+mshfl[meshslash:len(mshfl)-4]+".stofs.txt"
     WghtFlNetCDF="InterpWeights."+mshfl[meshslash:len(mshfl)-4]+".stofs.nc"
-    Njobs=32 #OVERWRITE FOR NOW
     with open(fl, 'w') as f:
-        f.write("#PBS -N ESMPy\n")
-        f.write("#PBS -j oe\n")
         f.write("#PBS -S /bin/bash\n")
+        f.write("#PBS -N UnstrCompIntpWghts.part\n")
+        f.write("#PBS -j oe\n")
         f.write("#PBS -q dev\n")
         f.write("#PBS -A NWPS-DEV\n")
-        f.write("#PBS -l walltime=01:00:00\n")
-        f.write("#PBS -J 1-"+str(Njobs)+"\n")
-        f.write("#PBS -l select=2:ncpus=32:mem=128gb\n")
-        f.write("#PBS -l place=excl\n")
+        f.write("#PBS -l walltime=08:00:00\n")
+#        f.write("#PBS -l select=1:ncpus="+str(Njobs)+":mem=256gb\n")
+        f.write("#PBS -l select=1:ncpus=1:mem=32gb\n")
+#        f.write("#PBS -l place=excl\n") #makes each sub job exclusive in PBS
         f.write("#PBS -l debug=true\n")
         f.write("#PBS -r y\n")
+        f.write("#PBS -J 1-"+str(Njobs)+"\n")
 
         f.write("module reset\n")
         f.write("module load PrgEnv-intel/8.5.0\n")

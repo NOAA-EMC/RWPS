@@ -38,7 +38,7 @@ SID="/lfs/h2/emc/couple/noscrub/keston.smith/SampleInputCactus"
 PDY="20260921"
 cyc="12"
 
-# number of cores to be used in calculation
+# number of cores to be used in unstructured parallel calculation
 Nprocs=32
 
 
@@ -47,6 +47,8 @@ Nprocs=32
 # no extrapolation for rrfs forecasts.
 ######################################################################
 (
+cd ${DATA}
+
 rrfs_hi=${SID}/wind.${PDY}.${cyc}/rrfs.${PDY}.${cyc}.wind10m.hi.nc
 rrfs_pr=${SID}/wind.${PDY}.${cyc}/rrfs.${PDY}.${cyc}.wind10m.pr.nc
 rrfs_ak=${SID}/wind.${PDY}.${cyc}/rrfs.${PDY}.${cyc}.wind10m.ak.nc
@@ -78,6 +80,8 @@ python ${ushIW}/compute_gridded_to_rwps_interp_weights.py $rrfs_conus ${mesh} ${
 # Extrapolate to cover minor edge differences on south and east boundaries.
 ######################################################################
 (
+cd ${DATA}
+
 nbm_oc=${SID}/wind.${PDY}.${cyc}/nbm.${PDY}.${cyc}.wind10m.oc.nc
 nbmIntrp="${out}/InterpolationWeights.${meshname}.nbm"
 nbmDst="${out}/DistToBndy.${meshname}.nbm"
@@ -102,6 +106,9 @@ python ${ushIW}/compute_gridded_to_rwps_interp_weights.py $nbm_ak ${mesh} ${nbmI
 # Do extrapolate rtofs .glo. for full ice coverage in near shore.
 ######################################################################
 (
+
+cd ${DATA}
+
 rtofs_ice=${SID}/ice.${PDY}.${cyc}/rtofs.ice.${PDY}.nc
 rtofsIntrp="${out}/InterpolationWeights.${meshname}.rtofs"
 rtofsDst="${out}/DistToBndy.${meshname}.rtofs"
@@ -119,6 +126,24 @@ rm $rtofsIntrp.current.nc ${rtofsDst}.current.nc
 python ${ushIW}/compute_gridded_to_rwps_interp_weights.py ${rtofs_cur} ${mesh} ${rtofsIntrp}.current.nc ${rtofsDst}.current.nc -1
 )&
 
+
+######################################################################
+# Compute psurge interpolation weights for interpolating watelevel.
+# Do not extrapolat into coastal regions. Mesh is conus 625m.
+######################################################################
+(
+cd ${DATA}
+
+psurge_conus=${SID}/psurge.20260921.12/psurge.t2026042912z.al832026_e10_inc_dat.h102.conus_625m.nc
+psurgeIntrp="${out}/InterpolationWeights.${meshname}.psurge"
+psurgeDst="${out}/DistToBndy.${meshname}.psurge"
+
+#do not extrapolate for psurge conus domain
+rm ${psurgeIntrp}.conus.nc ${psurgeDst}.conus.nc
+python ${ushIW}/compute_gridded_to_rwps_interp_weights.py $psurge_conus ${mesh} ${psurgeIntrp}.conus.nc ${psurgeDst}.conus.nc -1
+)&
+
+
 ######################################################################
 # Compute stofs interpolation weights for stofs v3 output
 # All dates after ~ August 18 2026
@@ -126,6 +151,8 @@ python ${ushIW}/compute_gridded_to_rwps_interp_weights.py ${rtofs_cur} ${mesh} $
 # earlier forecasts as well.
 ######################################################################
 (
+cd ${DATA}
+
 stofs_glo="${SID}/stofs.20260921.12/stofs_2d_glo.t12z.fields.cwl.nc"
 
 mkdir -p  ${DATA}/STOFSInterpWeights.${meshname}
@@ -152,5 +179,6 @@ rm ${DATA}/*.out
 rm ${DATA}/ESMPy*.*
 rm -rf ${DATA}/__pycache__
 )&
+
 
 wait

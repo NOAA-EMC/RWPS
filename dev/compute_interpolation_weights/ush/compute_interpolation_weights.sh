@@ -32,7 +32,6 @@ ${HOMErwps}/sorc/link_workflow.sh
 export mesh="${HOMErwps}/fix/${meshID}/rwps.${meshID}.msh"
 meshname="${mesh##*/}"
 export meshname="${meshname: 0: -4}"
-echo "meshname = ${meshname}"
 
 cd ${DATA}
 
