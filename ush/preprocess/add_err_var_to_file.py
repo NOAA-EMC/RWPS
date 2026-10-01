@@ -163,7 +163,7 @@ with  nc.Dataset(fltmp, "w", format="NETCDF4") as ncout:
     if not 'time' in ncout.dimensions:
         ncadd.createDimension('time' , nt)
     if not 'ErrorVariance' in ncout.variables:
-        ErrorVariance_var=ncout.createVariable('ErrorVariance', 'f8', ('time','node'))
+        ErrorVariance_var=ncout.createVariable('ErrorVariance', 'f4', ('time','node'))
         ErrorVariance_var.long_name     = 'forecast error variance'
         ErrorVariance_var.units         = "(field units)**2"
         ErrorVariance_var.standard_name = 'errror variance'
