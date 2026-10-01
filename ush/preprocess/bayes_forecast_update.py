@@ -7,7 +7,7 @@ HOMErwps = os.environ['HOMErwps']
 USHrwps=HOMErwps+'/ush'
 PREPROCESSrwps=USHrwps+'/preprocess'
 sys.path.append(PREPROCESSrwps)
-
+import interp_utilities as iutil
 ######################################################################
 # Combine two interpolated forecasts on the same mesh (both of which
 # have error variances associated with their respective forecasts) in
