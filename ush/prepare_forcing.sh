@@ -42,14 +42,11 @@ export mesh="${HOMErwps}/fix/${meshID}/rwps.${meshID}.msh"
 usrtmp="/lfs/h2/emc/ptmp/$USER/"
 mkdir -p ${usrtmp}
 
-export fix="${HOMErwps}/fix"
-export DATA="${usrtmp}/RWPSdata.${PDY}.${cyc}.${meshID}"
-export tmp="${DATA}/tmpfiles"
-export frc="${DATA}/forcing"
-export interpwghtsdir="${HOMErwps}/interpolation_weights"
+export DATA="${usrtmp}/RWPS.forcing_preperation.${PDY}.${cyc}.${meshID}.tmpdir"
+export tmp="${DATA}"
+export frc="${usrtmp}/RWPS.forcing.${PDY}.${cyc}.${meshID}"
 
-
-export outdir=${DATA}
+export interpwghtsdir=/lfs/h2/emc/couple/noscrub/keston.smith/InterpolationWeights/RWPS.interpolation_weights.${meshID}
 
 mkdir -p ${DATA}
 mkdir -p ${tmp}
@@ -65,14 +62,6 @@ export COMINstofs="/lfs/h1/ops/prod/com/stofs/v3.1/stofs_2d_glo.${PDY}"
 export RWPSfix=/lfs/h2/emc/couple/noscrub/keston.smith/RWPS
 
 cd ${DATA}
-
-mkdir -p ${interpwghtsdir}
-# copy mesh to local fix directory
-cp -p ${RWPSfix}/fix/${meshID}/20260722/rwps.${meshID}.msh ${interpwghtsdir}
-# copy Interpoplation weights for nbm, rrfs, rtofs and stofs to local directory
-cp -p ${RWPSfix}/fix/${meshID}/20260722/InterpolationWeights*${meshID}*.nc ${interpwghtsdir}
-# copy distance to boundary for nbm, rrfs, rtofs and stofs to local  directory
-cp -p ${RWPSfix}/fix/${meshID}/20260722/DistToBndy*${meshID}*.nc ${interpwghtsdir}
 
 meshname="${mesh##*/}"
 export meshname="${meshname: 0: -4}"
