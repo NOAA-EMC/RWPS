@@ -64,8 +64,9 @@ export COMINstofs="/lfs/h1/ops/prod/com/stofs/v3.1/stofs_2d_glo.${PDY}"
 #machine dependend path to RWPS fix files
 export RWPSfix=/lfs/h2/emc/couple/noscrub/keston.smith/RWPS
 
+cd ${DATA}
 
-mkdir -p $interpwghtsdir
+mkdir -p ${interpwghtsdir}
 # copy mesh to local fix directory
 cp -p ${RWPSfix}/fix/${meshID}/20260722/rwps.${meshID}.msh ${interpwghtsdir}
 # copy Interpoplation weights for nbm, rrfs, rtofs and stofs to local directory

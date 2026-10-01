@@ -7,8 +7,6 @@
 
 cd ${DATA}
 
-cd ${HOMErwps}/ush/preprocess
-
 echo "retrieving winds from rrfs and nbm for rwps wind"
 (
     ${HOMErwps}/ush/preprocess/nbm/make_nbm_wind.sh ${PDY} ${cyc} oc

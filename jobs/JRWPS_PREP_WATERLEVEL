@@ -1,5 +1,5 @@
 #!/bin/sh
 
-cd $HOMErwps/ush/preprocess
-sh get_waterlevel.sh
-sh process_waterlevel.sh
+cd ${DATA}
+sh ${HOMErwps}/ush/preprocess/get_waterlevel.sh
+sh ${HOMErwps}/ush/preprocess/process_waterlevel.sh

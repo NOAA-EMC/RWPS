@@ -1,7 +1,7 @@
 #!/bin/sh
 
-cd $HOMErwps/ush/preprocess
-sh get_ice.sh
-sh process_ice.sh
+cd ${DATA}
+sh ${HOMErwps}/ush/preprocess/get_ice.sh
+sh ${HOMErwps}/ush/preprocess/process_ice.sh
 
 
