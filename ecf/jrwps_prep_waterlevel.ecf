@@ -16,7 +16,6 @@ module use ${HOMErwps}/modulefiles
 source ${HOMErwps}/versions/preproc.${MACHINE_ID}.ver
 
 #modules for esmf
-module reset
 module load PrgEnv-intel/${PrgEnv_intel_ver}
 module load craype/${craype_ver}
 module load intel/${intel_ver}
