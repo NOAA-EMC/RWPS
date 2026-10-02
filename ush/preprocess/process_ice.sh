@@ -41,7 +41,7 @@ if [ ! -f "${nbm_ak_dists}" ]; then
 fi
 
 # no extrapolation of ice beyond ak grid coverage
-python ${HOMErwps}/ush/preprocess/interpolate_with_weights.py ${nbmice} ${nbm_ak_wghts} ${nbm_rwps} ${varnames} -1 &
+python ${USHrwps}/preprocess/interpolate_with_weights.py ${nbmice} ${nbm_ak_wghts} ${nbm_rwps} ${varnames} -1 &
 
 if [ ! -f "${rtofs_wghts}" ]; then
     echo "missing rtofs interpolation weights file: ${rtofs_wghts}"
@@ -55,26 +55,26 @@ if [ ! -f "${rtofs_dists}" ]; then
 fi
 
 # extrapolate with 0 as fill
-python ${HOMErwps}/ush/preprocess/interpolate_with_weights.py ${rtofsice} ${rtofs_wghts} ${rtofs_rwps} ${varnames} 0 &
+python ${USHrwps}/preprocess/interpolate_with_weights.py ${rtofsice} ${rtofs_wghts} ${rtofs_rwps} ${varnames} 0 &
 
 wait;
 
-python ${HOMErwps}/ush/preprocess/add_mesh_geom_to_file.py ${rtofs_rwps} ${mesh}
-python ${HOMErwps}/ush/preprocess/add_mesh_geom_to_file.py ${nbm_rwps} ${mesh}
+python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rtofs_rwps} ${mesh}
+python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${nbm_rwps} ${mesh}
 
 # interpolate from stofs to common stofs and rtofs times within range of stofs time
-python ${HOMErwps}/ush/preprocess/interp_time.py ${rtofs_rwps} ${nbm_rwps} ${rtofs_rwps_ti} ${varnames} False &
+python ${USHrwps}/preprocess/interp_time.py ${rtofs_rwps} ${nbm_rwps} ${rtofs_rwps_ti} ${varnames} False &
 
 # interpolate from rtofs to common stofs and rtofs times within range of stofs time
 # values out of range are extrapolated to assuming persistance
-python ${HOMErwps}/ush/preprocess/interp_time.py ${rtofs_rwps} ${nbm_rwps} ${nbm_rwps_ti} ${varnames} True &
+python ${USHrwps}/preprocess/interp_time.py ${rtofs_rwps} ${nbm_rwps} ${nbm_rwps_ti} ${varnames} True &
 
 wait
 
 #uniform variance of 100.
-python ${HOMErwps}/ush/preprocess/add_err_var_to_file.py ${rtofs_rwps_ti} ${rtofs_dists} 100.
+python ${USHrwps}/preprocess/add_err_var_to_file.py ${rtofs_rwps_ti} ${rtofs_dists} 100.
 
 #interior variance of 4., boundary variance fof 400., transition lengthscale 9. km
-python ${HOMErwps}/ush/preprocess/add_err_var_to_file.py ${nbm_rwps_ti} ${nbm_ak_dists} 4.:400.:9.
+python ${USHrwps}/preprocess/add_err_var_to_file.py ${nbm_rwps_ti} ${nbm_ak_dists} 4.:400.:9.
 
-python ${HOMErwps}/ush/preprocess/bayes_forecast_update.py ${rtofs_rwps_ti} ${nbm_rwps_ti} ${rwps_ice} ${varnames}
+python ${USHrwps}/preprocess/bayes_forecast_update.py ${rtofs_rwps_ti} ${nbm_rwps_ti} ${rwps_ice} ${varnames}

@@ -25,6 +25,6 @@ if [ ! -f "${stofs_dists}" ]; then
     exit 1
 fi
 
-python ${HOMErwps}/ush/preprocess/interpolate_with_weights.py ${stofslev} ${stofs_wghts} ${rwps_waterlevel} ${varnames} 0
-python ${HOMErwps}/ush/preprocess/add_mesh_geom_to_file.py ${rwps_waterlevel} ${mesh}
-python ${HOMErwps}/ush/preprocess/add_err_var_to_file.py ${rwps_waterlevel} ${stofs_dists} 1.
+python ${USHrwps}/preprocess/interpolate_with_weights.py ${stofslev} ${stofs_wghts} ${rwps_waterlevel} ${varnames} 0
+python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rwps_waterlevel} ${mesh}
+python ${USHrwps}/preprocess/add_err_var_to_file.py ${rwps_waterlevel} ${stofs_dists} 1.

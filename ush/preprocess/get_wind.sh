@@ -9,33 +9,33 @@ cd ${DATA}
 
 echo "retrieving winds from rrfs and nbm for rwps wind"
 (
-    ${HOMErwps}/ush/preprocess/nbm/make_nbm_wind.sh ${PDY} ${cyc} oc
+    ${USHrwps}/preprocess/nbm/make_nbm_wind.sh ${PDY} ${cyc} oc
     echo "retrieved winds from nbm oc domain"
     echo "Not retrieving other nbm domain winds"
 )&
 
 (
-    ${HOMErwps}/ush/preprocess/rrfs/make_rrfs_wind.sh ${PDY} ${cyc} na
+    ${USHrwps}/preprocess/rrfs/make_rrfs_wind.sh ${PDY} ${cyc} na
     echo "retrieved winds from rrfs na domain"
 )&
 
 (
-    ${HOMErwps}/ush/preprocess/rrfs/make_rrfs_wind.sh ${PDY} ${cyc} ak
+    ${USHrwps}/preprocess/rrfs/make_rrfs_wind.sh ${PDY} ${cyc} ak
     echo "retrieved winds from rrfs ak domain"
 )&
 
 (
-    ${HOMErwps}/ush/preprocess/rrfs/make_rrfs_wind.sh ${PDY} ${cyc} pr
+    ${USHrwps}/preprocess/rrfs/make_rrfs_wind.sh ${PDY} ${cyc} pr
     echo "retrieved winds from rrfs pr domain"
 )&
 
 (
-    ${HOMErwps}/ush/preprocess/rrfs/make_rrfs_wind.sh ${PDY} ${cyc} hi
+    ${USHrwps}/preprocess/rrfs/make_rrfs_wind.sh ${PDY} ${cyc} hi
     echo "retrieved winds from rrfs hi domain"
 )&
 
 (
-    ${HOMErwps}/ush/preprocess/rrfs/make_rrfs_wind.sh ${PDY} ${cyc} conus
+    ${USHrwps}/preprocess/rrfs/make_rrfs_wind.sh ${PDY} ${cyc} conus
     echo "retrieved winds from rrfs conus domain"
 )&
 wait

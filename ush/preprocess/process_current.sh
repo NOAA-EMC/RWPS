@@ -43,7 +43,7 @@ if [ ! -f "${stofs_dists}" ]; then
 fi
 
 # extrapolate with zero fill
-python ${HOMErwps}/ush/preprocess/interpolate_with_weights.py ${stofscur} ${stofs_wghts} ${stofs_rwps} ${varnames} 0 &
+python ${USHrwps}/preprocess/interpolate_with_weights.py ${stofscur} ${stofs_wghts} ${stofs_rwps} ${varnames} 0 &
 
 if [ ! -f "${rtofs_wghts}" ]; then
     echo "missing rtofs interpolation weights file: ${stofs_wghts}"
@@ -57,23 +57,23 @@ if [ ! -f "${rtofs_dists}" ]; then
 fi
 
 # no extrapolation
-python ${HOMErwps}/ush/preprocess/interpolate_with_weights.py ${rtofscur} ${rtofs_wghts} ${rtofs_rwps} ${varnames} -1 &
+python ${USHrwps}/preprocess/interpolate_with_weights.py ${rtofscur} ${rtofs_wghts} ${rtofs_rwps} ${varnames} -1 &
 
 wait;
 
-python ${HOMErwps}/ush/preprocess/add_mesh_geom_to_file.py ${rtofs_rwps} ${mesh}
-python ${HOMErwps}/ush/preprocess/add_mesh_geom_to_file.py ${stofs_rwps} ${mesh}
+python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rtofs_rwps} ${mesh}
+python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${stofs_rwps} ${mesh}
 
-python ${HOMErwps}/ush/preprocess/interp_time.py ${stofs_rwps} ${rtofs_rwps} ${stofs_rwps_ti} ${varnames} False &
+python ${USHrwps}/preprocess/interp_time.py ${stofs_rwps} ${rtofs_rwps} ${stofs_rwps_ti} ${varnames} False &
 
 #interpolate from rtofs to common stofs and rtofs times within range of stofs time
 #values out of range are extrapolated to assuming persistance
-python ${HOMErwps}/ush/preprocess/interp_time.py ${stofs_rwps} ${rtofs_rwps} ${rtofs_rwps_ti} ${varnames} True &
+python ${USHrwps}/preprocess/interp_time.py ${stofs_rwps} ${rtofs_rwps} ${rtofs_rwps_ti} ${varnames} True &
 
 wait
 
-python ${HOMErwps}/ush/preprocess/add_err_var_to_file.py ${rtofs_rwps_ti} ${rtofs_dists} 100.:1.:50.:250.:50.
-python ${HOMErwps}/ush/preprocess/add_err_var_to_file.py ${stofs_rwps_ti} ${stofs_dists} 1.:100.:50.:250.
+python ${USHrwps}/preprocess/add_err_var_to_file.py ${rtofs_rwps_ti} ${rtofs_dists} 100.:1.:50.:250.:50.
+python ${USHrwps}/preprocess/add_err_var_to_file.py ${stofs_rwps_ti} ${stofs_dists} 1.:100.:50.:250.
 
-python ${HOMErwps}/ush/preprocess/bayes_forecast_update.py ${stofs_rwps_ti} ${rtofs_rwps_ti} ${rwps_current} ${varnames}
+python ${USHrwps}/preprocess/bayes_forecast_update.py ${stofs_rwps_ti} ${rtofs_rwps_ti} ${rwps_current} ${varnames}
 

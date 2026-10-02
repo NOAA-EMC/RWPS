@@ -6,4 +6,4 @@
 # cyc=00,06... two digit cycle number
 # must be set.
 cd ${DATA}
-${HOMErwps}/ush/preprocess/stofs/get_stofs.sh ${PDY} ${cyc} waterlevel 
+${USHrwps}/preprocess/stofs/get_stofs.sh ${PDY} ${cyc} waterlevel 

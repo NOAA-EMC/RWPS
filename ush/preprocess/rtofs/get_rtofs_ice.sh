@@ -19,5 +19,5 @@ mkdir -p ${tmpdir}
 cp ${filesin} ${tmpdir}/
 
 PDYCC="${PDY}${cyc}"
-python ${HOMErwps}/ush/preprocess/rtofs/get_rtofs_ice_fcst.py ${tmpdir} ${PDYCC} ${flout}
+python ${USHrwps}/preprocess/rtofs/get_rtofs_ice_fcst.py ${tmpdir} ${PDYCC} ${flout}
 
