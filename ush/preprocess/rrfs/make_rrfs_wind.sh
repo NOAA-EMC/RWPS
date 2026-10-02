@@ -17,7 +17,7 @@
 echo "make_rrfs_wind.sh fetching rrfs : time = ${1}, cycle = ${2}, domain = ${3}"
 
 INPUT_DIR="${COMINrrfs}"
-OUTPUT_DIR="${tmp}/wind.${1}.${2}"
+OUTPUT_DIR="${DATA}/wind.${1}.${2}"
 OUTPUT_FILE="${OUTPUT_DIR}/rrfs.${1}.${2}.wind10m.${3}.nc"
 
 mkdir -p "${OUTPUT_DIR}"

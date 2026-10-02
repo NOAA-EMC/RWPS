@@ -7,8 +7,8 @@
 
 cd ${DATA}
 
-stofscur="${tmp}/stofs.${PDY}.${cyc}/stofs_2d_glo.t${cyc}z.fields.cwl.vel.nc"
-rtofscur="${tmp}/rtofs.${PDY}.nc"
+stofscur="${DATA}/stofs.${PDY}.${cyc}/stofs_2d_glo.t${cyc}z.fields.cwl.vel.nc"
+rtofscur="${DATA}/rtofs.${PDY}.nc"
 
 varnames="u-vel:v-vel"
 
@@ -20,14 +20,14 @@ echo "outputting combined stofs and rtofs currents to $rwps_current"
 ## STOFS interpolation
 stofs_wghts="${interpwghtsdir}/InterpolationWeights.${meshname}.stofs.nc"
 stofs_dists="${interpwghtsdir}/DistToBndy.${meshname}.stofs.nc"
-stofs_rwps="${tmp}/${meshname}.${PDY}.${cyc}.vel.cwl.stofs.nc"
-stofs_rwps_ti="${tmp}/${meshname}.${PDY}.${cyc}.vel.cwl.stofs.ti.nc"
+stofs_rwps="${DATA}/${meshname}.${PDY}.${cyc}.vel.cwl.stofs.nc"
+stofs_rwps_ti="${DATA}/${meshname}.${PDY}.${cyc}.vel.cwl.stofs.ti.nc"
 
 ## RTOFS interpolation
 rtofs_wghts="${interpwghtsdir}/InterpolationWeights.${meshname}.rtofs.current.nc"
 rtofs_dists="${interpwghtsdir}/DistToBndy.${meshname}.rtofs.current.nc"
-rtofs_rwps="${tmp}/${meshname}.${PDY}.vel.rtofs.nc"
-rtofs_rwps_ti="${tmp}/${meshname}.${PDY}.${cyc}.vel.cwl.rtofs.ti.nc"
+rtofs_rwps="${DATA}/${meshname}.${PDY}.vel.rtofs.nc"
+rtofs_rwps_ti="${DATA}/${meshname}.${PDY}.${cyc}.vel.cwl.rtofs.ti.nc"
 
 
 

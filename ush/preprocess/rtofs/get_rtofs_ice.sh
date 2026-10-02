@@ -10,9 +10,9 @@
 # call as:
 # $ sh get_rtofs_ice.sh
 
-tmpdir="${tmp}/tmp.rtofsIce.${PDY}"
+tmpdir="${DATA}/tmp.rtofsIce.${PDY}"
 filesin="${COMINrtofs}/*ice.nc"
-dirout="${tmp}/ice.${PDY}.${cyc}"
+dirout="${DATA}/ice.${PDY}.${cyc}"
 flout="${dirout}/rtofs.ice.${PDY}.nc"
 
 mkdir -p ${tmpdir}

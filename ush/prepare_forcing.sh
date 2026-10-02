@@ -39,17 +39,15 @@ ${HOMErwps}/sorc/link_workflow.sh
 export mesh="${HOMErwps}/fix/${meshID}/rwps.${meshID}.msh"
 
 #This should be defined somewhere else
-usrtmp="/lfs/h2/emc/ptmp/$USER/"
+usrtmp="/lfs/h2/emc/ptmp/$USER"
 mkdir -p ${usrtmp}
 
 export DATA="${usrtmp}/RWPS.forcing_preperation.${PDY}.${cyc}.${meshID}.tmpdir"
-export tmp="${DATA}"
 export frc="${usrtmp}/RWPS.forcing.${PDY}.${cyc}.${meshID}"
 
 export interpwghtsdir=/lfs/h2/emc/couple/noscrub/keston.smith/InterpolationWeights/RWPS.interpolation_weights.${meshID}
 
 mkdir -p ${DATA}
-mkdir -p ${tmp}
 mkdir -p ${frc}
 
 #machine dependend path to rtofs, nbm, rrfs, and stofs forecast files
@@ -58,16 +56,13 @@ export COMINnbm="/lfs/h3/mdl/ptmp/mdl.nbm/blend/v5.2/blend.${PDY}/${cyc}/grib2"
 export COMINrrfs="/lfs/h1/ops/prod/com/rrfs/v1.0/rrfs.${PDY}/${cyc}"
 export COMINstofs="/lfs/h1/ops/prod/com/stofs/v3.1/stofs_2d_glo.${PDY}"
 
-#machine dependend path to RWPS fix files
-export RWPSfix=/lfs/h2/emc/couple/noscrub/keston.smith/RWPS
-
 cd ${DATA}
 
 meshname="${mesh##*/}"
 export meshname="${meshname: 0: -4}"
 
 #Retrieve current and process for forecast cycle
-qsub -V -o ${tmp}/prep_current.out ${HOMErwps}/ecf/jrwps_prep_current.ecf 
-qsub -V -o ${tmp}/prep_ice.out ${HOMErwps}/ecf/jrwps_prep_ice.ecf
-qsub -V -o ${tmp}/prep_waterlevel.out ${HOMErwps}/ecf/jrwps_prep_waterlevel.ecf
-qsub -V -o ${tmp}/prep_wind.out ${HOMErwps}/ecf/jrwps_prep_wind.ecf
+qsub -V -o ${DATA}/prep_current.out ${HOMErwps}/ecf/jrwps_prep_current.ecf 
+qsub -V -o ${DATA}/prep_ice.out ${HOMErwps}/ecf/jrwps_prep_ice.ecf
+qsub -V -o ${DATA}/prep_waterlevel.out ${HOMErwps}/ecf/jrwps_prep_waterlevel.ecf
+qsub -V -o ${DATA}/prep_wind.out ${HOMErwps}/ecf/jrwps_prep_wind.ecf

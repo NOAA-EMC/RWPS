@@ -24,7 +24,7 @@ else
     fields=${3}
 fi
 
-outdir=${tmp}/stofs.${PDY}.${cyc}
+outdir=${DATA}/stofs.${PDY}.${cyc}
 
 mkdir -p ${outdir}
 

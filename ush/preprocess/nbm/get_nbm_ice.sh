@@ -13,7 +13,7 @@
 
 ICE_FILE=${COMINnbm}/blend.t${2}z.icec.ak.grib2
 
-OUTPUT_DIR=${tmp}/ice.${1}.${2}
+OUTPUT_DIR=${DATA}/ice.${1}.${2}
 OUTPUT_FILE=${OUTPUT_DIR}/nbm.${1}.${2}.ice.ak.nc
 
 mkdir -p ${OUTPUT_DIR}

@@ -8,7 +8,7 @@
 cd ${DATA}
 
 
-inpdir=${tmp}/ice.${PDY}.${cyc}
+inpdir=${DATA}/ice.${PDY}.${cyc}
 
 nbmice=$inpdir/nbm.${PDY}.${cyc}.ice.ak.nc
 rtofsice=$inpdir/rtofs.ice.${PDY}.nc
@@ -18,11 +18,11 @@ rtofs_dists="${interpwghtsdir}/DistToBndy.${meshname}.rtofs.ice.nc"
 nbm_ak_wghts="${interpwghtsdir}/InterpolationWeights.${meshname}.nbm.ak.nc"
 nbm_ak_dists="${interpwghtsdir}/DistToBndy.${meshname}.nbm.ak.nc"
 
-rtofs_rwps="${tmp}/${meshname}.${PDY}.ice.rtofs.nc"
-rtofs_rwps_ti="${tmp}/${meshname}.${PDY}.${cyc}.ice.rtofs.ti.nc"
+rtofs_rwps="${DATA}/${meshname}.${PDY}.ice.rtofs.nc"
+rtofs_rwps_ti="${DATA}/${meshname}.${PDY}.${cyc}.ice.rtofs.ti.nc"
 
-nbm_rwps="${tmp}/${meshname}.${PDY}.${cyc}.ice.nbm.ak.nc"
-nbm_rwps_ti="${tmp}/${meshname}.${PDY}.${cyc}.ice.nbm.ak.ti.nc"
+nbm_rwps="${DATA}/${meshname}.${PDY}.${cyc}.ice.nbm.ak.nc"
+nbm_rwps_ti="${DATA}/${meshname}.${PDY}.${cyc}.ice.nbm.ak.ti.nc"
 
 varnames="ICEC_surface"
 

@@ -103,17 +103,20 @@ nvar=len(varname)
 vari=np.zeros((nvar,nt,nni))
 
 if ExtrapMethod>=0:
-    IsExtrap=np.zeros((nvar,nt,nni),dtype=int)
+    IsExtrap=np.zeros((nvar,nt,nni),dtype=np.uint8)
     
 if ExtrapMethod==3:
-    AnyExtrap=np.zeros((nvar,nni),dtype=int)
+    AnyExtrap=np.zeros((nvar,nni),dtype=np.uint8)
 
 nan=float("nan")
 for jv in range(nvar):
     try:
         fill_value0=data[varname[jv]]._FillValue
     except:
-        fill_value0=-99999
+        try:
+            fill_value0=data.getncattr('_FillValue') # Stofs V3 files have this as global attribute
+        except:
+            fill_value0=-99999
     print("fill value="+str(fill_value0))
     for k in range(nt):
         print("interpolating for time step = "+str(k)+" of "+str(nt))
@@ -231,7 +234,7 @@ with nc.Dataset(flout, 'w', format='NETCDF4') as ncout:
         F_var[:,:]          = vari[jv,:,:]
         
         if ExtrapMethod >= 0 :
-            xtrp_var=ncout.createVariable(varname[jv]+'IsExtrap', 'i1', ('time','node'))
+            xtrp_var=ncout.createVariable(varname[jv]+'IsExtrap', 'u1', ('time','node'))
             xtrp_var.long_name     = '==1 if the interpolated value extrapolated. 0 if interpolated'
             xtrp_var.standard_name = 'is extrapolated'
             xtrp_var.location      = 'node'

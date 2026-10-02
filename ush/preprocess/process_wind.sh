@@ -7,13 +7,13 @@
 
 cd ${DATA}
 
-winddir="${tmp}/wind.${PDY}.${cyc}"
+winddir="${DATA}/wind.${PDY}.${cyc}"
 windvars="UGRD_10maboveground:VGRD_10maboveground"
 
 # incorporate {meshname} date and cycle into output directory name to avoid
 # applying winds to wrong mesh
 
-outdir="${tmp}/rwps_wind.${meshname}.${PDY}.${cyc}"
+outdir="${DATA}/rwps_wind.${meshname}.${PDY}.${cyc}"
 
 rwps_wind="${frc}/${meshname}.${PDY}.${cyc}.wind.nc"
 

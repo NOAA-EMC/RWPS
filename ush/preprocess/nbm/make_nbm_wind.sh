@@ -15,7 +15,7 @@ WSPD_FILE="${COMINnbm}/blend.t${2}z.wspd.${3}.grib2"
 WDIR_FILE="${COMINnbm}/blend.t${2}z.wdir.${3}.grib2"
 
 OUTPUT_DIR="wind.${1}.${2}"
-OUTPUT_DIR="${tmp}/wind.${1}.${2}"
+OUTPUT_DIR="${DATA}/wind.${1}.${2}"
 OUTPUT_FILE="${OUTPUT_DIR}/nbm.${1}.${2}.wind10m.${3}.nc"
 
 mkdir -p ${OUTPUT_DIR}

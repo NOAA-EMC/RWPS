@@ -5,7 +5,7 @@
 
 cd ${DATA}
 
-stofslev="${tmp}/stofs.${PDY}.${cyc}/stofs_2d_glo.t${cyc}z.fields.cwl.nc"
+stofslev="${DATA}/stofs.${PDY}.${cyc}/stofs_2d_glo.t${cyc}z.fields.cwl.nc"
 stofs_wghts="${interpwghtsdir}/InterpolationWeights.${meshname}.stofs.nc"
 stofs_dists="${interpwghtsdir}/DistToBndy.${meshname}.stofs.nc"
 stofs_rwps="${frc}/${meshname}.${PDY}.${cyc}.cwl.waterlevel.nc"

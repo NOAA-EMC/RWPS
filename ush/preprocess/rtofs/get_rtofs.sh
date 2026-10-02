@@ -9,9 +9,9 @@
 # COMINrtofs = directory path to rtofs forecast
 
 
-tmpdir="${tmp}/tmp.rtofs.${PDY}"
+tmpdir="${DATA}/tmp.rtofs.${PDY}"
 filesin="${COMINrtofs}/*prog.nc"
-flout="${tmp}/rtofs.${PDY}.nc"
+flout="${DATA}/rtofs.${PDY}.nc"
 
 mkdir -p ${tmpdir}
 cp ${filesin} ${tmpdir}/
