@@ -6,7 +6,7 @@
 #PBS -j oe
 #PBS -l select=1:ncpus=32:mem=64GB
 
-cd ${HOMErwps}/ush/preprocess
+cd ${DATA}
 
 module use ${HOMErwps}/modulefiles
 
