@@ -1,6 +1,5 @@
 #!/bin/sh
 
 cd ${DATA}
-sh ${HOMErwps}/ush/preprocess/get_current.sh
-sh ${HOMErwps}/ush/preprocess/process_current.sh
+sh ${HOMErwps}/scripts/exrwps_prep_current.sh
 
