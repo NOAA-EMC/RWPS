@@ -17,8 +17,6 @@ OUTPUT_DIR=${DATA}/ice.${1}.${2}
 OUTPUT_FILE=${OUTPUT_DIR}/nbm.${1}.${2}.ice.ak.nc
 
 mkdir -p ${OUTPUT_DIR}
-# Remove existing output file to avoid mixing old data
-rm -f ${OUTPUT_FILE}
 
 echo "writing ice from ${INPUT_DIR} to ${OUTPUT_FILE}"
 

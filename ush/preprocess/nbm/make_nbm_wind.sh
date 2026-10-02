@@ -20,9 +20,6 @@ OUTPUT_FILE="${OUTPUT_DIR}/nbm.${1}.${2}.wind10m.${3}.nc"
 
 mkdir -p ${OUTPUT_DIR}
 
-# Remove existing output file to avoid mixing old data
-rm -f ${OUTPUT_FILE}
-
 echo "writing 10m wind from ${INPUT_DIR} to ${OUTPUT_FILE}"
 
 wgrib2 "${WSPD_FILE}"  -match ":WIND:10 m" -netcdf "${OUTPUT_FILE}"
