@@ -5,5 +5,5 @@
 ###############################################################################
 
 cd ${DATA}
-sh ${HOMErwps}/ush/preprocess/get_ice.sh
-sh ${HOMErwps}/ush/preprocess/process_ice.sh
+${HOMErwps}/ush/preprocess/get_ice.sh
+${HOMErwps}/ush/preprocess/process_ice.sh

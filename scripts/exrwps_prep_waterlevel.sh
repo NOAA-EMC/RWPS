@@ -5,5 +5,5 @@
 ###############################################################################
 
 cd ${DATA}
-sh ${HOMErwps}/ush/preprocess/get_waterlevel.sh
-sh ${HOMErwps}/ush/preprocess/process_waterlevel.sh
+${HOMErwps}/ush/preprocess/get_waterlevel.sh
+${HOMErwps}/ush/preprocess/process_waterlevel.sh

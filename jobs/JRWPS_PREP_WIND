@@ -1,6 +1,6 @@
 #!/bin/sh
 
 cd ${DATA}
-sh ${HOMErwps}/scripts/exrwps_prep_wind.sh
+${HOMErwps}/scripts/exrwps_prep_wind.sh
 
 

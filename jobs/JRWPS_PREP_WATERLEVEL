@@ -1,4 +1,4 @@
 #!/bin/sh
 
 cd ${DATA}
-sh ${HOMErwps}/scripts/exrwps_prep_waterlevel.sh
+${HOMErwps}/scripts/exrwps_prep_waterlevel.sh

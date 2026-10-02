@@ -5,5 +5,5 @@
 ###############################################################################
 
 cd ${DATA}
-sh ${HOMErwps}/ush/preprocess/get_wind.sh
-sh ${HOMErwps}/ush/preprocess/process_wind.sh
+${HOMErwps}/ush/preprocess/get_wind.sh
+${HOMErwps}/ush/preprocess/process_wind.sh

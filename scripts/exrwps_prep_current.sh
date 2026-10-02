@@ -5,5 +5,5 @@
 ###############################################################################
 
 cd ${DATA}
-sh ${HOMErwps}/ush/preprocess/get_current.sh
-sh ${HOMErwps}/ush/preprocess/process_current.sh
+${HOMErwps}/ush/preprocess/get_current.sh
+${HOMErwps}/ush/preprocess/process_current.sh
