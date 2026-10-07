@@ -23,8 +23,7 @@ cd "${HOMErwps}/ush" || exit 1
 
 source "${HOMErwps}/ush/detect_machine.sh"
 source "${HOMErwps}/ush/module-setup.sh"
-#source "${HOMErwps}/versions/build.ver"
-
+source "${HOMErwps}/versions/build.ver"
 
 export MACHINE_ID
 export HOMErwps
@@ -37,6 +36,7 @@ fi
 # link mesh corresponding to meshID to local fix directory
 ${HOMErwps}/sorc/link_workflow.sh
 export mesh="${HOMErwps}/fix/${meshID}/rwps.${meshID}.msh"
+export USHrwps=${HOMErwps}/ush
 
 #This should be defined somewhere else
 usrtmp="/lfs/h2/emc/ptmp/$USER"
