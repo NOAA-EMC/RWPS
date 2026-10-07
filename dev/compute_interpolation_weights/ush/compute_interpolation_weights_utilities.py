@@ -367,6 +367,13 @@ def compute_mesh_to_mesh_interp_weights(x, y, e, xi, yi):
         total_area = a1 + a2 + a3
         weights[k, :] = [a1, a2, a3] / total_area
 
+        # Handle extrapolation cases where target is outside element
+        # with nearest element center extrapolation
+        if np.min(weights[k, :])<0:
+            weights[k, :]=1/3
+        
+
+
         nodes[k, :] = e[j, :] #<- indexed 1 .. nn
         # Progress reporting every 100 iterations
         if (k + 1) % 100 == 0:
