@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd ${DATA}
+${HOMErwps}/scripts/exrwps_prep_current.sh
+
