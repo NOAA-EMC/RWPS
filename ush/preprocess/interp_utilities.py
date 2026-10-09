@@ -96,7 +96,6 @@ def loadWW3Mesh(fl):
         A = f.readline()
         B=A.lstrip()
         values = B.split(" ")
-#        print(values)
         if len(values)>5:
             xi[k]=values[2]
             yi[k]=values[4]
@@ -118,9 +117,7 @@ def loadWW3Mesh(fl):
     k=0
     for i in range(ne):
         A = f.readline()
-        #print(A)
         values = A.split(" ")
-        #print(values)
         if len(values) == 6:
             if int(values[2])==2:
                 bnd.append(int(values[5]))

@@ -27,4 +27,11 @@ fi
 
 python ${USHrwps}/preprocess/interpolate_with_weights.py ${stofslev} ${stofs_wghts} ${rwps_waterlevel} ${varnames} 0
 python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rwps_waterlevel} ${mesh}
-python ${USHrwps}/preprocess/add_err_var_to_file.py ${rwps_waterlevel} ${stofs_dists} 1.
+
+if [ ! -f "${stofs_dists}" ]; then
+    echo "missing stofs distance to boundary file: ${stofs_dists}"
+    echo "compute with script compute_unstr_to_rwps_interp_weights.sh"
+    echo "continuing without adding error variance field to waterlevel forecast"
+else
+    python ${USHrwps}/preprocess/add_err_var_to_file.py ${rwps_waterlevel} ${stofs_dists} 1.
+fi

@@ -96,9 +96,9 @@ if VariableType=="Current":
     VarDeep=float(VarParam[1])  # variance (m/s)**2 for deep regions
     BatShallow=float(VarParam[2]) # isobath (m) for shallow regions
     BatDeep=float(VarParam[3]) # isobath (m) for deep regions
-    if "stofs" in flin:
+    if "stofs" in flin:  # error variance low in shallows and high in deeper regions
         Variance = VarianceLinearDepth (zi, VarShallow, VarDeep, BatShallow, BatDeep)
-    if "rtofs" in flin: #variance high in shallows and near boundary of coverage
+    if "rtofs" in flin: # error variance high in shallows and near boundary of coverage
         VarianceDepth = VarianceLinearDepth(zi,VarShallow,VarDeep,BatShallow,BatDeep)
         VarLambda= float(VarParam[4])  # lengthscale (km) for linear transition from bounadry variance(==VarShallow) to interior variance(==VarDeep)
         VarianceBnd = VarianceLinearDistanceToBndy( dist2bnd, VarDeep,VarShallow, VarLambda)
@@ -123,11 +123,11 @@ if VariableType=="Wind":
 
 
 if VariableType=="Ice":
-    VarInterior=float(VarParam[0]) # variance (m/s)**2 for interior of forecast
+    VarInterior=float(VarParam[0]) # variance for interior of forecast
     if "rtofs" in flin:
         Variance = VarInterior + np.zeros(nn)
     if "nbm" in flin:
-        VarBoundary = float(VarParam[1]) # variance (m/s)**2 for boundary of forecast
+        VarBoundary = float(VarParam[1]) # variance for boundary of forecast
         VarLambda   = float(VarParam[2]) # lengthscale (km) for linear transition from bounadry variance to interior variance
         Variance = VarianceLinearDistanceToBndy( dist2bnd, VarInterior, VarBoundary,VarLambda )
 
@@ -151,7 +151,7 @@ with  nc.Dataset(fltmp, "w", format="NETCDF4") as ncout:
         dst_var = ncout.createVariable(name, src_var.datatype, src_var.dimensions)
         dst_var.setncatts({attr: src_var.getncattr(attr) for attr in src_var.ncattrs()})
         dst_var[:] = src_var[:]
-        
+
     time=np.asarray(data0["time"][:])
     nt=len(time)
     ErrorVariance=np.zeros((nt,nn))
@@ -170,4 +170,5 @@ with  nc.Dataset(fltmp, "w", format="NETCDF4") as ncout:
         ErrorVariance_var[:]=ErrorVariance
 
     ncout.close
+
 os.rename(fltmp, flin)

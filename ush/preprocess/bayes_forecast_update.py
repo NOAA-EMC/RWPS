@@ -68,16 +68,14 @@ for jv in range(nvar):
         tmp[np.where(tmp==fill_value1)]=nan
     field1[jv,:,:]=tmp
 
-Inf=float('inf')
-um1=field1[0,0,:]
-ng1=np.where( um1**2>=0  ) # find points that are valid floats for field1
-
 for k in range(nt):
     #j=np.where(t[k]==t1) # find common merge point in data
     j=np.where(np.abs(t[k]-t1)<120.) # find common merge point in data
     j=j[0].tolist()
     if len(j)==1:
         print("j="+str(j)+" : k="+str(k))
+        field1VarSum=np.sum(field1[:,k,:],axis=0) # find points for which all variables are available at this time
+        ng1=np.where( field1VarSum**2>=0  ) # find points that are valid floats for field1
         for jv in range(nvar):
              field[jv,k,ng1] =  ( field[jv,k,ng1] 
                                     +  ( var[k,ng1] / ( var[k,ng1] + var1[j,ng1] ) ) 

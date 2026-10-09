@@ -107,8 +107,34 @@ python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rwps_oc_ti} ${mesh}
 python ${USHrwps}/preprocess/add_err_var_to_file.py ${rwps_oc_ti} ${nbm_oc_dist} 100.
 
 cp $rwps_oc_ti ${rwps_wind}
-[ ! -f "${rwps_hi}" ] && python ${USHrwps}/preprocess/bayes_forecast_update.py ${rwps_wind} ${rwps_hi} ${rwps_wind} ${windvars}
-[ ! -f "${rwps_pr}" ] && python ${USHrwps}/preprocess/bayes_forecast_update.py ${rwps_wind} ${rwps_pr} ${rwps_wind} ${windvars}
-[ ! -f "${rwps_ak}" ] && python ${USHrwps}/preprocess/bayes_forecast_update.py ${rwps_wind} ${rwps_ak} ${rwps_wind} ${windvars}
-[ ! -f "${rwps_conus}" ] && python ${USHrwps}/preprocess/bayes_forecast_update.py ${rwps_wind} ${rwps_conus} ${rwps_wind} ${windvars}
-[ ! -f "${rwps_na}" ] && python ${USHrwps}/preprocess/bayes_forecast_update.py ${rwps_wind} ${rwps_na} ${rwps_wind} ${windvars}
+
+if [ -f ${rwps_hi} ]; then
+    echo "incorporating hi winds"
+    python ${USHrwps}/preprocess/bayes_forecast_update.py ${rwps_wind} ${rwps_hi} tmp_wind.nc ${windvars}
+    mv tmp_wind.nc ${rwps_wind}
+fi
+
+if [ -f ${rwps_pr} ]; then
+    echo "incorporating pr winds"
+    python ${USHrwps}/preprocess/bayes_forecast_update.py ${rwps_wind} ${rwps_pr} tmp_wind.nc ${windvars}
+    mv tmp_wind.nc ${rwps_wind}
+fi
+
+if [ -f ${rwps_ak} ]; then
+    echo "incorporating ak winds"
+    python ${USHrwps}/preprocess/bayes_forecast_update.py ${rwps_wind} ${rwps_ak} tmp_wind.nc ${windvars}
+    mv tmp_wind.nc ${rwps_wind}
+fi
+
+if [ -f ${rwps_conus} ]; then
+    echo "incorporating conus winds"
+    python ${USHrwps}/preprocess/bayes_forecast_update.py ${rwps_wind} ${rwps_conus} tmp_wind.nc ${windvars}
+    mv tmp_wind.nc ${rwps_wind}
+fi
+
+if [ -f ${rwps_na} ]; then
+    echo "incorporating na winds"
+    python ${USHrwps}/preprocess/bayes_forecast_update.py ${rwps_wind} ${rwps_na} tmp_wind.nc ${windvars}
+    mv tmp_wind.nc ${rwps_wind}
+fi
+

@@ -36,6 +36,9 @@ fi
 # link mesh corresponding to meshID to local fix directory
 ${HOMErwps}/sorc/link_workflow.sh
 export mesh="${HOMErwps}/fix/${meshID}/rwps.${meshID}.msh"
+meshname="${mesh##*/}"
+export meshname="${meshname: 0: -4}"
+
 export USHrwps=${HOMErwps}/ush
 
 #This should be defined somewhere else
@@ -57,9 +60,6 @@ export COMINrrfs="/lfs/h1/ops/prod/com/rrfs/v1.0/rrfs.${PDY}/${cyc}"
 export COMINstofs="/lfs/h1/ops/prod/com/stofs/v3.1/stofs_2d_glo.${PDY}"
 
 cd ${DATA}
-
-meshname="${mesh##*/}"
-export meshname="${meshname: 0: -4}"
 
 #Retrieve current and process for forecast cycle
 qsub -V -o ${DATA}/prep_current.out ${HOMErwps}/ecf/jrwps_prep_current.ecf 
