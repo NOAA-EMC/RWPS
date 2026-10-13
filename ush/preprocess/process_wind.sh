@@ -1,9 +1,45 @@
 #!/bin/bash
 
+# Program Name: proccess_winds.sh
+# Author(s)/Contact(s): Keston Smith (keston.smith@noaa.gov)
+#
+# Abstract: 
 # This script processes wind forecasts and prepare them for use with WW3 as pre-interpolated
 # forcing (AI- already interpolated).Currently configured to combine a backgrounbd forecast 
 # from the nbm oc domain with higher resolution wind forecasts from the rrfs hi, pr, ak, na
 # and conus domains in the forecast period when these are available.
+# History Log:
+#
+# Usage:
+#  Parameters: 
+#    
+#  Input Files: (as variable names, see script for expected location)
+#    nbm_oc        nbm forecast winds for oceanic (oc) domain
+#    nbm_wghts     interpolation weights to interpolate from nbm oc grid to RWPS unstructured mesh
+#    nbm_dists     distance to boundary of nbm oc interpolation envelope for RWPS mesh
+#    (for XX="hi,"pr","ak","conus", "na")
+#    rrfs_XX       rrfs forecast winds for domain XX 
+#    rrfs_XX_wghts interpolation weights to interpolate from rrfs XX grid to RWPS unstructured mesh
+#    rrfs_XX_dists distance to boundary of rrfs XX interpolation envelope for RWPS mesh
+#
+#  Output File:
+#    rwps_wind     RWPS wind forcing
+#
+# Imported Shell Variables:
+#    PDY            YYYYMMDD
+#    cyc            two digit forecat cycle, i.e. 00, 06, etc.
+#    meshname       filename of RWPS mesh geometry file without path or .msh suffix, i.e. rwps.oc_500m_10km
+#    DATA           working directory containg stofs and rtofs forecasts
+#    frc            output directory to write RWPS current forecast to
+#    interpwghtsdir path to directory containing precomputed interpolation weights for RWPS mesh 
+#
+# Exit codes:
+#    0 success
+#    1 missing nbm oc forecast file
+#    2 missing nbm oc interpolation weights file for RWPS mesh
+#
+# User controllable options:
+#    Error variance parameter specification for each forecast domain, defined by [interior error variance(m/s)]:[boundary error variance(m/s)]:[transition lengscale(km)] 
 
 cd ${DATA}
 
@@ -58,13 +94,27 @@ rrfs_conus_dist="${interpwghtsdir}/DistToBndy.${meshname}.rrfs.conus.nc"
 
 
 (
-    #Convert NBM speed and direction to u,v
-    python ${USHrwps}/preprocess/spd_dir_to_uv_nbm.py ${nbm_oc} ${nbm_oc_uv}
-    python ${USHrwps}/preprocess/interpolate_with_weights.py ${nbm_oc_uv} ${nbm_oc_wghts} ${rwps_oc} ${windvars} 3
-    python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rwps_oc} ${mesh}
+    if [ -f "${nbm_oc}" ] && [ -f "${nbm_oc_wghts}" ] ; then
+        #Convert nbm speed and direction to u,v
+        python ${USHrwps}/preprocess/spd_dir_to_uv_nbm.py ${nbm_oc} ${nbm_oc_uv}
+        #interpolate nbm oc domain winds to rwps mesh
+        python ${USHrwps}/preprocess/interpolate_with_weights.py ${nbm_oc_uv} ${nbm_oc_wghts} ${rwps_oc} ${windvars} 3
+        #add mesh geometry into interpolated file
+        python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rwps_oc} ${mesh}
+    else
+        if [ ! -f "${nbm_oc}" ] 
+            echo "FATAL ERROR: missing nbm oc domain forecast file ${nbm_oc}"
+            exit 1
+        fi
+        if [ ! -f "${nbm_oc_wghts}" ] 
+            echo "FATAL ERROR: missing nbm oc interpolation weights file ${nbm_oc_wghts}"
+            exit 2
+        fi
+    fi
 )&
 
 (
+    #interpolate rrfs hi domain winds to rwps mesh
     python ${USHrwps}/preprocess/interpolate_with_weights.py ${rrfs_hi} ${rrfs_hi_wghts} ${rwps_hi} ${windvars} -1
     #add mesh geometry into interpolated file
     python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rwps_hi} ${mesh}
@@ -112,29 +162,39 @@ if [ -f ${rwps_hi} ]; then
     echo "incorporating hi winds"
     python ${USHrwps}/preprocess/bayes_forecast_update.py ${rwps_wind} ${rwps_hi} tmp_wind.nc ${windvars}
     mv tmp_wind.nc ${rwps_wind}
+else
+    echo "WARNING: no local rrfs forecast available for hi domain. missing ${rwps_hi}"
 fi
 
 if [ -f ${rwps_pr} ]; then
     echo "incorporating pr winds"
     python ${USHrwps}/preprocess/bayes_forecast_update.py ${rwps_wind} ${rwps_pr} tmp_wind.nc ${windvars}
     mv tmp_wind.nc ${rwps_wind}
+else
+    echo "WARNING: no local rrfs forecast available for pr domain. missing ${rwps_pr}"
 fi
 
 if [ -f ${rwps_ak} ]; then
     echo "incorporating ak winds"
     python ${USHrwps}/preprocess/bayes_forecast_update.py ${rwps_wind} ${rwps_ak} tmp_wind.nc ${windvars}
     mv tmp_wind.nc ${rwps_wind}
+else
+    echo "WARNING: no local rrfs forecast available for ak domain. missing ${rwps_ak}"
 fi
 
 if [ -f ${rwps_conus} ]; then
     echo "incorporating conus winds"
     python ${USHrwps}/preprocess/bayes_forecast_update.py ${rwps_wind} ${rwps_conus} tmp_wind.nc ${windvars}
     mv tmp_wind.nc ${rwps_wind}
+else
+    echo "WARNING: no local rrfs forecast available for conus domain. missing ${rwps_conus}"
 fi
 
 if [ -f ${rwps_na} ]; then
     echo "incorporating na winds"
     python ${USHrwps}/preprocess/bayes_forecast_update.py ${rwps_wind} ${rwps_na} tmp_wind.nc ${windvars}
     mv tmp_wind.nc ${rwps_wind}
+else
+    echo "WARNING: no local rrfs forecast available for na domain. missing ${rwps_na}"
 fi
 

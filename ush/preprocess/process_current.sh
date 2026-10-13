@@ -1,9 +1,47 @@
 #!/bin/bash
 
+# Program Name: proccess_currents.sh
+# Author(s)/Contact(s): Keston Smith (keston.smith@noaa.gov)
+#
+# Abstract: 
 # This script processes marine current forecasts and prepare them for use with WW3 as 
 # pre-interpolated forcing (AI- already interpolated).  Currently configured to 
 # combine a background forecast from stofs with surface current forecasts from rtofs 
-# global domain in deep water.
+# global domain in deep water. If rtofs forecast is not available then only stofs forecast will be used.
+# If variable max_current_speed is defined, output current forecast will be truncated at max_current_speed.  
+
+# History Log:
+#
+# Usage:
+#  Parameters: 
+#    
+#  Input Files: (see script for expected location)
+#    stofscur      global stofs depth averaged current forecast file
+#    rtofscur      global rtofs surface current forecast file
+#    stofs_wghts   interpolation weights to interpolate from stofs unstructured mesh to RWPS unstructured mesh
+#    stofs_dists   distance to boundary stofs interpolation envelope for RWPS mesh as well as bathymetric depth.
+#    rtofs_wghts   interpolation weights to interpolate from rtofs grid to RWPS unstructured mesh
+#    rtofs_dists   distance to boundary of rtofs interpolation envelope for RWPS mesh as well as bathymetric depth.
+
+#  Output File:
+#    rwps_current  RWPS current forcing
+#
+# Imported Shell Variables:
+#    PDY            YYYYMMDD
+#    cyc            two digit forecat cycle, i.e. 00, 06, etc.
+#    meshname       filename of RWPS mesh geometry file without path or .msh suffix, i.e. rwps.oc_500m_10km
+#    DATA           working directory containg stofs and rtofs forecasts
+#    frc            output directory to write RWPS current forecast to
+#    interpwghtsdir path to directory containing precomputed interpolation weights for RWPS mesh 
+#
+# Exit codes:
+#    0 success
+#    1 missing stofs current forecast file
+#    2 missing stofs current interpolation weights file
+#    3 missing stofs distance to boundary file
+#
+# User controllable options: 
+#    max_current_speed (localy defined in script): maximum current speed to impose on RWPS forcing
 
 cd ${DATA}
 
@@ -33,15 +71,20 @@ rtofs_dists="${interpwghtsdir}/DistToBndy.${meshname}.rtofs.current.nc"
 rtofs_rwps="${DATA}/${meshname}.${PDY}.vel.rtofs.nc"
 rtofs_rwps_ti="${DATA}/${meshname}.${PDY}.${cyc}.vel.cwl.rtofs.ti.nc"
 
-if [ ! -f "${stofs_wghts}" ]; then
-    echo "missing stofs interpolation weights file: ${stofs_wghts}"
-    echo "compute with script compute_unstr_to_rwps_interp_weights.sh"
+if [ ! -f "${stofscur}" ]; then
+    echo "FATAL ERROR: missing stofs current forecast file: ${stofscur}"
     exit 1
 fi
-if [ ! -f "${stofs_dists}" ]; then
-    echo "missing stofs distance to boundary file: ${stofs_dists}"
+
+if [ ! -f "${stofs_wghts}" ]; then
+    echo "FATAL ERROR: missing stofs interpolation weights file: ${stofs_wghts}"
     echo "compute with script compute_unstr_to_rwps_interp_weights.sh"
-    exit 1
+    exit 2
+fi
+if [ ! -f "${stofs_dists}" ]; then
+    echo "FATAL ERROR: missing stofs distance to boundary file: ${stofs_dists}"
+    echo "compute with script compute_unstr_to_rwps_interp_weights.sh"
+    exit 3
 fi
 
 (
@@ -51,7 +94,7 @@ fi
 )&
 
 if [ -f "${rtofscur}" ] && [ -f "${rtofs_wghts}" ] && [ -f "${rtofs_dists}" ]; then
-    echo "RTOFS current forecast available. Combining with Stofs current forecast"
+    echo "RTOFS current forecast IS available. Combining with STOFS current forecast"
     echo "outputting combined stofs and rtofs currents to ${rwps_current}"
     (
         # No extrapolation of rtofs into shallows
@@ -82,21 +125,25 @@ else
     python ${USHrwps}/preprocess/add_err_var_to_file.py ${stofs_rwps} ${stofs_dists} 1.:100.:50.:250.
     cp ${stofs_rwps} ${rwps_current}
     if [ ! -f "${rtofscur}" ]; then
-        echo "No RTOFS current forecast available, missing ${{rtofscur}. Using STOFS current forecast only."
+        echo "WARNING: No RTOFS current forecast available, missing ${rtofscur}. Using STOFS current forecast only."
     fi
     if [ ! -f "${rtofs_wghts}" ]; then
-        echo "missing rtofs interpolation weights file: ${rtofs_wghts}"
+        echo "WARNING: missing rtofs interpolation weights file: ${rtofs_wghts}"
         echo "compute with script compute_gridded_to_rwps_interp_weights.py"
     fi
     if [ ! -f "${rtofs_dists}" ]; then
-        echo "missing rtofs  distance to boundary file: ${rtofs_dists}"
+        echo "WARNING: missing rtofs  distance to boundary file: ${rtofs_dists}"
         echo "compute with script compute_gridded_to_rwps_interp_weights.py"
     fi
 fi
 
 if [[ -v max_current_speed ]]; then
     mv ${rwps_current} ${rwps_current_nolimit}
+
+    # to limit current speed to max_current_speed:
 #    python ${USHrwps}/preprocess/limit_max_current_speed.py ${rwps_current_nolimit} ${rwps_current} ${max_current_speed}
+
+    # to replace all current forecasts faster than max_current_speed(m/s) with u=0.0 (m/s), v=0.0 (m/s)
     python ${USHrwps}/preprocess/limit_max_current_speed.py ${rwps_current_nolimit} ${rwps_current} ${max_current_speed} 0.
     echo "limiting maximum current speed to ${rwps_current}, limited field output to ${rwps_current}."
     echo "unlimited current field recorded at ${rwps_current_nolimit}."
