@@ -6,7 +6,6 @@
 #PBS -j oe
 #PBS -l select=1:ncpus=16:mem=64GB
 
-cd ${DATA}
 
 module use ${HOMErwps}/modulefiles
 
