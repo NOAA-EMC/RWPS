@@ -41,8 +41,6 @@
 # User controllable options:
 #    Error variance parameter specification for each forecast domain, defined by [interior error variance(m/s)]:[boundary error variance(m/s)]:[transition lengscale(km)] 
 
-cd ${DATA}
-
 winddir="${DATA}/wind.${PDY}.${cyc}"
 windvars="UGRD_10maboveground:VGRD_10maboveground"
 
@@ -102,11 +100,11 @@ rrfs_conus_dist="${interpwghtsdir}/DistToBndy.${meshname}.rrfs.conus.nc"
         #add mesh geometry into interpolated file
         python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rwps_oc} ${mesh}
     else
-        if [ ! -f "${nbm_oc}" ] 
+        if [ ! -f "${nbm_oc}" ];then
             echo "FATAL ERROR: missing nbm oc domain forecast file ${nbm_oc}"
             exit 1
         fi
-        if [ ! -f "${nbm_oc_wghts}" ] 
+        if [ ! -f "${nbm_oc_wghts}" ];then
             echo "FATAL ERROR: missing nbm oc interpolation weights file ${nbm_oc_wghts}"
             exit 2
         fi

@@ -25,6 +25,8 @@ module load ve/hafs/${ve_hafs_ver}
 module load intel-oneapi/${intel_oneapi_ver}
 module load wgrib2/${wgrib2_ver}
 
+module load prod_util/${prod_util_ver}
+
 module list 
 
 ${HOMErwps}/jobs/JRWPS_PREP_WATERLEVEL

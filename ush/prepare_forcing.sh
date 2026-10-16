@@ -31,12 +31,25 @@ export KEEPDATA="YES"
 # presently defined here for ecf job submit
 readonly HOMErwps=$(cd "$(dirname "$(readlink -f -n "${BASH_SOURCE[0]}")")" && git rev-parse --show-toplevel)
 
+##################################
+export mesh="${HOMErwps}/fix/${meshID}/rwps.${meshID}.msh"
+meshname="${mesh##*/}"
+export meshname="${meshname: 0: -4}"
+##################################
+
 # presently defined here to route ecf output.
 usrtmp="/lfs/h2/emc/ptmp/$USER"
 mkdir -p ${usrtmp}
 export DATA="${usrtmp}/RWPS.forcing_preperation.${PDY}.${cyc}.${meshID}.tmpdir"
 mkdir -p ${DATA}
 
+export DATA
+export HOMErwps
+
+source ${HOMErwps}/ush/detect_machine.sh
+export MACHINE_ID
+
+source ${HOMErwps}/sorc/link_workflow.sh
 
 #Retrieve current and process for forecast cycle
 qsub -V -o ${DATA}/prep_current.out ${HOMErwps}/ecf/jrwps_prep_current.ecf 
