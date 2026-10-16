@@ -31,7 +31,6 @@
 #    meshname       filename of RWPS mesh geometry file without path or .msh suffix, i.e. rwps.oc_500m_10km
 #    DATA           working directory containg stofs and rtofs forecasts
 #    frc            output directory to write RWPS current forecast to
-#    interpwghtsdir path to directory containing precomputed interpolation weights for RWPS mesh 
 #
 # Exit codes:
 #    0 success

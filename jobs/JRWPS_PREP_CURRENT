@@ -24,9 +24,6 @@ export COMINnbm="/lfs/h3/mdl/ptmp/mdl.nbm/blend/v5.2/blend.${PDY}/${cyc}/grib2"
 export COMINrrfs="/lfs/h1/ops/prod/com/rrfs/v1.0/rrfs.${PDY}/${cyc}"
 export COMINstofs="/lfs/h1/ops/prod/com/stofs/v3.1/stofs_2d_glo.${PDY}"
 
-
-export interpwghtsdir=/lfs/h2/emc/couple/noscrub/keston.smith/InterpolationWeights/RWPS.interpolation_weights.${meshID}
-
 # Set cycle parameters
 export cycle=${cycle:-t${cyc}z}
 setpdy.sh
