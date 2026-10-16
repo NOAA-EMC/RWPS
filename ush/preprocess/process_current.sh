@@ -58,14 +58,14 @@ rwps_current=${frc}/${meshname}.${PDY}.${cyc}.current.nc
 rwps_current_nolimit=${DATA}/${meshname}.${PDY}.${cyc}.current.nolimit.nc
 
 ## STOFS interpolation
-stofs_wghts="${interpwghtsdir}/InterpolationWeights.${meshname}.stofs.nc"
-stofs_dists="${interpwghtsdir}/DistToBndy.${meshname}.stofs.nc"
+stofs_wghts="${FIXrwps}/${meshID}/InterpolationWeights.${meshname}.stofs.nc"
+stofs_dists="${FIXrwps}/${meshID}/DistToBndy.${meshname}.stofs.nc"
 stofs_rwps="${DATA}/${meshname}.${PDY}.${cyc}.vel.cwl.stofs.nc"
 stofs_rwps_ti="${DATA}/${meshname}.${PDY}.${cyc}.vel.cwl.stofs.ti.nc"
 
 ## RTOFS interpolation
-rtofs_wghts="${interpwghtsdir}/InterpolationWeights.${meshname}.rtofs.current.nc"
-rtofs_dists="${interpwghtsdir}/DistToBndy.${meshname}.rtofs.current.nc"
+rtofs_wghts="${FIXrwps}/${meshID}/InterpolationWeights.${meshname}.rtofs.current.nc"
+rtofs_dists="${FIXrwps}/${meshID}/DistToBndy.${meshname}.rtofs.current.nc"
 rtofs_rwps="${DATA}/${meshname}.${PDY}.vel.rtofs.nc"
 rtofs_rwps_ti="${DATA}/${meshname}.${PDY}.${cyc}.vel.cwl.rtofs.ti.nc"
 

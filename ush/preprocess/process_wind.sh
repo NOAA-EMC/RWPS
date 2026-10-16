@@ -76,19 +76,19 @@ mkdir -p ${outdir}
 ##LocalFS  = [ rwps_pr, rwps_hi, rwps_ak, rwps_conus, rwps_na] # file names
 ##VarFS    = [ 4.     , 4.    , 9.      , 16.       , 25.    ] # (m m /s /s)
 ##LambdaFS = [ 150.   , 200.  , 500.    , 1000.     , 1500.  ] # (km)
-nbm_oc_wghts="${interpwghtsdir}/InterpolationWeights.${meshname}.nbm.oc.nc"
-rrfs_hi_wghts="${interpwghtsdir}/InterpolationWeights.${meshname}.rrfs.hi.nc"
-rrfs_pr_wghts="${interpwghtsdir}/InterpolationWeights.${meshname}.rrfs.pr.nc"
-rrfs_ak_wghts="${interpwghtsdir}/InterpolationWeights.${meshname}.rrfs.ak.nc"
-rrfs_na_wghts="${interpwghtsdir}/InterpolationWeights.${meshname}.rrfs.na.nc"
-rrfs_conus_wghts="${interpwghtsdir}/InterpolationWeights.${meshname}.rrfs.conus.nc"
+nbm_oc_wghts="${FIXrwps}/${meshID}/InterpolationWeights.${meshname}.nbm.oc.nc"
+rrfs_hi_wghts="${FIXrwps}/${meshID}/InterpolationWeights.${meshname}.rrfs.hi.nc"
+rrfs_pr_wghts="${FIXrwps}/${meshID}/InterpolationWeights.${meshname}.rrfs.pr.nc"
+rrfs_ak_wghts="${FIXrwps}/${meshID}/InterpolationWeights.${meshname}.rrfs.ak.nc"
+rrfs_na_wghts="${FIXrwps}/${meshID}/InterpolationWeights.${meshname}.rrfs.na.nc"
+rrfs_conus_wghts="${FIXrwps}/${meshID}/InterpolationWeights.${meshname}.rrfs.conus.nc"
 
-nbm_oc_dist="${interpwghtsdir}/DistToBndy.${meshname}.nbm.oc.nc"
-rrfs_hi_dist="${interpwghtsdir}/DistToBndy.${meshname}.rrfs.hi.nc"
-rrfs_pr_dist="${interpwghtsdir}/DistToBndy.${meshname}.rrfs.pr.nc"
-rrfs_ak_dist="${interpwghtsdir}/DistToBndy.${meshname}.rrfs.ak.nc"
-rrfs_na_dist="${interpwghtsdir}/DistToBndy.${meshname}.rrfs.na.nc"
-rrfs_conus_dist="${interpwghtsdir}/DistToBndy.${meshname}.rrfs.conus.nc"
+nbm_oc_dist="${FIXrwps}/${meshID}/DistToBndy.${meshname}.nbm.oc.nc"
+rrfs_hi_dist="${FIXrwps}/${meshID}/DistToBndy.${meshname}.rrfs.hi.nc"
+rrfs_pr_dist="${FIXrwps}/${meshID}/DistToBndy.${meshname}.rrfs.pr.nc"
+rrfs_ak_dist="${FIXrwps}/${meshID}/DistToBndy.${meshname}.rrfs.ak.nc"
+rrfs_na_dist="${FIXrwps}/${meshID}/DistToBndy.${meshname}.rrfs.na.nc"
+rrfs_conus_dist="${FIXrwps}/${meshID}/DistToBndy.${meshname}.rrfs.conus.nc"
 
 
 (

@@ -52,10 +52,10 @@ inpdir=${DATA}/ice.${PDY}.${cyc}
 nbmice=$inpdir/nbm.${PDY}.${cyc}.ice.ak.nc
 rtofsice=$inpdir/rtofs.ice.${PDY}.nc
 
-rtofs_wghts="${interpwghtsdir}/InterpolationWeights.${meshname}.rtofs.ice.nc"
-rtofs_dists="${interpwghtsdir}/DistToBndy.${meshname}.rtofs.ice.nc"
-nbm_ak_wghts="${interpwghtsdir}/InterpolationWeights.${meshname}.nbm.ak.nc"
-nbm_ak_dists="${interpwghtsdir}/DistToBndy.${meshname}.nbm.ak.nc"
+rtofs_wghts="${FIXrwps}/${meshID}/InterpolationWeights.${meshname}.rtofs.ice.nc"
+rtofs_dists="${FIXrwps}/${meshID}/DistToBndy.${meshname}.rtofs.ice.nc"
+nbm_ak_wghts="${FIXrwps}/${meshID}/InterpolationWeights.${meshname}.nbm.ak.nc"
+nbm_ak_dists="${FIXrwps}/${meshID}/DistToBndy.${meshname}.nbm.ak.nc"
 
 rtofs_rwps="${DATA}/${meshname}.${PDY}.ice.rtofs.nc"
 rtofs_rwps_ti="${DATA}/${meshname}.${PDY}.${cyc}.ice.rtofs.ti.nc"
