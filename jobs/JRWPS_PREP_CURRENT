@@ -18,13 +18,6 @@ mkdir -p ${usrtmp}
 export frc="${usrtmp}/RWPS.forcing.${PDY}.${cyc}.${meshID}"
 mkdir -p ${frc}
 
-#machine dependend path to rtofs and stofs forecast files
-#export COMINrtofs="/lfs/h1/ops/prod/com/rtofs/v2.5/rtofs.${PDY}/"
-#export COMINstofs="/lfs/h1/ops/prod/com/stofs/v3.1/stofs_2d_glo.${PDY}"
-export COMINstofs=${COMINstofs:-$(compath.py stofs/${stofs_ver}/stofs.$PDY)}
-export COMINrtofs=${COMINrtofs:-$(compath.py rtofs/${rtofs_ver}/rtofs.$PDY)}
-echo "COMINstofs=$COMINstofs should be /lfs/h1/ops/prod/com/rtofs/v2.5/rtofs.${PDY}/"
-echo "COMINrtofs=$COMINrtofs should be /lfs/h1/ops/prod/com/stofs/v3.1/stofs_2d_glo.${PDY}"
 
 # Set cycle parameters
 export cycle=${cycle:-t${cyc}z}
@@ -60,6 +53,15 @@ export COMINwave=${COMINwave:-$(compath.py -v ${NET}/${model_ver})}
 export COMOUT=${COMOUT:-$(compath.py -v -o ${NET}/${model_ver}/${RUN}.${PDY})}
 export COMOUTwave=${COMOUTwave:-$(compath.py -v -o ${NET}/${model_ver})}
 export COMINOUT=${COMINOUT:-$(compath.py -v -o ${NET}/${model_ver}/${RUN}.${PDY})}
+
+#machine dependend path to rtofs and stofs forecast files
+#TO DO: COMINroottemporary work around to set path for wcoss2, 
+# $COMIN not defined but should replace this definition
+COMINroot="/lfs/h1/ops/prod/com" 
+export COMINrtofs="${COMINroot}/rtofs/${rtofs_ver}/rtofs.${PDY}"
+export COMINstofs="${COMINroot}/stofs/${stofs_ver}/stofs_2d_glo.${PDY}"
+echo "COMINrtofs=$COMINrtofs should be /lfs/h1/ops/prod/com/rtofs/v2.5/rtofs.${PDY}"
+echo "COMINstofs=$COMINstofs should be /lfs/h1/ops/prod/com/stofs/v3.1/stofs_2d_glo.${PDY}"
 
 if [ "$SENDCOM" = YES ]; then
   mkdir -p ${COMOUT}

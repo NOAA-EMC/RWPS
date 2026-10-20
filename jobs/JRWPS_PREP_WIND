@@ -19,8 +19,8 @@ export frc="${usrtmp}/RWPS.forcing.${PDY}.${cyc}.${meshID}"
 mkdir -p ${frc}
 
 #machine dependend path to nbm and rrfs forecast files
-export COMINnbm="/lfs/h3/mdl/ptmp/mdl.nbm/blend/v5.2/blend.${PDY}/${cyc}/grib2"
-export COMINrrfs="/lfs/h1/ops/prod/com/rrfs/v1.0/rrfs.${PDY}/${cyc}"
+#export COMINnbm="/lfs/h3/mdl/ptmp/mdl.nbm/blend/v5.2/blend.${PDY}/${cyc}/grib2"
+#export COMINrrfs="/lfs/h1/ops/prod/com/rrfs/v1.0/rrfs.${PDY}/${cyc}"
 
 # Set cycle parameters
 export cycle=${cycle:-t${cyc}z}
@@ -56,6 +56,17 @@ export COMINwave=${COMINwave:-$(compath.py -v ${NET}/${model_ver})}
 export COMOUT=${COMOUT:-$(compath.py -v -o ${NET}/${model_ver}/${RUN}.${PDY})}
 export COMOUTwave=${COMOUTwave:-$(compath.py -v -o ${NET}/${model_ver})}
 export COMINOUT=${COMINOUT:-$(compath.py -v -o ${NET}/${model_ver}/${RUN}.${PDY})}
+
+#machine dependend path to rrfs and nbm forecast files
+# TO DO: COMINroot temporary work around to set path for wcoss2,
+# TO DO: COMINmdlnbm temporary work around to set path for wcoss2,
+# $COMIN not defined but should replace this definition
+COMINroot="/lfs/h1/ops/prod/com"
+COMINmdlnbm="/lfs/h3/mdl/ptmp/mdl.nbm"
+export COMINrrfs="${COMINroot}/rrfs/${rrfs_ver}/rrfs.${PDY}/${cyc}"
+export COMINnbm="${COMINmdlnbm}/blend/${nbm_ver}/blend.${PDY}/${cyc}/grib2"
+echo "COMINrrfs=$COMINrrfs should be /lfs/h1/ops/prod/com/rrfs/v1.0/rrfs.${PDY}/${cyc}"
+echo "COMINnbm=$COMINnbm should be /lfs/h3/mdl/ptmp/mdl.nbm/blend/v5.2/blend.${PDY}/${cyc}/grib2"
 
 if [ "$SENDCOM" = YES ]; then
   mkdir -p ${COMOUT}
