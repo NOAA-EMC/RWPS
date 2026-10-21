@@ -18,10 +18,6 @@ mkdir -p ${usrtmp}
 export frc="${usrtmp}/RWPS.forcing.${PDY}.${cyc}.${meshID}"
 mkdir -p ${frc}
 
-#machine dependend path to rtofs and nbm forecast files
-#export COMINrtofs="/lfs/h1/ops/prod/com/rtofs/v2.5/rtofs.${PDY}/"
-#export COMINnbm="/lfs/h3/mdl/ptmp/mdl.nbm/blend/v5.2/blend.${PDY}/${cyc}/grib2"
-
 # Set cycle parameters
 export cycle=${cycle:-t${cyc}z}
 setpdy.sh
@@ -65,8 +61,6 @@ COMINroot="/lfs/h1/ops/prod/com"
 COMINmdlnbm="/lfs/h3/mdl/ptmp/mdl.nbm"
 export COMINrtofs="${COMINroot}/rtofs/${rtofs_ver}/rtofs.${PDY}"
 export COMINnbm="${COMINmdlnbm}/blend/${nbm_ver}/blend.${PDY}/${cyc}/grib2"
-echo "COMINrtofs=$COMINrtofs should be /lfs/h1/ops/prod/com/stofs/v3.1/stofs_2d_glo.${PDY}"
-echo "COMINnbm=$COMINnbm should be /lfs/h3/mdl/ptmp/mdl.nbm/blend/v5.2/blend.${PDY}/${cyc}/grib2"
 
 if [ "$SENDCOM" = YES ]; then
   mkdir -p ${COMOUT}

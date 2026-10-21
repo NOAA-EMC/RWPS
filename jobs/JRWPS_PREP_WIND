@@ -65,8 +65,6 @@ COMINroot="/lfs/h1/ops/prod/com"
 COMINmdlnbm="/lfs/h3/mdl/ptmp/mdl.nbm"
 export COMINrrfs="${COMINroot}/rrfs/${rrfs_ver}/rrfs.${PDY}/${cyc}"
 export COMINnbm="${COMINmdlnbm}/blend/${nbm_ver}/blend.${PDY}/${cyc}/grib2"
-echo "COMINrrfs=$COMINrrfs should be /lfs/h1/ops/prod/com/rrfs/v1.0/rrfs.${PDY}/${cyc}"
-echo "COMINnbm=$COMINnbm should be /lfs/h3/mdl/ptmp/mdl.nbm/blend/v5.2/blend.${PDY}/${cyc}/grib2"
 
 if [ "$SENDCOM" = YES ]; then
   mkdir -p ${COMOUT}

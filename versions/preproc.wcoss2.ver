@@ -15,4 +15,5 @@ export stofs_ver=v3.1
 export rtofs_ver=v2.5
 export nbm_ver=v5.2
 export rrfs_ver=v1.0
+export model_ver=v1.0.0
 

@@ -60,8 +60,6 @@ export COMINOUT=${COMINOUT:-$(compath.py -v -o ${NET}/${model_ver}/${RUN}.${PDY}
 COMINroot="/lfs/h1/ops/prod/com" 
 export COMINrtofs="${COMINroot}/rtofs/${rtofs_ver}/rtofs.${PDY}"
 export COMINstofs="${COMINroot}/stofs/${stofs_ver}/stofs_2d_glo.${PDY}"
-echo "COMINrtofs=$COMINrtofs should be /lfs/h1/ops/prod/com/rtofs/v2.5/rtofs.${PDY}"
-echo "COMINstofs=$COMINstofs should be /lfs/h1/ops/prod/com/stofs/v3.1/stofs_2d_glo.${PDY}"
 
 if [ "$SENDCOM" = YES ]; then
   mkdir -p ${COMOUT}
