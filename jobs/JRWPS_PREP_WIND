@@ -52,7 +52,6 @@ export USHrwps=${USHrwps:-${HOMErwps}/ush}
 export DCOMIN=${DCOMIN:-${DCOMROOT}} # serves ice and ndfd data
 
 export COMIN=${COMIN:-$(compath.py -v ${NET}/${model_ver}/${RUN}.${PDY})}
-export COMINwave=${COMINwave:-$(compath.py -v ${NET}/${model_ver})}
 export COMOUT=${COMOUT:-$(compath.py -v -o ${NET}/${model_ver}/${RUN}.${PDY})}
 export COMOUTwave=${COMOUTwave:-$(compath.py -v -o ${NET}/${model_ver})}
 export COMINOUT=${COMINOUT:-$(compath.py -v -o ${NET}/${model_ver}/${RUN}.${PDY})}
