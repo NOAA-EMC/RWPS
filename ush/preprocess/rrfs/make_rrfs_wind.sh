@@ -14,6 +14,9 @@
 # to produce output file:
 # rrfs.20260428.00.wind10m.pr.nc
 #
+
+set -x
+
 echo "make_rrfs_wind.sh fetching rrfs : time = ${1}, cycle = ${2}, domain = ${3}"
 
 INPUT_DIR="${COMINrrfs}"

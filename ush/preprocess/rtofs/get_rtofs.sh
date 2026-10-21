@@ -8,6 +8,7 @@
 # tmp = work directory to write output files to
 # COMINrtofs = directory path to rtofs forecast
 
+set -x
 
 tmpdir="${DATA}/tmp.rtofs.${PDY}"
 filesin="${COMINrtofs}/*prog.nc"

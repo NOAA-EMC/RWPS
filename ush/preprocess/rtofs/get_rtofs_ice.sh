@@ -10,6 +10,8 @@
 # call as:
 # $ sh get_rtofs_ice.sh
 
+set -x
+
 tmpdir="${DATA}/tmp.rtofsIce.${PDY}"
 filesin="${COMINrtofs}/*ice.nc"
 dirout="${DATA}/ice.${PDY}.${cyc}"

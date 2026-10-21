@@ -42,6 +42,8 @@
 # User controllable options: 
 #    max_current_speed (localy defined in script): maximum current speed to impose on RWPS forcing
 
+set -x
+
 stofscur="${DATA}/stofs.${PDY}.${cyc}/stofs_2d_glo.t${cyc}z.fields.cwl.vel.nc"
 rtofscur="${DATA}/rtofs.${PDY}.nc"
 

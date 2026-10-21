@@ -11,6 +11,8 @@
 # call as:
 # $ sh make_nbm_wind.sh 20260829 00 oc
 
+set -x
+
 WSPD_FILE="${COMINnbm}/blend.t${2}z.wspd.${3}.grib2" 
 WDIR_FILE="${COMINnbm}/blend.t${2}z.wdir.${3}.grib2"
 

@@ -5,5 +5,7 @@
 # PDY=YYYYMMDD 
 # cyc=00,06... two digit cycle number
 # must be set.
-cd ${DATA}
+
+set -x
+
 ${USHrwps}/preprocess/stofs/get_stofs.sh ${PDY} ${cyc} waterlevel 

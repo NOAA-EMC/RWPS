@@ -46,6 +46,8 @@
 #    or
 #    Error variance parameter specification for each forecast domain, defined by [constant error variance (m/s)**2] 
 
+set -x
+
 inpdir=${DATA}/ice.${PDY}.${cyc}
 
 nbmice=$inpdir/nbm.${PDY}.${cyc}.ice.ak.nc

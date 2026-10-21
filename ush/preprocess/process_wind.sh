@@ -40,6 +40,8 @@
 # User controllable options:
 #    Error variance parameter specification for each forecast domain, defined by [interior error variance(m/s)]:[boundary error variance(m/s)]:[transition lengscale(km)] 
 
+set -x
+
 winddir="${DATA}/wind.${PDY}.${cyc}"
 windvars="UGRD_10maboveground:VGRD_10maboveground"
 

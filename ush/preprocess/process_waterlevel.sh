@@ -35,6 +35,8 @@
 #
 # User controllable options: 
 
+set -x
+
 stofslev="${DATA}/stofs.${PDY}.${cyc}/stofs_2d_glo.t${cyc}z.fields.cwl.nc"
 stofs_wghts="${FIXrwps}/${meshID}/InterpolationWeights.${meshname}.stofs.nc"
 stofs_dists="${FIXrwps}/${meshID}/DistToBndy.${meshname}.stofs.nc"

@@ -5,7 +5,7 @@
 # PDY=YYYYMMDD, 
 # cyc=00,06... two digit cycle number
 
-cd ${DATA}
+set -x
 
 echo "retrieving winds from rrfs and nbm for rwps wind"
 (
