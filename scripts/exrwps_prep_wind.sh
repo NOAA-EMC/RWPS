@@ -4,6 +4,5 @@
 # and processes the wind forecasts for a particular RWPS mesh.
 ###############################################################################
 
-cd ${DATA}
 ${HOMErwps}/ush/preprocess/get_wind.sh
 ${HOMErwps}/ush/preprocess/process_wind.sh

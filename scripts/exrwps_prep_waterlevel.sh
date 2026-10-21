@@ -4,6 +4,5 @@
 # and processes the waterlevel forecasts for a particular RWPS mesh.
 ###############################################################################
 
-cd ${DATA}
 ${HOMErwps}/ush/preprocess/get_waterlevel.sh
 ${HOMErwps}/ush/preprocess/process_waterlevel.sh

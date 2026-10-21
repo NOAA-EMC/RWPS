@@ -4,6 +4,5 @@
 # cycle and processes the ice forecasts for a particular RWPS mesh.
 ###############################################################################
 
-cd ${DATA}
 ${HOMErwps}/ush/preprocess/get_ice.sh
 ${HOMErwps}/ush/preprocess/process_ice.sh
