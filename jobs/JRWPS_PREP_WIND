@@ -48,9 +48,6 @@ export FIXrwps=${FIXrwps:-${HOMErwps}/fix}
 export PARMrwps=${PARMrwps:-${HOMErwps}/parm}
 export USHrwps=${USHrwps:-${HOMErwps}/ush}
 
-# Location of NDFD input files
-export DCOMIN=${DCOMIN:-${DCOMROOT}} # serves ice and ndfd data
-
 export COMIN=${COMIN:-$(compath.py -v ${NET}/${model_ver}/${RUN}.${PDY})}
 export COMOUT=${COMOUT:-$(compath.py -v -o ${NET}/${model_ver}/${RUN}.${PDY})}
 export COMOUTwave=${COMOUTwave:-$(compath.py -v -o ${NET}/${model_ver})}
