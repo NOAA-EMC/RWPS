@@ -8,7 +8,7 @@ export PS4='$SECONDS + '
  
 # PATH for working directory
 export DATA=${DATA:-${DATAROOT:?}/$jobid}
-export DATA=${DATA}".current" #local data directory specific to current preperation
+export DATA=${DATA}"/current" #local data directory specific to current preperation
 mkdir -p ${DATA}
 cd ${DATA}
 

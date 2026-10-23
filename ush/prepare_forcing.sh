@@ -30,6 +30,7 @@ export KEEPDATA="YES"
 
 # presently defined here for ecf job submit
 readonly HOMErwps=$(cd "$(dirname "$(readlink -f -n "${BASH_SOURCE[0]}")")" && git rev-parse --show-toplevel)
+export HOMErwps
 
 ##################################
 export mesh="${HOMErwps}/fix/${meshID}/rwps.${meshID}.msh"
@@ -38,9 +39,6 @@ export meshname="${meshname: 0: -4}"
 ##################################
 # Note: model_ver defined in ../versions/run.wcoss2.ver
 source $HOMErwps/versions/run.wcoss2.ver
-export envir="test"
-export NET="rwps"
-export RUN=rwps
 
 # TODO: OPSROOT=/lfs/$FS/ops/$envir
 export OPSROOT=/lfs/h2/emc/ptmp/$USER
@@ -48,22 +46,11 @@ export OPSROOT=/lfs/h2/emc/ptmp/$USER
 # TODO: COMROOT=$OPSROOT/com
 export COMROOT="/lfs/h2/emc/ptmp/$USER"
 
-# Note: following https://nws-hpc-standards.readthedocs.io/en/stable/#standard-variables-formats-and-utilities
-# COMIN and COMOUT are the same directory
-#export COMIN=$COMROOT/$NET/$model_ver/$RUN.$PDY
-#export COMOUT=$COMROOT/$NET/$model_ver/$RUN.$PDY
-
+# set DATA and create path for ecf output files
 export DATAROOT=$OPSROOT/tmp
 export DATA=$DATAROOT/$jobid
-
-#This is the directory where WW3 forcing files are stored
-export frc="${DATA}/RWPS.forcing.${PDY}.${cyc}.${meshID}"
-
 mkdir -p ${DATA}
-mkdir -p ${frc}
-
 export DATA
-export HOMErwps
 
 source ${HOMErwps}/ush/detect_machine.sh
 source ${HOMErwps}/sorc/link_workflow.sh

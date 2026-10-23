@@ -8,7 +8,7 @@ export PS4='$SECONDS + '
  
 # PATH for working directory
 export DATA=${DATA:-${DATAROOT:?}/$jobid}
-export DATA=${DATA}".ice" #local data directory specific to ice preperation
+export DATA=${DATA}"/ice" #local data directory specific to ice preperation
 mkdir -p ${DATA}
 cd ${DATA}
 
