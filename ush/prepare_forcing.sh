@@ -54,8 +54,6 @@ export DATA
 
 source ${HOMErwps}/ush/detect_machine.sh
 source ${HOMErwps}/sorc/link_workflow.sh
-#set PATH and modules
-source ${HOMErwps}/ush/module-setup.sh
 
 #Retrieve current and process for forecast cycle
 qsub -V -o ${DATA}/prep_current.out ${HOMErwps}/ecf/jrwps_prep_current.ecf 
