@@ -37,8 +37,6 @@ export mesh="${HOMErwps}/fix/${meshID}/rwps.${meshID}.msh"
 meshname="${mesh##*/}"
 export meshname="${meshname: 0: -4}"
 ##################################
-# Note: model_ver defined in ../versions/run.wcoss2.ver
-source $HOMErwps/versions/run.wcoss2.ver
 
 # TODO: OPSROOT=/lfs/$FS/ops/$envir
 export OPSROOT=/lfs/h2/emc/ptmp/$USER
