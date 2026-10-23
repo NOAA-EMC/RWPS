@@ -52,7 +52,6 @@ export DATA
 
 source ${HOMErwps}/ush/detect_machine.sh
 source ${HOMErwps}/versions/run.${MACHINE_ID}.ver
-source ${HOMErwps}/sorc/link_workflow.sh
 
 #Retrieve current and process for forecast cycle
 qsub -V -o ${DATA}/prep_current.out ${HOMErwps}/ecf/jrwps_prep_current.ecf 
