@@ -51,6 +51,7 @@ mkdir -p ${DATA}
 export DATA
 
 source ${HOMErwps}/ush/detect_machine.sh
+source ${HOMErwps}/versions/run.${MACHINE_ID}.ver
 source ${HOMErwps}/sorc/link_workflow.sh
 
 #Retrieve current and process for forecast cycle
