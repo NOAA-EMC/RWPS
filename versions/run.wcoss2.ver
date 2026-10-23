@@ -22,4 +22,17 @@ export bacio_ver=2.4.1
 export util_shared_ver=1.5.0
 export hrrr_ver=v4.1
 export gfs_ver=v16.3
+export hdf5_C_ver=1.14.0
+export netcdf_C_ver=4.9.2
+export esmf_C_ver=8.6.0
+export ve_hafs_ver=2.1
+export intel_oneapi_ver=2022.2.0.262
+export wgrib2_ver=2.0.8
+export rwps_ver=v1.0.0
+export prod_util_ver=2.0.5
+export stofs_ver=v3.1
+export rtofs_ver=v2.5
+export nbm_ver=v5.1
+export rrfs_ver=v1.0
+export model_ver=v1.0.0
 

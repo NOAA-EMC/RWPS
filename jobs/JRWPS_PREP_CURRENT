@@ -13,11 +13,8 @@ mkdir -p ${DATA}
 cd ${DATA}
 
 # set location for RWPS WW3 forcing files 
-usrtmp="/lfs/h2/emc/ptmp/$USER"
-mkdir -p ${usrtmp}
-export frc="${usrtmp}/RWPS.forcing.${PDY}.${cyc}.${meshID}"
+export frc="${COMROOT}/RWPS.forcing.${PDY}.${cyc}.${meshID}"
 mkdir -p ${frc}
-
 
 # Set cycle parameters
 export cycle=${cycle:-t${cyc}z}
@@ -28,7 +25,8 @@ setpdy.sh
 export SENDECF=${SENDECF:-YES}
 export SENDDBN=${SENDDBN:-YES}
 export SENDCOM=${SENDCOM:-YES}
-export KEEPDATA=${KEEPDATA:-NO}
+# KEEPDATA set in job card 
+#export KEEPDATA=${KEEPDATA:-NO}
 
 # Set runID (Until modID becomes glwn and glw is dumped) 
 export runID=rwps

@@ -36,21 +36,37 @@ export mesh="${HOMErwps}/fix/${meshID}/rwps.${meshID}.msh"
 meshname="${mesh##*/}"
 export meshname="${meshname: 0: -4}"
 ##################################
+# Note: model_ver defined in ../versions/run.wcoss2.ver
+source $HOMErwps/versions/run.wcoss2.ver
+export envir="test"
+export NET="rwps"
+export RUN=rwps
 
-# presently defined here to route ecf output.
-usrtmp="/lfs/h2/emc/ptmp/$USER"
-mkdir -p ${usrtmp}
-export DATA="${usrtmp}/RWPS.forcing_preperation.${PDY}.${cyc}.${meshID}.tmpdir"
+# TODO: OPSROOT=/lfs/$FS/ops/$envir
+export OPSROOT=/lfs/h2/emc/ptmp/$USER
+
+# TODO: COMROOT=$OPSROOT/com
+export COMROOT="/lfs/h2/emc/ptmp/$USER"
+
+# Note: following https://nws-hpc-standards.readthedocs.io/en/stable/#standard-variables-formats-and-utilities
+# COMIN and COMOUT are the same directory
+#export COMIN=$COMROOT/$NET/$model_ver/$RUN.$PDY
+#export COMOUT=$COMROOT/$NET/$model_ver/$RUN.$PDY
+
+export DATAROOT=$OPSROOT/tmp
+export DATA=$DATAROOT/$jobid
+
+#This is the directory where WW3 forcing files are stored
+export frc="${DATA}/RWPS.forcing.${PDY}.${cyc}.${meshID}"
+
 mkdir -p ${DATA}
+mkdir -p ${frc}
 
 export DATA
 export HOMErwps
 
 source ${HOMErwps}/ush/detect_machine.sh
-export MACHINE_ID
-
 source ${HOMErwps}/sorc/link_workflow.sh
-
 #set PATH and modules
 source ${HOMErwps}/ush/module-setup.sh
 
