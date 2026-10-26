@@ -32,6 +32,9 @@ export KEEPDATA="YES"
 readonly HOMErwps=$(cd "$(dirname "$(readlink -f -n "${BASH_SOURCE[0]}")")" && git rev-parse --show-toplevel)
 export HOMErwps
 
+source ${HOMErwps}/ush/detect_machine.sh
+source ${HOMErwps}/versions/run.${MACHINE_ID}.ver
+
 ##################################
 export mesh="${HOMErwps}/fix/${meshID}/rwps.${meshID}.msh"
 meshname="${mesh##*/}"
@@ -39,19 +42,15 @@ export meshname="${meshname: 0: -4}"
 ##################################
 
 # TODO: OPSROOT=/lfs/$FS/ops/$envir
-export OPSROOT=/lfs/h2/emc/ptmp/$USER
-
-# TODO: COMROOT=$OPSROOT/com
-export COMROOT="/lfs/h2/emc/ptmp/$USER"
+export OPSROOT=/lfs/h2/emc/ptmp/$USER/rwps/$rwps_ver/JRWPS_PREP
 
 # set DATA and create path for ecf output files
+export COMROOT=$OPSROOT/com
 export DATAROOT=$OPSROOT/tmp
 export DATA=$DATAROOT/$jobid
 mkdir -p ${DATA}
-export DATA
+mkdir -p ${COMROOT}
 
-source ${HOMErwps}/ush/detect_machine.sh
-source ${HOMErwps}/versions/run.${MACHINE_ID}.ver
 
 #Retrieve current and process for forecast cycle
 qsub -V -o ${DATA}/prep_current.out ${HOMErwps}/ecf/jrwps_prep_current.ecf 

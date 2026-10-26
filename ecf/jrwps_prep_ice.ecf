@@ -35,13 +35,10 @@ module list
 # set env variables according to nws-hpc-standards
 ############################################################
 #TODO: OPSROOT=/lfs/$FS/ops/$envir
-OPSROOT=/lfs/h2/emc/ptmp/$USER
+#OPSROOT=/lfs/h2/emc/ptmp/$USER
 envir="test"
 export job=rwps.$PDY.$cyc.$meshID
 export jobid=$job.$PBS_JOBID
-export DATAROOT=$OPSROOT/tmp
-export COMROOT=$OPSROOT/com
-export KEEPDATA=YES
 
 ############################################################
 # run j-job
