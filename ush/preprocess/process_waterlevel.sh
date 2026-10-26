@@ -26,7 +26,7 @@
 #    cyc            two digit forecat cycle, i.e. 00, 06, etc.
 #    meshname       filename of RWPS mesh geometry file without path or .msh suffix, i.e. rwps.oc_500m_10km
 #    DATA           working directory containg stofs and rtofs forecasts
-#    frc            output directory to write RWPS current forecast to
+#    DATA            output directory to write RWPS current forecast to
 #
 # Exit codes:
 #    0 success
@@ -40,9 +40,9 @@ set -x
 stofslev="${DATA}/stofs.${PDY}.${cyc}/stofs_2d_glo.t${cyc}z.fields.cwl.nc"
 stofs_wghts="${FIXrwps}/${meshID}/InterpolationWeights.${meshname}.stofs.nc"
 stofs_dists="${FIXrwps}/${meshID}/DistToBndy.${meshname}.stofs.nc"
-stofs_rwps="${frc}/${meshname}.${PDY}.${cyc}.cwl.waterlevel.nc"
+stofs_rwps="${DATA}/${meshname}.${PDY}.${cyc}.cwl.waterlevel.nc"
 
-rwps_waterlevel="${frc}/${meshname}.${PDY}.${cyc}.waterlevel.nc"
+rwps_waterlevel="${DATA}/${meshname}.${PDY}.${cyc}.waterlevel.nc"
 
 varnames="zeta"
 

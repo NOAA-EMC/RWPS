@@ -30,7 +30,7 @@
 #    cyc            two digit forecat cycle, i.e. 00, 06, etc.
 #    meshname       filename of RWPS mesh geometry file without path or .msh suffix, i.e. rwps.oc_500m_10km
 #    DATA           working directory containg stofs and rtofs forecasts
-#    frc            output directory to write RWPS current forecast to
+#    DATA            output directory to write RWPS current forecast to
 #
 # Exit codes:
 #    0 success
@@ -50,7 +50,7 @@ windvars="UGRD_10maboveground:VGRD_10maboveground"
 
 outdir="${DATA}/rwps_wind.${meshname}.${PDY}.${cyc}"
 
-rwps_wind="${frc}/${meshname}.${PDY}.${cyc}.wind.nc"
+rwps_wind="${DATA}/${meshname}.${PDY}.${cyc}.wind.nc"
 
 echo "outputing files to: ${outdir}"
 

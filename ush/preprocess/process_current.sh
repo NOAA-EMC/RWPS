@@ -31,7 +31,7 @@
 #    cyc            two digit forecat cycle, i.e. 00, 06, etc.
 #    meshname       filename of RWPS mesh geometry file without path or .msh suffix, i.e. rwps.oc_500m_10km
 #    DATA           working directory containg stofs and rtofs forecasts
-#    frc            output directory to write RWPS current forecast to
+#    DATA            output directory to write RWPS current forecast to
 #
 # Exit codes:
 #    0 success
@@ -55,7 +55,7 @@ max_current_speed=3.0
 varnames="u-vel:v-vel"
 
 #name of blended wind
-rwps_current=${frc}/${meshname}.${PDY}.${cyc}.current.nc
+rwps_current=${DATA}/${meshname}.${PDY}.${cyc}.current.nc
 rwps_current_nolimit=${DATA}/${meshname}.${PDY}.${cyc}.current.nolimit.nc
 
 ## STOFS interpolation

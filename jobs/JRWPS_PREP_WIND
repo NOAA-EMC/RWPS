@@ -12,10 +12,6 @@ export DATA=${DATA}"/wind" #local data directory specific to wind preperation
 mkdir -p ${DATA}
 cd ${DATA}
 
-# set location for RWPS WW3 forcing files 
-export frc="${COMROOT}/RWPS.forcing.${PDY}.${cyc}.${meshID}"
-mkdir -p ${frc}
-
 # Set cycle parameters
 export cycle=${cycle:-t${cyc}z}
 setpdy.sh
@@ -68,6 +64,11 @@ export err=$?; err_chk
 
 msg="JOB $job HAS COMPLETED NORMALLY."
 postmsg "$msg"
+
+
+#move forcing files from $DATA to COM
+mkdir -p ${COMROOT}
+cp ${DATA}/${NET}.${meshID}.${PDY}.${cyc}.wind.nc $COMROOT/
 
 if [ -e "$pgmout" ]; then
   cat $pgmout

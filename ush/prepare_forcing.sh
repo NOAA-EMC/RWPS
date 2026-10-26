@@ -42,12 +42,13 @@ export meshname="${meshname: 0: -4}"
 ##################################
 
 # TODO: OPSROOT=/lfs/$FS/ops/$envir
-export OPSROOT=/lfs/h2/emc/ptmp/$USER/rwps/$rwps_ver/JRWPS_PREP
+export OPSROOT=/lfs/h2/emc/ptmp/${USER}/rwps/${rwps_ver}/JRWPS_PREP
 
 # set DATA and create path for ecf output files
-export COMROOT=$OPSROOT/com
-export DATAROOT=$OPSROOT/tmp
-export DATA=$DATAROOT/$jobid
+export COMROOT=${OPSROOT}/com/rwps/${rwps_ver}/rwps.${PDY}/${cyc}/prep
+
+export DATAROOT=${OPSROOT}/tmp
+export DATA=${DATAROOT}/${jobid}
 mkdir -p ${DATA}
 mkdir -p ${COMROOT}
 

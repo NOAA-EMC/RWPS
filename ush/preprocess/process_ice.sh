@@ -30,7 +30,7 @@
 #    cyc            two digit forecat cycle, i.e. 00, 06, etc.
 #    meshname       filename of RWPS mesh geometry file without path or .msh suffix, i.e. rwps.oc_500m_10km
 #    DATA           working directory containg stofs and rtofs forecasts
-#    frc            output directory to write RWPS current forecast to
+#    DATA            output directory to write RWPS current forecast to
 #
 # Exit codes:
 #    0 success
@@ -66,7 +66,7 @@ nbm_rwps_ti="${DATA}/${meshname}.${PDY}.${cyc}.ice.nbm.ak.ti.nc"
 
 varnames="ICEC_surface"
 
-rwps_ice="${frc}/${meshname}.${PDY}.${cyc}.ice.nc"
+rwps_ice="${DATA}/${meshname}.${PDY}.${cyc}.ice.nc"
 
 if [ ! -f "${nbmice}" ]; then
     echo "FATAL ERROR: missing nbm ice concentration file: ${nbmice}"
