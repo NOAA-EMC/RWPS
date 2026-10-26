@@ -53,10 +53,10 @@ mkdir -p ${COMROOT}
 
 
 #Retrieve current and process for forecast cycle
-qsub -V -o ${DATA}/prep_current.out ${HOMErwps}/ecf/jrwps_prep_current.ecf 
-qsub -V -o ${DATA}/prep_ice.out ${HOMErwps}/ecf/jrwps_prep_ice.ecf
-qsub -V -o ${DATA}/prep_waterlevel.out ${HOMErwps}/ecf/jrwps_prep_waterlevel.ecf
-qsub -V -o ${DATA}/prep_wind.out ${HOMErwps}/ecf/jrwps_prep_wind.ecf
+qsub -V -o ${COMROOT}/prep_current.${PDY}.${cyc}.${meshID}.out ${HOMErwps}/ecf/jrwps_prep_current.ecf
+qsub -V -o ${COMROOT}/prep_ice.${PDY}.${cyc}.${meshID}.out ${HOMErwps}/ecf/jrwps_prep_ice.ecf
+qsub -V -o ${COMROOT}/prep_waterlevel.${PDY}.${cyc}.${meshID}.out ${HOMErwps}/ecf/jrwps_prep_waterlevel.ecf
+qsub -V -o ${COMROOT}/prep_wind.${PDY}.${cyc}.${meshID}.out ${HOMErwps}/ecf/jrwps_prep_wind.ecf
 
 set +x
 echo ' '
