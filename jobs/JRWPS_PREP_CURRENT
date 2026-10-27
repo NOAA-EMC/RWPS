@@ -10,7 +10,6 @@ export PS4='$SECONDS + '
 export DATA=${DATA:-${DATAROOT:?}/$jobid}
 export DATA=${DATA}"/current" #local data directory specific to current preperation
 mkdir -p ${DATA}
-cd ${DATA}
 
 # Set cycle parameters
 export cycle=${cycle:-t${cyc}z}
