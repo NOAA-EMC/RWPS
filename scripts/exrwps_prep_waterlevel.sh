@@ -7,5 +7,9 @@ set -x
 
 cd ${DATA}
 
-${HOMErwps}/ush/preprocess/get_waterlevel.sh
+# retrieve global STOFS water level forecast as netcdf file
+${USHrwps}/preprocess/stofs/get_stofs.sh ${PDY} ${cyc} waterlevel 
+export err=$?; err_chk
+
 ${HOMErwps}/ush/preprocess/process_waterlevel.sh
+export err=$?; err_chk

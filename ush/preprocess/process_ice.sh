@@ -68,62 +68,92 @@ varnames="ICEC_surface"
 
 rwps_ice="${DATA}/${meshname}.${PDY}.${cyc}.ice.nc"
 
+#TODO: nbmice should be treated as optional - need to update logic to fallback to just global rtofs ice
 if [ ! -f "${nbmice}" ]; then
-    echo "FATAL ERROR: missing nbm ice concentration file: ${nbmice}"
-    exit 1
+    msg = "FATAL ERROR: missing nbm ice concentration file: ${nbmice}"
+    echo "$msg"
+    postmsg "$msg"      
+    err=1;export err;err_chk
+    exit $err
 fi
 if [ ! -f "${nbm_ak_wghts}" ]; then
-    echo "FATAL ERROR: missing nbm ak interpolation weights file: ${nbm_ak_wghts}"
-    echo "compute with script compute_unstr_to_rwps_interp_weights.sh"
-    exit 2
+    echo msg = "FATAL ERROR: missing nbm ak interpolation weights file: ${nbm_ak_wghts}"
+    echo "$msg"
+    postmsg "$msg"      
+    err=2;export err;err_chk
+    exit $err
 fi
 
 if [ ! -f "${nbm_ak_dists}" ]; then
-    echo "FATAL ERROR: missing nbm ak  distance to boundary file: ${nbm_ak_dists}"
-    echo "compute with script compute_unstr_to_rwps_interp_weights.sh"
-    exit 3
+    msg = "FATAL ERROR: missing nbm ak  distance to boundary file: ${nbm_ak_dists}"
+    echo "$msg"
+    postmsg "$msg"      
+    err=3;export err;err_chk
+    exit $err
 fi
 
 # no extrapolation of ice beyond ak grid coverage
-python ${USHrwps}/preprocess/interpolate_with_weights.py ${nbmice} ${nbm_ak_wghts} ${nbm_rwps} ${varnames} -1 &
+(
+    python ${USHrwps}/preprocess/interpolate_with_weights.py ${nbmice} ${nbm_ak_wghts} ${nbm_rwps} ${varnames} -1
+    export err=$?; err_chk                 # error checking
+)&
 
 if [ ! -f "${rtofsice}" ]; then
-    echo "FATAL ERROR: missing rtofs ice concentration file: ${rtofsice}"
-    exit 4
+    echo msg = "FATAL ERROR: missing rtofs ice concentration file: ${rtofsice}"
+    echo "$msg"
+    postmsg "$msg"      
+    err=4;export err;err_chk
+    exit $err
 fi
 if [ ! -f "${rtofs_wghts}" ]; then
-    echo "FATAL ERROR: missing rtofs interpolation weights file: ${rtofs_wghts}"
-    echo "compute with script ComputeGridToRWPSInterpWeights.py"
-    exit 5
+   msg = "FATAL ERROR: missing rtofs interpolation weights file: ${rtofs_wghts}"
+   echo "$msg"
+   postmsg "$msg"      
+   err=5;export err;err_chk
+   exit $err
 fi
 if [ ! -f "${rtofs_dists}" ]; then
-    echo "FATAL ERROR: missing stofs distance to boundary file: ${rtofs_dists}"
-    echo "compute with script compute_unstr_to_rwps_interp_weights.py"
-    exit 6
+   msg = "FATAL ERROR: missing stofs distance to boundary file: ${rtofs_dists}"
+   echo "$msg"
+   postmsg "$msg"      
+   err=6;export err;err_chk
+   exit $err
 fi
 
 # extrapolate with 0 as fill
-python ${USHrwps}/preprocess/interpolate_with_weights.py ${rtofsice} ${rtofs_wghts} ${rtofs_rwps} ${varnames} 0 &
-
+(
+    python ${USHrwps}/preprocess/interpolate_with_weights.py ${rtofsice} ${rtofs_wghts} ${rtofs_rwps} ${varnames} 0
+    export err=$?; err_chk                 # error checking
+)&
 wait;
 
 
 python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rtofs_rwps} ${mesh}
+export err=$?; err_chk                 # error checking
 python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${nbm_rwps} ${mesh}
+export err=$?; err_chk                 # error checking
 
 # interpolate from stofs to common stofs and rtofs times within range of stofs time
-python ${USHrwps}/preprocess/interp_time.py ${rtofs_rwps} ${nbm_rwps} ${rtofs_rwps_ti} ${varnames} False &
+(
+   python ${USHrwps}/preprocess/interp_time.py ${rtofs_rwps} ${nbm_rwps} ${rtofs_rwps_ti} ${varnames} False 
+   export err=$?; err_chk                 # error checking
+)&
 
 # interpolate from rtofs to common stofs and rtofs times within range of stofs time
 # values out of range are extrapolated to assuming persistance
-python ${USHrwps}/preprocess/interp_time.py ${rtofs_rwps} ${nbm_rwps} ${nbm_rwps_ti} ${varnames} True &
-
-wait
+(
+   python ${USHrwps}/preprocess/interp_time.py ${rtofs_rwps} ${nbm_rwps} ${nbm_rwps_ti} ${varnames} True
+   export err=$?; err_chk                 # error checking
+)&
+wait;
 
 #uniform variance of 100.
 python ${USHrwps}/preprocess/add_err_var_to_file.py ${rtofs_rwps_ti} ${rtofs_dists} 100.
+export err=$?; err_chk                 # error checking
 
 #interior variance of 4., boundary variance fof 400., transition lengthscale 9. km
 python ${USHrwps}/preprocess/add_err_var_to_file.py ${nbm_rwps_ti} ${nbm_ak_dists} 4.:400.:9.
+export err=$?; err_chk                 # error checking
 
 python ${USHrwps}/preprocess/bayes_forecast_update.py ${rtofs_rwps_ti} ${nbm_rwps_ti} ${rwps_ice} ${varnames}
+export err=$?; err_chk                 # error checking

@@ -7,5 +7,18 @@ set -x
 
 cd ${DATA}
 
-${HOMErwps}/ush/preprocess/get_ice.sh
+#${HOMErwps}/ush/preprocess/get_ice.sh
+# retrieve ice forecasts for global RTOFS and Alaska NBM as netcdf files
+(
+    ${USHrwps}/preprocess/rtofs/get_rtofs_ice.sh ${PDY} ${cyc}
+    export err=$?; err_chk
+)&
+(
+    ${USHrwps}/preprocess/nbm/get_nbm_ice.sh ${PDY} ${cyc}
+    export err=$?; err_chk
+) &
+
+wait;
+
 ${HOMErwps}/ush/preprocess/process_ice.sh
+export err=$?; err_chk

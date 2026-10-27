@@ -7,5 +7,18 @@ set -x
 
 cd ${DATA}
 
-${HOMErwps}/ush/preprocess/get_current.sh
+#${HOMErwps}/ush/preprocess/get_current.sh
+# retrieve global RTOFS and STOFS current forecasts as netcdf files
+(
+    ${USHrwps}/preprocess/rtofs/get_rtofs.sh ${PDY}
+    export err=$?; err_chk
+) &
+(
+    ${USHrwps}/preprocess/stofs/get_stofs.sh ${PDY} ${cyc} current
+    export err=$?; err_chk
+) &
+
+wait;
+
 ${HOMErwps}/ush/preprocess/process_current.sh
+export err=$?; err_chk

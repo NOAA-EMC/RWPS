@@ -47,18 +47,26 @@ rwps_waterlevel="${DATA}/${meshname}.${PDY}.${cyc}.waterlevel.nc"
 varnames="zeta"
 
 if [ ! -f "${stofslev}" ]; then
-    echo "FATAL ERROR: missing stofs waterlevel forecast: ${stofslev}"
+    msg = "FATAL ERROR: missing stofs waterlevel forecast: ${stofslev}"
+    echo "$msg"
+    postmsg "$msg"      
+    err=1;export err;err_chk
     exit 1
 fi
 
 if [ ! -f "${stofs_wghts}" ]; then
-    echo "FATAL ERROR: missing stofs interpolation weights file: ${stofs_wghts}"
-    echo "compute with script compute_unstr_to_rwps_interp_weights.sh"
+    msg = "FATAL ERROR: missing stofs interpolation weights file: ${stofs_wghts}"
+    echo $msg
+    postmsg "$msg"      
+    err=2;export err;err_chk
     exit 2
 fi
 
 python ${USHrwps}/preprocess/interpolate_with_weights.py ${stofslev} ${stofs_wghts} ${rwps_waterlevel} ${varnames} 0
+export err=$?; err_chk                 # error checking
+
 python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rwps_waterlevel} ${mesh}
+export err=$?; err_chk                 # error checking
 
 if [ ! -f "${stofs_dists}" ]; then
     echo "WARNING: missing stofs distance to boundary file: ${stofs_dists}"
@@ -66,4 +74,5 @@ if [ ! -f "${stofs_dists}" ]; then
     echo "continuing without adding error variance field to waterlevel forecast"
 else
     python ${USHrwps}/preprocess/add_err_var_to_file.py ${rwps_waterlevel} ${stofs_dists} 1.
+    err=$?;export err;err_chk   
 fi
