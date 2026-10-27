@@ -5,7 +5,7 @@
 # {PDY}=YYYYMMDD, 
 # call as:
 # $ sh get_rtofs.sh 20260829
-# tmp = work directory to write output files to
+# DATA = work directory to write output files to
 # COMINrtofs = directory path to rtofs forecast
 
 set -x

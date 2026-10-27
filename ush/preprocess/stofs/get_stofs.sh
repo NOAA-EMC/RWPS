@@ -7,11 +7,11 @@
 # arg 3 = variable to retrieve, (current or waterlevel)
 #
 # Requires environmental variables:
-# tmp = work directory to write output files to
+# DATA = work directory to write output files to
 # COMINstofs = directory path to stofs forecasts
 #
 # call as:
-# $ sh get_rtofs_ice.sh
+# $ sh get_stofs.sh 20260829 00 current
 
 PDY=${1}
 cyc=${2}

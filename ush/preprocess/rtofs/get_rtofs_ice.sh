@@ -5,10 +5,10 @@
 # Requires environmental variables:
 # {PDY}=YYYYMMDD, 
 # {cyc}=00,06... two digit cycle number
-# tmp = work directory to write output files to
+# DATA = work directory to write output files to
 #
 # call as:
-# $ sh get_rtofs_ice.sh
+# $ sh get_rtofs_ice.sh 20260829 00
 
 set -x
 
