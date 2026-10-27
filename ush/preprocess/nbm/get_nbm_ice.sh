@@ -11,7 +11,6 @@
 # call as:
 # $ sh get_nbm_ice.sh 20260829 00
 set -x
-set -x
 
 ICE_FILE=${COMINnbm}/blend.t${2}z.icec.ak.grib2
 
