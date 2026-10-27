@@ -7,7 +7,6 @@ set -x
 
 cd ${DATA}
 
-#${HOMErwps}/ush/preprocess/get_current.sh
 # retrieve global RTOFS and STOFS current forecasts as netcdf files
 (
     ${USHrwps}/preprocess/rtofs/get_rtofs.sh ${PDY}
