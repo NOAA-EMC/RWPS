@@ -92,12 +92,15 @@ if [ ! -f "${nbm_ak_dists}" ]; then
     exit $err
 fi
 
+###############################################################################
+# (A)
 # no extrapolation of ice beyond ak grid coverage
-(
-    python ${USHrwps}/preprocess/interpolate_with_weights.py ${nbmice} ${nbm_ak_wghts} ${nbm_rwps} ${varnames} -1
-    export err=$?; err_chk                 # error checking
-)&
+python ${USHrwps}/preprocess/interpolate_with_weights.py ${nbmice} ${nbm_ak_wghts} ${nbm_rwps} ${varnames} -1
+export err=$?; err_chk                 # error checking
+###############################################################################
 
+###############################################################################
+# (B)
 if [ ! -f "${rtofsice}" ]; then
     echo msg = "FATAL ERROR: missing rtofs ice concentration file: ${rtofsice}"
     echo "$msg"
@@ -119,34 +122,42 @@ if [ ! -f "${rtofs_dists}" ]; then
    err=6;export err;err_chk
    exit $err
 fi
-
 # extrapolate with 0 as fill
-(
-    python ${USHrwps}/preprocess/interpolate_with_weights.py ${rtofsice} ${rtofs_wghts} ${rtofs_rwps} ${varnames} 0
-    export err=$?; err_chk                 # error checking
-)&
-wait;
+python ${USHrwps}/preprocess/interpolate_with_weights.py ${rtofsice} ${rtofs_wghts} ${rtofs_rwps} ${varnames} 0
+export err=$?; err_chk                 # error checking
+###############################################################################
 
+# (A) and (B) can be executed in parallel but must both compleate before (C) 
 
+###############################################################################
+# (C)
 python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rtofs_rwps} ${mesh}
 export err=$?; err_chk                 # error checking
 python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${nbm_rwps} ${mesh}
 export err=$?; err_chk                 # error checking
+###############################################################################
 
+# after (C) compleates (D) and (E) can be executed in parallel
+
+###############################################################################
+# (D)
 # interpolate from stofs to common stofs and rtofs times within range of stofs time
-(
-   python ${USHrwps}/preprocess/interp_time.py ${rtofs_rwps} ${nbm_rwps} ${rtofs_rwps_ti} ${varnames} False 
-   export err=$?; err_chk                 # error checking
-)&
+python ${USHrwps}/preprocess/interp_time.py ${rtofs_rwps} ${nbm_rwps} ${rtofs_rwps_ti} ${varnames} False 
+export err=$?; err_chk                 # error checking
+###############################################################################
 
+###############################################################################
+# (E)
 # interpolate from rtofs to common stofs and rtofs times within range of stofs time
 # values out of range are extrapolated to assuming persistance
-(
-   python ${USHrwps}/preprocess/interp_time.py ${rtofs_rwps} ${nbm_rwps} ${nbm_rwps_ti} ${varnames} True
-   export err=$?; err_chk                 # error checking
-)&
-wait;
+python ${USHrwps}/preprocess/interp_time.py ${rtofs_rwps} ${nbm_rwps} ${nbm_rwps_ti} ${varnames} True
+export err=$?; err_chk                 # error checking
+###############################################################################
 
+# (D) and (E) can be executed in parallel but must both compleate before (F)
+
+###############################################################################
+# (F)
 #uniform variance of 100.
 python ${USHrwps}/preprocess/add_err_var_to_file.py ${rtofs_rwps_ti} ${rtofs_dists} 100.
 export err=$?; err_chk                 # error checking
@@ -157,3 +168,4 @@ export err=$?; err_chk                 # error checking
 
 python ${USHrwps}/preprocess/bayes_forecast_update.py ${rtofs_rwps_ti} ${nbm_rwps_ti} ${rwps_ice} ${varnames}
 export err=$?; err_chk                 # error checking
+###############################################################################

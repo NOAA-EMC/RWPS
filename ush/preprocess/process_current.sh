@@ -85,6 +85,7 @@ if [ ! -f "${stofs_wghts}" ]; then
     err=2;export err;err_chk
     exit 2
 fi
+
 if [ ! -f "${stofs_dists}" ]; then
     msg ="FATAL ERROR: missing stofs distance to boundary file: ${stofs_dists}"
     echo "$msg"
@@ -93,51 +94,68 @@ if [ ! -f "${stofs_dists}" ]; then
     exit 3
 fi
 
-(
-    # Extrapolate stofs forecast with zero as fill value
-    python ${USHrwps}/preprocess/interpolate_with_weights.py ${stofscur} ${stofs_wghts} ${stofs_rwps} ${varnames} 0
-    export err=$?; err_chk                 # error checking
-    python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${stofs_rwps} ${mesh}
-    export err=$?; err_chk                 # error checking
-)&
+
+###############################################################################
+# (A)
+# Extrapolate stofs forecast with zero as fill value
+python ${USHrwps}/preprocess/interpolate_with_weights.py ${stofscur} ${stofs_wghts} ${stofs_rwps} ${varnames} 0
+export err=$?; err_chk                 # error checking
+python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${stofs_rwps} ${mesh}
+export err=$?; err_chk                 # error checking
+###############################################################################
+
 
 if [ -f "${rtofscur}" ] && [ -f "${rtofs_wghts}" ] && [ -f "${rtofs_dists}" ]; then
     echo "RTOFS current forecast IS available. Combining with STOFS current forecast"
     echo "outputting combined stofs and rtofs currents to ${rwps_current}"
-    (
-        # No extrapolation of rtofs into shallows
-        python ${USHrwps}/preprocess/interpolate_with_weights.py ${rtofscur} ${rtofs_wghts} ${rtofs_rwps} ${varnames} -1
-        export err=$?; err_chk                 # error checking
-        python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rtofs_rwps} ${mesh}
-        export err=$?; err_chk                 # error checking
-    )&
-    wait; # wait for spatial interpolation to RWPS mesh from stofs and rtofs forecasts to compleate
+    ###############################################################################
+    # (B)
+    # No extrapolation of rtofs into shallows
+    python ${USHrwps}/preprocess/interpolate_with_weights.py ${rtofscur} ${rtofs_wghts} ${rtofs_rwps} ${varnames} -1
+    export err=$?; err_chk                 # error checking
+    python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rtofs_rwps} ${mesh}
+    export err=$?; err_chk                 # error checking
+    ###############################################################################
 
-    (
-        # interpolate stofs forecast to common stofs and rtofs times within range of stofs time
-        python ${USHrwps}/preprocess/interp_time.py ${stofs_rwps} ${rtofs_rwps} ${stofs_rwps_ti} ${varnames} False
-        export err=$?; err_chk                 # error checking
-        # Add parmaterized error variance to stofs forecast. Favors stofs in shallow regions
-        python ${USHrwps}/preprocess/add_err_var_to_file.py ${stofs_rwps_ti} ${stofs_dists} 1.:100.:50.:250.
-        export err=$?; err_chk                 # error checking
-    )&
-    (
-        # interpolate rtofs forecast to common stofs and rtofs times within range of stofs time
-        python ${USHrwps}/preprocess/interp_time.py ${stofs_rwps} ${rtofs_rwps} ${rtofs_rwps_ti} ${varnames} True
-        export err=$?; err_chk                 # error checking
-        # Add parmaterized error variance to rtofs forecast. Favors rtofs in deep water and stofs in shallow regions.
-        python ${USHrwps}/preprocess/add_err_var_to_file.py ${rtofs_rwps_ti} ${rtofs_dists} 100.:1.:50.:250.:50.
-        export err=$?; err_chk                 # error checking
-    )&
-    wait;
+    # (A) and (B) can be executed in parallel but must both compleate before continuing
 
+    ###############################################################################
+    # (C)
+    # interpolate stofs forecast to common stofs and rtofs times within range of stofs time
+    python ${USHrwps}/preprocess/interp_time.py ${stofs_rwps} ${rtofs_rwps} ${stofs_rwps_ti} ${varnames} False
+    export err=$?; err_chk                 # error checking
+    # Add parmaterized error variance to stofs forecast. Favors stofs in shallow regions
+    python ${USHrwps}/preprocess/add_err_var_to_file.py ${stofs_rwps_ti} ${stofs_dists} 1.:100.:50.:250.
+    export err=$?; err_chk                 # error checking
+    ###############################################################################
+
+    ###############################################################################
+    # (D)
+    # interpolate rtofs forecast to common stofs and rtofs times within range of stofs time
+    python ${USHrwps}/preprocess/interp_time.py ${stofs_rwps} ${rtofs_rwps} ${rtofs_rwps_ti} ${varnames} True
+    export err=$?; err_chk                 # error checking
+    # Add parmaterized error variance to rtofs forecast. Favors rtofs in deep water and stofs in shallow regions.
+    python ${USHrwps}/preprocess/add_err_var_to_file.py ${rtofs_rwps_ti} ${rtofs_dists} 100.:1.:50.:250.:50.
+    export err=$?; err_chk                 # error checking
+    ###############################################################################
+
+    # (C) and (D) can be executed in parallel but must both compleate before (E)
+
+    ###############################################################################
+    # (E)
     # combine stofs and rtofs forecast
     python ${USHrwps}/preprocess/bayes_forecast_update.py ${stofs_rwps_ti} ${rtofs_rwps_ti} ${rwps_current} ${varnames}
     export err=$?; err_chk                 # error checking
+    ###############################################################################
 else
-    echo "outputting STOFS current forecast to ${rwps_current}, Not using RTOFS current forecast."
-    wait;  # wait for spatial interpolation to RWPS mesh from stofs forecast to compleate
     
+    # section (A) must compleate before (F)
+    
+    ###############################################################################
+    # (F)
+    # No success with RTOFS, using only STOFS current forecast
+    # wait for spatial interpolation to RWPS mesh from stofs forecast to compleate
+    echo "outputting STOFS current forecast to ${rwps_current}, Not using RTOFS current forecast."
     python ${USHrwps}/preprocess/add_err_var_to_file.py ${stofs_rwps} ${stofs_dists} 1.:100.:50.:250.
     export err=$?; err_chk                 # error checking
     cp ${stofs_rwps} ${rwps_current}
@@ -154,8 +172,13 @@ else
         echo "WARNING: missing rtofs  distance to boundary file: ${rtofs_dists}"
         echo "compute with script compute_gridded_to_rwps_interp_weights.py"
     fi
+    ###############################################################################
 fi
 
+# section (E)  or (F) must have compleated before (G)
+
+###############################################################################
+# (G)
 if [[ -v max_current_speed ]]; then
     mv ${rwps_current} ${rwps_current_nolimit}
 
@@ -168,3 +191,4 @@ if [[ -v max_current_speed ]]; then
     echo "limiting maximum current speed to ${rwps_current}, limited field output to ${rwps_current}."
     echo "unlimited current field recorded at ${rwps_current_nolimit}."
 fi
+###############################################################################

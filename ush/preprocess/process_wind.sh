@@ -73,9 +73,11 @@ rwps_conus="${outdir}/${meshname}.${PDY}.${cyc}.wind10m.rrfs.conus.nc"
 
 mkdir -p ${outdir}
 
-##LocalFS  = [ rwps_pr, rwps_hi, rwps_ak, rwps_conus, rwps_na] # file names
-##VarFS    = [ 4.     , 4.    , 9.      , 16.       , 25.    ] # (m m /s /s)
-##LambdaFS = [ 150.   , 200.  , 500.    , 1000.     , 1500.  ] # (km)
+# Tested paramater values for bayesian update
+# LocalFS  = [ rwps_pr, rwps_hi, rwps_ak, rwps_conus, rwps_na, nbm_oc] # file names
+# VarFS    = [ 4.     , 4.    , 9.      , 16.       , 25.    , 100.  ] # (m m /s /s)
+# LambdaFS = [ 150.   , 200.  , 500.    , 1000.     , 1500.  , inf   ] # (km)
+
 nbm_oc_wghts="${FIXrwps}/${meshID}/InterpolationWeights.${meshname}.nbm.oc.nc"
 rrfs_hi_wghts="${FIXrwps}/${meshID}/InterpolationWeights.${meshname}.rrfs.hi.nc"
 rrfs_pr_wghts="${FIXrwps}/${meshID}/InterpolationWeights.${meshname}.rrfs.pr.nc"
@@ -90,98 +92,124 @@ rrfs_ak_dist="${FIXrwps}/${meshID}/DistToBndy.${meshname}.rrfs.ak.nc"
 rrfs_na_dist="${FIXrwps}/${meshID}/DistToBndy.${meshname}.rrfs.na.nc"
 rrfs_conus_dist="${FIXrwps}/${meshID}/DistToBndy.${meshname}.rrfs.conus.nc"
 
-
-(
-    if [ -f "${nbm_oc}" ] && [ -f "${nbm_oc_wghts}" ] ; then
-        #Convert nbm speed and direction to u,v
-        python ${USHrwps}/preprocess/spd_dir_to_uv_nbm.py ${nbm_oc} ${nbm_oc_uv}
-        export err=$?; err_chk                 # error checking
-        #interpolate nbm oc domain winds to rwps mesh
-        python ${USHrwps}/preprocess/interpolate_with_weights.py ${nbm_oc_uv} ${nbm_oc_wghts} ${rwps_oc} ${windvars} 3
-        export err=$?; err_chk                 # error checking
-        #add mesh geometry into interpolated file
-        python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rwps_oc} ${mesh}
-        export err=$?; err_chk                 # error checking
-    else
-        if [ ! -f "${nbm_oc}" ];then
-            msg = "FATAL ERROR: missing nbm oc domain forecast file ${nbm_oc}"
-            echo "$msg"
-            postmsg "$msg"      
-            err=1;export err;err_chk
-            exit $err
-        fi
-        if [ ! -f "${nbm_oc_wghts}" ];then
-            msg = "FATAL ERROR: missing nbm oc interpolation weights file ${nbm_oc_wghts}"
-            echo "$msg"
-            postmsg "$msg"      
-            err=2;export err;err_chk
-            exit $err
-        fi
-    fi
-)&
-
-(
-    #interpolate rrfs hi domain winds to rwps mesh
-    python ${USHrwps}/preprocess/interpolate_with_weights.py ${rrfs_hi} ${rrfs_hi_wghts} ${rwps_hi} ${windvars} -1
+###############################################################################
+# (A)
+if [ -f "${nbm_oc}" ] && [ -f "${nbm_oc_wghts}" ] ; then
+    #Convert nbm speed and direction to u,v
+    python ${USHrwps}/preprocess/spd_dir_to_uv_nbm.py ${nbm_oc} ${nbm_oc_uv}
+    export err=$?; err_chk                 # error checking
+    #interpolate nbm oc domain winds to rwps mesh
+    python ${USHrwps}/preprocess/interpolate_with_weights.py ${nbm_oc_uv} ${nbm_oc_wghts} ${rwps_oc} ${windvars} 3
     export err=$?; err_chk                 # error checking
     #add mesh geometry into interpolated file
-    python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rwps_hi} ${mesh}
+    python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rwps_oc} ${mesh}
     export err=$?; err_chk                 # error checking
-    # Add error covariance field to files with interpolated fields for bayesian update
-    # Based on distance to boundary of input field and commant line parameters InternalVariance:BoundaryVariance:LengthScale(km) 
-    python ${USHrwps}/preprocess/add_err_var_to_file.py ${rwps_hi} ${rrfs_hi_dist} 4.:40.:200.
-    export err=$?; err_chk                 # error checking
-)&
+else
+    if [ ! -f "${nbm_oc}" ];then
+       msg = "FATAL ERROR: missing nbm oc domain forecast file ${nbm_oc}"
+       echo "$msg"
+       postmsg "$msg"      
+       err=1;export err;err_chk
+       exit $err
+    fi
+    if [ ! -f "${nbm_oc_wghts}" ];then
+        msg = "FATAL ERROR: missing nbm oc interpolation weights file ${nbm_oc_wghts}"
+        echo "$msg"
+        postmsg "$msg"      
+        err=2;export err;err_chk
+        exit $err
+    fi
+fi
+###############################################################################
 
-(
-    python ${USHrwps}/preprocess/interpolate_with_weights.py ${rrfs_pr} ${rrfs_pr_wghts} ${rwps_pr} ${windvars} -1
-    export err=$?; err_chk                 # error checking
-    python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rwps_pr} ${mesh}
-    export err=$?; err_chk                 # error checking
-    python ${USHrwps}/preprocess/add_err_var_to_file.py ${rwps_pr} ${rrfs_pr_dist} 4.:40.:150.
-    export err=$?; err_chk                 # error checking
-)&
+###############################################################################
+# (B)
+#interpolate rrfs hi domain winds to rwps mesh
+python ${USHrwps}/preprocess/interpolate_with_weights.py ${rrfs_hi} ${rrfs_hi_wghts} ${rwps_hi} ${windvars} -1
+#add mesh geometry into interpolated file
+python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rwps_hi} ${mesh}
+# Add error covariance field to files with interpolated fields for bayesian update
+# Based on distance to boundary of input field and commant line parameters InternalVariance:BoundaryVariance:LengthScale(km) 
+python ${USHrwps}/preprocess/add_err_var_to_file.py ${rwps_hi} ${rrfs_hi_dist} 4.:40.:200.
+err=$?                 # if err not =0  then script failed to process rrfs hi domain
+if [$err != 0 ]; then
+    msg="WARNING: Failed to process rrfs forecast for domain hi, proceeding with nbm wind for this region" 
+    echo "$msg"
+    postmsg "$msg"      
+fi
+###############################################################################
 
-(
-    python ${USHrwps}/preprocess/interpolate_with_weights.py ${rrfs_ak} ${rrfs_ak_wghts} ${rwps_ak} ${windvars} -1
-    export err=$?; err_chk                 # error checking
-    python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rwps_ak} ${mesh}
-    export err=$?; err_chk                 # error checking
-    python ${USHrwps}/preprocess/add_err_var_to_file.py ${rwps_ak} ${rrfs_ak_dist} 9.:90.:500.
-    export err=$?; err_chk                 # error checking
-)&
+###############################################################################
+# (C)
+python ${USHrwps}/preprocess/interpolate_with_weights.py ${rrfs_pr} ${rrfs_pr_wghts} ${rwps_pr} ${windvars} -1
+python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rwps_pr} ${mesh}
+python ${USHrwps}/preprocess/add_err_var_to_file.py ${rwps_pr} ${rrfs_pr_dist} 4.:40.:150.
+err=$?                 # Failed to process rrfs hi domain
+if [$err != 0 ]; then
+    msg="WARNING: Failed to process rrfs forecast for domain pr, proceeding with nbm wind for this region" 
+    echo "$msg"
+    postmsg "$msg"      
+fi
+###############################################################################
 
-(
-    python ${USHrwps}/preprocess/interpolate_with_weights.py ${rrfs_conus} ${rrfs_conus_wghts} ${rwps_conus} ${windvars} -1
-    export err=$?; err_chk                 # error checking
-    python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rwps_conus} ${mesh}
-    export err=$?; err_chk                 # error checking
-    python ${USHrwps}/preprocess/add_err_var_to_file.py ${rwps_conus} ${rrfs_conus_dist} 16.:160.:1000.
-    export err=$?; err_chk                 # error checking
-)&
+###############################################################################
+# (D)
+python ${USHrwps}/preprocess/interpolate_with_weights.py ${rrfs_ak} ${rrfs_ak_wghts} ${rwps_ak} ${windvars} -1
+python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rwps_ak} ${mesh}
+python ${USHrwps}/preprocess/add_err_var_to_file.py ${rwps_ak} ${rrfs_ak_dist} 9.:90.:500.
+err=$?                 
+if [$err != 0 ]; then
+    msg="WARNING: Failed to process rrfs forecast for domain ak, proceeding with nbm wind for this region" 
+    echo "$msg"
+    postmsg "$msg"      
+fi
+###############################################################################
 
-(
-    python ${USHrwps}/preprocess/interpolate_with_weights.py ${rrfs_na} ${rrfs_na_wghts} ${rwps_na} ${windvars} -1
-    export err=$?; err_chk                 # error checking
-    python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rwps_na} ${mesh}
-    export err=$?; err_chk                 # error checking
-    python ${USHrwps}/preprocess/add_err_var_to_file.py ${rwps_na} ${rrfs_na_dist} 50.:500.:1500.
-    export err=$?; err_chk                 # error checking
-)&
+###############################################################################
+# (E)
+python ${USHrwps}/preprocess/interpolate_with_weights.py ${rrfs_conus} ${rrfs_conus_wghts} ${rwps_conus} ${windvars} -1
+python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rwps_conus} ${mesh}
+python ${USHrwps}/preprocess/add_err_var_to_file.py ${rwps_conus} ${rrfs_conus_dist} 16.:160.:1000.
+err=$?
+if [$err != 0 ]; then
+    msg="WARNING: Failed to process rrfs forecast for domain conus, proceeding with nbm wind for this region" 
+    echo "$msg"
+    postmsg "$msg"      
+fi
+###############################################################################
 
-wait;
+###############################################################################
+# (F)
+python ${USHrwps}/preprocess/interpolate_with_weights.py ${rrfs_na} ${rrfs_na_wghts} ${rwps_na} ${windvars} -1
+python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rwps_na} ${mesh}
+python ${USHrwps}/preprocess/add_err_var_to_file.py ${rwps_na} ${rrfs_na_dist} 50.:500.:1500.
+err=$?
+if [$err != 0 ]; then
+    msg="WARNING: Failed to process rrfs forecast for domain na, proceeding with nbm wind for this region" 
+    echo "$msg"
+    postmsg "$msg"      
+fi
+###############################################################################
 
-#Interpolate NBM in time to times within the NBM forecast covered by the RRFS forecast
-python ${USHrwps}/preprocess/interp_time.py ${rwps_oc} ${rwps_pr} ${rwps_oc_ti} ${windvars}
-export err=$?; err_chk                 # error checking
+# Sections (A) through (F) can be executed in parallel but must both compleate 
+# before running section (G)
+
+###############################################################################
+# (G)
+if [ -f ${rwps_na} ]; then # this should be any of the rwps_(rrfs_domain) files that exist
+    #Interpolate NBM in time to times within the NBM forecast covered by the RRFS forecast
+    python ${USHrwps}/preprocess/interp_time.py ${rwps_oc} ${rwps_na} ${rwps_oc_ti} ${windvars}
+    export err=$?; err_chk                 # error checking
+else
+    # if rrfs forecast is missing just use nbm times and proceed
+    cp ${rwps_oc} ${rwps_oc_ti}
+fi
 #add mesh geometry into file
 python ${USHrwps}/preprocess/add_mesh_geom_to_file.py ${rwps_oc_ti} ${mesh}
 export err=$?; err_chk                 # error checking
 #add prescribed error covariance for nbm oc domain (assumed constant 100. (m/s)^2 )
 python ${USHrwps}/preprocess/add_err_var_to_file.py ${rwps_oc_ti} ${nbm_oc_dist} 100.
 export err=$?; err_chk                 # error checking
-
-
 
 cp $rwps_oc_ti ${rwps_wind}
 # apply bayesian update to nbm oc winds based on available rrfs wind forecasts for domains 
@@ -230,4 +258,5 @@ if [ -f ${rwps_na} ]; then
 else
     echo "WARNING: no local rrfs forecast available for na domain. missing ${rwps_na}"
 fi
+###############################################################################
 
