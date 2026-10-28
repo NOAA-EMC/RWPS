@@ -13,3 +13,10 @@ export err=$?; err_chk
 
 ${HOMErwps}/ush/preprocess/process_waterlevel.sh
 export err=$?; err_chk
+
+msg="JOB $job HAS COMPLETED NORMALLY."
+postmsg "$msg"
+
+#move forcing files from $DATA to COM
+mkdir -p ${COMROOT}
+cp ${DATA}/${NET}.${meshID}.${PDY}.${cyc}.waterlevel.nc $COMROOT/${NET}.t${cyc}z.${meshID}.waterlevel.nc

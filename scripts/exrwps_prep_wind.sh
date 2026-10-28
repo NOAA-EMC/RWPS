@@ -53,7 +53,7 @@ export err=$?; err_chk
 echo "retrieved winds from rrfs conus domain"
 ###############################################################################
 
-# Sections (A) through (F) can be executed in parallel but must both compleate 
+# Sections (A) through (F) can be executed in parallel but must all compleate 
 # before running section (G)
     
 ###############################################################################
@@ -63,3 +63,10 @@ echo "finished retrieving winds from rrfs and nbm for rwps wind"
 ${HOMErwps}/ush/preprocess/process_wind.sh
 export err=$?; err_chk
 ###############################################################################
+
+msg="JOB $job HAS COMPLETED NORMALLY."
+postmsg "$msg"
+
+#move forcing files from $DATA to COM
+mkdir -p ${COMROOT}
+cp ${DATA}/${NET}.${meshID}.${PDY}.${cyc}.wind.nc $COMROOT/${NET}.t${cyc}z.${meshID}.wind.nc

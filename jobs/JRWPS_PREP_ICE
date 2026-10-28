@@ -62,13 +62,6 @@ ${HOMErwps}/scripts/exrwps_prep_ice.sh
 
 export err=$?; err_chk
 
-msg="JOB $job HAS COMPLETED NORMALLY."
-postmsg "$msg"
-
-#move forcing files from $DATA to COM
-mkdir -p ${COMROOT}
-cp ${DATA}/${NET}.${meshID}.${PDY}.${cyc}.ice.nc $COMROOT/
-
 if [ -e "$pgmout" ]; then
   cat $pgmout
 fi

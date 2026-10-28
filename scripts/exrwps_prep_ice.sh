@@ -28,3 +28,10 @@ export err=$?; err_chk
 ${HOMErwps}/ush/preprocess/process_ice.sh
 export err=$?; err_chk
 ###############################################################################
+
+msg="JOB $job HAS COMPLETED NORMALLY."
+postmsg "$msg"
+
+#move forcing files from $DATA to COM
+mkdir -p ${COMROOT}
+cp ${DATA}/${NET}.${meshID}.${PDY}.${cyc}.ice.nc $COMROOT/${NET}.t${cyc}z.${meshID}.ice.nc
