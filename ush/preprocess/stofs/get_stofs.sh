@@ -12,6 +12,7 @@
 #
 # call as:
 # $ sh get_stofs.sh 20260829 00 current
+set -x
 
 PDY=${1}
 cyc=${2}
