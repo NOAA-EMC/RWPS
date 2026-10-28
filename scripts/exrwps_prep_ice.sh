@@ -8,16 +8,23 @@ set -x
 cd ${DATA}
 
 # retrieve ice forecasts for global RTOFS and Alaska NBM as netcdf files
-(
-    ${USHrwps}/preprocess/rtofs/get_rtofs_ice.sh ${PDY} ${cyc}
-    export err=$?; err_chk
-)&
-(
-    ${USHrwps}/preprocess/nbm/get_nbm_ice.sh ${PDY} ${cyc}
-    export err=$?; err_chk
-) &
+    
+###############################################################################
+# (A)
+${USHrwps}/preprocess/rtofs/get_rtofs_ice.sh ${PDY} ${cyc}
+export err=$?; err_chk
+###############################################################################
 
-wait;
+###############################################################################
+# (B)
+${USHrwps}/preprocess/nbm/get_nbm_ice.sh ${PDY} ${cyc}
+export err=$?; err_chk
+###############################################################################
 
+# (A) and (B) can be executed in parallel but must both compleate before (C)
+
+###############################################################################
+# (C)
 ${HOMErwps}/ush/preprocess/process_ice.sh
 export err=$?; err_chk
+###############################################################################
