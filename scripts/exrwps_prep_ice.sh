@@ -8,7 +8,7 @@ set -x
 cd ${DATA}
 
 # retrieve ice forecasts for global RTOFS and Alaska NBM as netcdf files
-    
+
 ###############################################################################
 # (A)
 ${USHrwps}/preprocess/rtofs/get_rtofs_ice.sh ${PDY} ${cyc}

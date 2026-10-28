@@ -83,7 +83,6 @@ if [ ! -f "${nbm_ak_wghts}" ]; then
     err=2;export err;err_chk
     exit $err
 fi
-
 if [ ! -f "${nbm_ak_dists}" ]; then
     msg = "FATAL ERROR: missing nbm ak  distance to boundary file: ${nbm_ak_dists}"
     echo "$msg"

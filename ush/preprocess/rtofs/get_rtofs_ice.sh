@@ -17,6 +17,7 @@ filesin="${COMINrtofs}/*ice.nc"
 dirout="${DATA}/ice.${PDY}.${cyc}"
 flout="${dirout}/rtofs.ice.${PDY}.nc"
 
+mkdir -p ${dirout}
 mkdir -p ${tmpdir}
 cp ${filesin} ${tmpdir}/
 
