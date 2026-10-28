@@ -10,6 +10,7 @@ export PS4='$SECONDS + '
 export DATA=${DATA:-${DATAROOT:?}/$jobid}
 export DATA=${DATA}"/wind" #local data directory specific to wind preperation
 mkdir -p ${DATA}
+cd ${DATA} #needed before setting PDY
 
 # Set cycle parameters
 export cycle=${cycle:-t${cyc}z}
