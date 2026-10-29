@@ -63,6 +63,9 @@ elif [[ ${MACHINE_ID} = wcoss2 ]]; then
     if [[ -z "${ECF_JOB:-}" ]]; then
         module reset
     fi
+    #TO DO: This should probably be defined elsewhere but is needed for error checking
+    export USHprod_util=/apps/ops/prod/nco/core/prod_util.v2.0.5/ush/
+    export PATH=${PATH}:${USHprod_util}
 
 elif [[ ${MACHINE_ID} = cheyenne* ]]; then
     # We are on NCAR Cheyenne
