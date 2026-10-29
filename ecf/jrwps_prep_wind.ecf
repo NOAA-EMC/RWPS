@@ -11,7 +11,7 @@
 ############################################################
 source ${HOMErwps}/versions/run.${MACHINE_ID}.ver
 
-#modules for esmf
+#modules for preprocessing routines
 module load PrgEnv-intel/${PrgEnv_intel_ver}
 module load craype/${craype_ver}
 module load intel/${intel_ver}
@@ -31,6 +31,7 @@ module list
 
 ############################################################
 # set env variables according to nws-hpc-standards
+#TODO: these definitions needs to be moved to the exflow setup 
 ############################################################
 export envir="test"
 export job=rwps.$PDY.$cyc.$meshID
