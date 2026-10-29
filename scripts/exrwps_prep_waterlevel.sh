@@ -14,9 +14,10 @@ export err=$?; err_chk
 ${HOMErwps}/ush/preprocess/process_waterlevel.sh
 export err=$?; err_chk
 
+#move forcing files from $DATA to $COMOUT and rename 
+mkdir -p ${COMOUT}
+cp ${DATA}/${NET}.${meshID}.${PDY}.${cyc}.waterlevel.nc ${COMOUT}/${NET}.t${cyc}z.${meshID}.waterlevel.nc
+
 msg="JOB $job HAS COMPLETED NORMALLY."
 postmsg "$msg"
 
-#move forcing files from $DATA to COM
-mkdir -p ${COMROOT}
-cp ${DATA}/${NET}.${meshID}.${PDY}.${cyc}.waterlevel.nc $COMROOT/${NET}.t${cyc}z.${meshID}.waterlevel.nc

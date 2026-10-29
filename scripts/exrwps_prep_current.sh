@@ -29,10 +29,11 @@ ${HOMErwps}/ush/preprocess/process_current.sh
 export err=$?; err_chk
 ###############################################################################
 
+#move forcing files from $DATA to $COMOUT and rename 
+mkdir -p ${COMOUT}
+cp ${DATA}/${NET}.${meshID}.${PDY}.${cyc}.current.nc ${COMOUT}/${NET}.t${cyc}z.${meshID}.current.nc
+
 msg="JOB $job HAS COMPLETED NORMALLY."
 postmsg "$msg"
 
-#move forcing files from $DATA to COM
-mkdir -p ${COMROOT}
-cp ${DATA}/${NET}.${meshID}.${PDY}.${cyc}.current.nc $COMROOT/${NET}.t${cyc}z.${meshID}.current.nc
 

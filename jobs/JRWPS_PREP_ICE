@@ -21,8 +21,6 @@ setpdy.sh
 export SENDECF=${SENDECF:-YES}
 export SENDDBN=${SENDDBN:-YES}
 export SENDCOM=${SENDCOM:-YES}
-# KEEPDATA set in job card 
-#export KEEPDATA=${KEEPDATA:-NO}
 
 # Set runID (Until modID becomes glwn and glw is dumped) 
 export runID=rwps
@@ -45,6 +43,8 @@ export COMOUTwave=${COMOUTwave:-$(compath.py -v -o ${NET}/${model_ver})}
 export COMINOUT=${COMINOUT:-$(compath.py -v -o ${NET}/${model_ver}/${RUN}.${PDY})}
 
 #machine dependend path to rtofs and nbm forecast files
+#TODO: COMINroot temporary work around to set path for wcoss2, 
+# $COMIN not defined but should replace this definition
 COMINroot="/lfs/h1/ops/prod/com" 
 export COMINrtofs="${COMINroot}/rtofs/${rtofs_ver}/rtofs.${PDY}"
 export COMINnbm="${COMINroot}/blend/${nbm_ver}/blend.${PDY}/${cyc}/grib2"
