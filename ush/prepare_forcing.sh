@@ -45,19 +45,28 @@ export meshname="${meshname: 0: -4}"
 export OPSROOT=/lfs/h2/emc/ptmp/${USER}/rwps/${rwps_ver}/JRWPS_PREP
 
 # set DATA and create path for ecf output files
-export COMROOT=${OPSROOT}/com/rwps/${rwps_ver}/rwps.${PDY}/${cyc}/prep
+export COMROOT=${OPSROOT}/com
+
+rwps_ver_minor="${rwps_ver%.*}"
+export COMOUT=${COMROOT}/rwps/$rwps_ver_minor/rwps.$PDY/$cyc/prep
+
+# directory to troute qsub output
+OUTPUT=${COMOUT}/logs
 
 export DATAROOT=${OPSROOT}/tmp
-export DATA=${DATAROOT}/${jobid}
-mkdir -p ${DATA}
-mkdir -p ${COMROOT}
 
+# TODO: $jobid is not set if this is run directly
+export DATA=${DATAROOT}/${jobid}
+
+mkdir -p ${DATA}
+mkdir -p ${COMOUT}
+mkdir -p ${OUTPUT}
 
 #Retrieve current and process for forecast cycle
-qsub -V -o ${COMROOT}/prep_current.${PDY}.${cyc}.${meshID}.out ${HOMErwps}/ecf/jrwps_prep_current.ecf
-qsub -V -o ${COMROOT}/prep_ice.${PDY}.${cyc}.${meshID}.out ${HOMErwps}/ecf/jrwps_prep_ice.ecf
-qsub -V -o ${COMROOT}/prep_waterlevel.${PDY}.${cyc}.${meshID}.out ${HOMErwps}/ecf/jrwps_prep_waterlevel.ecf
-qsub -V -o ${COMROOT}/prep_wind.${PDY}.${cyc}.${meshID}.out ${HOMErwps}/ecf/jrwps_prep_wind.ecf
+qsub -V -o ${OUTPUT}/prep_current.${PDY}.${cyc}.${meshID}.out ${HOMErwps}/ecf/jrwps_prep_current.ecf
+qsub -V -o ${OUTPUT}/prep_ice.${PDY}.${cyc}.${meshID}.out ${HOMErwps}/ecf/jrwps_prep_ice.ecf
+qsub -V -o ${OUTPUT}/prep_waterlevel.${PDY}.${cyc}.${meshID}.out ${HOMErwps}/ecf/jrwps_prep_waterlevel.ecf
+qsub -V -o ${OUTPUT}/prep_wind.${PDY}.${cyc}.${meshID}.out ${HOMErwps}/ecf/jrwps_prep_wind.ecf
 
 set +x
 echo ' '
