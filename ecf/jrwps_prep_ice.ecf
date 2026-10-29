@@ -30,14 +30,6 @@ module load prod_util/${prod_util_ver}
 module list 
 
 ############################################################
-# set env variables according to nws-hpc-standards
-#TODO: these definitions needs to be moved to the exflow setup 
-############################################################
-envir="test"
-export job=rwps.$PDY.$cyc.$meshID
-export jobid=$job.$PBS_JOBID
-
-############################################################
 # run j-job
 ############################################################
 ${HOMErwps}/jobs/JRWPS_PREP_ICE
